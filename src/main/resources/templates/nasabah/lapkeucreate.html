@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>IPS | BPR CORE SYSTEM</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<!-- Bootstrap 3.3.6 -->
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/css/AdminLTE.min.css">
+	<!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+	<link rel="stylesheet" href="/css/_all-skins.min.css">
+	<link rel="stylesheet" href="/css/datepicker3.css">
+	<!-- Theme style -->
+	<!-- iCheck -->
+	<link rel="stylesheet" href="/css/blue.css">
+	<!-- Morris chart -->
+	<link rel="stylesheet" href="/css/morris.css">
+	
+	
+	<link rel="shortcut icon" th:href="@{/static/images/favicon.ico}"/>
+	
+	<!-- bootstrap wysihtml5 - text editor -->
+	<link rel="stylesheet" href="/css/bootstrap3-wysihtml5.min.css">
+	<script src="/ckeditor/ckeditor.js"></script>
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+	<![endif]-->
+	
+	<link href="/css/bootselect.css" rel="stylesheet">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header class="main-header">
+		<!-- Logo -->
+		<a th:href="@{/home}" class="logo">
+			<!-- mini logo for sidebar mini 50x50 pixels -->
+			<span class="logo-mini"><img th:src="@{/images/logodki.png}"
+                                         class="img-responsive center-block" width="50" height="50"
+                                         alt="Logo" /></span>
+			<!-- logo for regular state and mobile devices -->
+			<span class="logo-lg"><img th:src="@{/images/home.png}"
+                                         class="img-responsive center-block" width="200" height="200"
+                                         alt="Logo" /> </span>
+
+		</a>
+		<!-- Header Navbar: style can be found in header.less -->
+		<nav class="navbar navbar-static-top">
+			<!-- Sidebar toggle button-->
+			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+
+			<div class="navbar-custom-menu">
+				<ul class="nav navbar-nav">
+					<!-- User Account: style can be found in dropdown.less -->
+					<li class="dropdown user user-menu">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<img src="/images/avatar5.png" class="user-image" alt="User Image">
+							<span class="hidden-xs" th:utext="${auth.name}"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<!-- User image -->
+							<li class="user-header">
+								<img src="/images/avatar5.png" class="img-circle" alt="User Image">
+
+								<p>
+									<span class="hidden-xs" th:utext="${auth.name}"></span>
+									<small><span class="hidden-xs" th:utext="${auth.email}"></span></small>
+								</p>
+							</li>
+							<!-- Menu Body --
+                            <!-- Menu Footer-->
+							<li class="user-footer">
+								<div class="pull-left">
+									<a th:href="@{/myprofile/inf}" class="btn btn-primary btn-flat">Profile</a>
+								</div>
+								<div class="col-xs-offset-1 col-xs-4 text-center">
+									<a  th:href="@{/myprofile/change_password(id=${auth.id})}"><i class="fa fa-gears"></i> Change
+										Password</a>
+								</div>
+								<div class="pull-right">
+									<a th:href="@{/logout}" class="btn btn-danger btn-flat">Sign out</a>
+								</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside class="main-sidebar">
+		<!-- sidebar: style can be found in sidebar.less -->
+		<section class="sidebar">
+			<!-- Sidebar user panel -->
+			<div class="user-panel">
+				<div class="pull-left image">
+					<img src="/images/avatar5.png" class="img-circle" alt="User Image">
+				</div>
+				<div class="pull-left info">
+					<p><span class="hidden-xs" th:utext="${auth.name}"></span></p>
+				</div>
+			</div>
+			<!-- search form -->
+			<form action="#" method="get" class="sidebar-form">
+				<div class="input-group">
+					<input type="text" name="q" class="form-control" placeholder="Search...">
+					<span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+				</div>
+			</form>
+			<!-- /.search form -->
+			<!-- sidebar menu: : style can be found in sidebar.less -->
+			<ul class="sidebar-menu">
+				<li class="header">MAIN NAVIGATION</li>
+				<li class="treeview">
+					<a th:href="@{/home}">
+						<i class="fa fa-home text-yellow"></i> <span>Home Page</span>
+						<span class="pull-right-container">
+            </span>
+					</a>
+				</li>
+				<li th:if="${control != 'ADMIN'}" class="treeview">
+					<a th:href="@{/myprofile/mytasks(id=${auth.id})}">
+						<i class="fa fa-file-text text-green"></i> <span>My Tasks</span>
+						<span class="pull-right-container">
+            </span>
+					</a>
+				</li>
+				<li th:if="${control != 'ADMIN'}" class="treeview">
+					<a th:href="@{/myprofile/inf}">
+						<i class="fa fa-gears text-blue"></i> <span>Profile Settings</span>
+						<span class="pull-right-container">
+            </span>
+					</a>
+				</li>
+				<!-- <li class="treeview">
+					<a th:href="@{/users/all}">
+						<i class="fa fa-users text-green"></i>
+						<span>All Users</span>
+					</a>
+				</li> -->
+				
+				<li class="treeview">
+					<a href="#">
+						<i class="fa fa-users text-green"></i>
+						<span>Users</span>
+						<span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/users/new}" ><i
+								class="fa fa-plus"></i> New User</a></li>
+						<li><a th:href="@{/users/all}" ><i class="fa fa-users text-green"></i>
+							All User</a></li>
+					</ul>
+				</li>
+				
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+					<a href="#">
+						<i class="fa fa-odnoklassniki text-blue"></i>
+						<span>User Role</span>
+						<span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/admin/roles/new}" ><i
+								class="fa fa-plus"></i> New User Role</a></li>
+						<li><a th:href="@{/admin/roles/all}" ><i class="fa fa-odnoklassniki"></i>
+							All User Role</a></li>
+					</ul>
+				</li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-money text-red "></i>
+                        <span>Proses Akunting</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/user-task/new}"><i class="fa fa-laptop"></i> Task Assignment</a>
+                        </li>
+                        <li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li>
+                    </ul>
+                </li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-laptop text-yellow "></i>
+                        <span>Proses Kasir</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/user-task/new}"><i class="fa fa-laptop"></i> Task Assignment</a>
+                        </li>
+                        <li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li>
+                    </ul>
+                </li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+					<a href="#">
+						<i class="fa fa-male text-purple"></i>
+						<span>Proses Data Nasabah</span>
+						<span class="pull-right-container">
+              				<i class="fa fa-angle-left pull-right"></i>
+           				 </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/admin/kategoris/new}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
+						<li><a th:href="@{/admin/kategoris/all}"><i class="fa fa-file-text"></i> All Kategori</a></li>
+					</ul>
+				</li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+					<a href="#">
+						<i class="fa fa-credit-card text-white"></i>
+						<span>Proses Pinjaman</span>
+						<span class="pull-right-container">
+              				<i class="fa fa-angle-left pull-right"></i>
+           				 </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/admin/tasks/new}"><i class="fa fa-plus"></i> New Content</a></li>
+						<li><a th:href="@{/admin/tasks/all}"><i class="fa fa-file-text"></i> All Content</a></li>
+					</ul>
+				</li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-book text-red "></i>
+                        <span>Proses Tabungan</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/tabungans/all}"><i class="fa fa-laptop"></i>Proses Tabungan</a>
+                        </li>
+                        <!--<li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li> -->
+                    </ul>
+                </li>
+                <li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-lightbulb-o text-yellow "></i>
+                        <span>Proses Deposito</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/user-task/new}"><i class="fa fa-laptop"></i> Task Assignment</a>
+                        </li>
+                        <li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li>
+                    </ul>
+                </li>
+			</ul>
+		</section>
+		<!-- /.sidebar -->
+	</aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Data Nasabah</legend>
+			
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/nasabah/edit/badanusaha/' + ${nonasabah}}">Basic Data Badan Usaha</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/pengurus/index/' + ${nonasabah}}">Data Pengurus Perusahaan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/edit/laporbadanusaha/' + ${nonasabah}}">Data Sandi Pelaporan</a></li>
+					<li role="presentation" class="active"><a href="#">Data Laporan Keuangan</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form action="#" method="POST" th:action="@{'/nasabah/lapkeu/insert/' + ${nonasabah}}" th:object="${nasabahLapKeu}" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Periode</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="periode" name="periode" th:field=*{periode} required />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+						
+							<h5>ASET</h5>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="kas">Kas</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="kas" name="kas" th:field=*{kas} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="piutang">Piutang</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="piutang" name="piutang" th:field=*{piutang} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="investasi">Investasi</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="investasi" name="investasi" th:field=*{investasi} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="asetlancarlain">Aset Lancar Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="asetlancarlain" name="asetlancarlain" th:field=*{asetlancarlain} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="asettidaklancar">Aset Non Lancar Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="asettidaklancar" name="asettidaklancar" th:field=*{asettidaklancar} />
+								</div>
+							</div>
+							
+							<br/>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="modal">EKUITAS</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="modal" name="modal" th:field=*{modal} />
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-4">
+						
+							<h5>LIABILITAS</h5>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pinjamanpendek">Pinjaman Jangka Pendek</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pinjamanpendek" name="pinjamanpendek" th:field=*{pinjamanpendek} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="utangusahapendek">Utang Jangka Pendek</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="utangusahapendek" name="utangusahapendek" th:field=*{utangusahapendek} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="liabpendeklain">Liab Jangka Pendek Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="liabpendeklain" name="liabpendeklain" th:field=*{liabpendeklain} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pinjamanpanjang">Pinjaman Jangka Panjang</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pinjamanpanjang" name="pinjamanpanjang" th:field=*{pinjamanpanjang} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="utangusahapanjang">Utang Jangka Panjang</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="utangusahapanjang" name="utangusahapanjang" th:field=*{utangusahapanjang} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="liabpanjanglain">Liab Jangka Panjang Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="liabpanjanglain" name="liabpanjanglain" th:field=*{liabpanjanglain} />
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-4">
+						
+							<h5>LABA RUGI</h5>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pendapatanopr">Pendapatan Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pendapatanopr" name="pendapatanopr" th:field=*{pendapatanopr} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="bebanopr">Beban Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="bebanopr" name="bebanopr" th:field=*{bebanopr} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pendapatannonopr">Pendapatan Non Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pendapatannonopr" name="pendapatannonopr" th:field=*{pendapatannonopr} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="bebannonopr">Beban Non Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="bebannonopr" name="bebannonopr" th:field=*{bebannonopr} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="lababruto">Laba Bruto</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="lababruto" name="lababruto" th:field=*{lababruto} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="labasebelumpajak">Laba Sebelum Pajak</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="labasebelumpajak" name="labasebelumpajak" th:field=*{labasebelumpajak} />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="labatahunberjalan">Laba Tahun Berjalan</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="labatahunberjalan" name="labatahunberjalan" th:field=*{labatahunberjalan} />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<div class="row">
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="submitButton"></label>
+							<div class="col-md-9">
+								<button type="submit" id="submitButton" name="submitButton" class="btn btn-success">Save</button>
+								<a th:href="@{'/nasabah/lapkeu/index/' + ${nonasabah}}" class="btn btn-inverse">Cancel</a>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+
+		$('#provinsi').change(function () {
+			$.ajax({
+                url: '/parameter/listkotakabbyprov/' + $('#provinsi').val(),
+                success: function (result) {
+                    $('#kota').empty();
+                    $.each(result, function () {
+                        $('#kota').append($('<option></option>').attr('value', this.kotacode).text(this.kotadesc));
+                    });
+                }
+            });
+		});
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

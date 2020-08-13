@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IPS | BPR CORE SYSTEM</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/css/dataTables.bootstrap.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/css/_all-skins.min.css">
+    
+	<link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" />
+	<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Bootstrap Color Picker -->
+  <link rel="stylesheet" href="../../plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" href="../../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <!-- Bootstrap4 Duallistbox -->
+  <link rel="stylesheet" href="../../plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <header class="main-header">
+        <!-- Logo -->
+        <a th:href="@{/home}" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><img th:src="@{/images/logodki.png}"
+                                         class="img-responsive center-block" width="50" height="50"
+                                         alt="Logo" /></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><img th:src="@{/images/home.png}"
+                                         class="img-responsive center-block" width="200" height="200"
+                                         alt="Logo" /></span>
+
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="/images/avatar5.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs" th:utext="${auth.name}"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="/images/avatar5.png" class="img-circle" alt="User Image">
+
+                                <p>
+                                    <span class="hidden-xs" th:utext="${auth.name}"></span>
+                                    <small><span class="hidden-xs" th:utext="${auth.email}"></span></small>
+                                </p>
+                            </li>
+                            <!-- Menu Body --
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a th:href="@{/myprofile/inf}" class="btn btn-primary btn-flat">Profile</a>
+                                </div>
+                                <div class="col-xs-offset-1 col-xs-4 text-center">
+                                    <a  th:href="@{/myprofile/change_password(id=${auth.id})}"><i class="fa fa-gears"></i> Change
+                                        Password</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a th:href="@{/logout}" class="btn btn-danger btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="/images/avatar5.png" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p><span class="hidden-xs" th:utext="${auth.name}"></span></p>
+                </div>
+            </div>
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                <li class="treeview">
+                    <a th:href="@{/home}">
+                        <i class="fa fa-home text-yellow"></i> <span>Home Page</span>
+                        <span class="pull-right-container">
+            </span>
+                    </a>
+                </li>
+                <li th:if="${control != 'ADMIN'}" class="treeview">
+                    <a th:href="@{/myprofile/mytasks(id=${auth.id})}">
+                        <i class="fa fa-file-text text-green"></i> <span>My Tasks</span>
+                        <span class="pull-right-container">
+            </span>
+                    </a>
+                </li>
+                <li th:if="${control != 'ADMIN'}" class="treeview">
+                    <a th:href="@{/myprofile/inf}">
+                        <i class="fa fa-gears text-blue"></i> <span>Profile Settings</span>
+                        <span class="pull-right-container">
+            </span>
+                    </a>
+                </li>
+                <li class="treeview">
+					<a href="#">
+						<i class="fa fa-users text-green"></i>
+						<span>Users</span>
+						<span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/users/new}" ><i
+								class="fa fa-plus"></i> New User</a></li>
+						<li><a th:href="@{/users/all}" ><i class="fa fa-users text-green"></i>
+							All User</a></li>
+					</ul>
+				</li>
+                <li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-odnoklassniki text-blue"></i>
+                        <span>User Role</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/roles/new}" ><i
+                                class="fa fa-plus"></i> New User Role</a></li>
+                        <li><a th:href="@{/admin/roles/all}" ><i class="fa fa-odnoklassniki"></i>
+                            All User Role</a></li>
+                    </ul>
+                </li>
+                
+                <li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-money text-red "></i>
+                        <span>Proses Akunting</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/user-task/new}"><i class="fa fa-laptop"></i> Task Assignment</a>
+                        </li>
+                        <li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li>
+                    </ul>
+                </li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-laptop text-yellow "></i>
+                        <span>Proses Kasir</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/user-task/new}"><i class="fa fa-laptop"></i> Task Assignment</a>
+                        </li>
+                        <li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li>
+                    </ul>
+                </li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+					<a href="#">
+						<i class="fa fa-male text-purple"></i>
+						<span>Proses Data Nasabah</span>
+						<span class="pull-right-container">
+              				<i class="fa fa-angle-left pull-right"></i>
+           				 </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/admin/kategoris/new}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
+						<li><a th:href="@{/admin/kategoris/all}"><i class="fa fa-file-text"></i> All Kategori</a></li>
+					</ul>
+				</li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+					<a href="#">
+						<i class="fa fa-credit-card text-white"></i>
+						<span>Proses Pinjaman</span>
+						<span class="pull-right-container">
+              				<i class="fa fa-angle-left pull-right"></i>
+           				 </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/admin/tasks/new}"><i class="fa fa-plus"></i> New Content</a></li>
+						<li><a th:href="@{/admin/tasks/all}"><i class="fa fa-file-text"></i> All Content</a></li>
+					</ul>
+				</li>
+				<li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-book text-red "></i>
+                        <span>Proses Tabungan</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/user-task/new}"><i class="fa fa-laptop"></i> Task Assignment</a>
+                        </li>
+                        <li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li>
+                    </ul>
+                </li>
+                <li th:if="${control == 'ADMIN'}" class="treeview">
+                    <a href="#">
+                        <i class="fa fa-lightbulb-o text-yellow "></i>
+                        <span>Proses Deposito</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right "></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/user-task/new}"><i class="fa fa-laptop"></i> Task Assignment</a>
+                        </li>
+                        <li><a th:href="@{/admin/user-task/all}"><i class="fa fa-files-o"></i> User Tasks</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div th:if="${mode == 'MODE_ALL'}">
+                <section class="content-header">
+                    <h1>
+                        Content JakService
+                        <small>Content Tables</small>
+                    </h1>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box">
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Kategori Name</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="kategori : ${kategoris}">
+                                            <td th:text="${kategori.name}"></td>
+
+                                            <td><a th:href="@{/admin/kategoris/update(id=${kategori.id})}"><span
+                                                    class="glyphicon glyphicon-pencil"></span> EDIT</a></td>
+                                            <td><a th:href="@{/admin/kategoris/delete(id=${kategori.id})}"><span
+                                                    class="glyphicon glyphicon-trash"></span> DELETE</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </section>
+            </div>
+            <div th:if="${mode == 'MODE_UPDATE'}">
+                <div class="container">
+                    <div class="row">
+                        <form autocomplete="off" action="#" th:action="@{/admin/kategoris/save}"
+                              th:object="${kategori}" method="post" class="form-horizontal"
+                              role="form">
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Edit User Type</legend>
+                                <!-- Text input-->
+                                <input type="hidden" name="id" th:field="${kategori.id}" />
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="textinput">kategori
+                                        Name</label>
+                                    <div class="col-md-4">
+                                        <input type="text" th:field="${kategori.name}" placeholder="Kategeori Name"
+                                               class="form-control" />
+                                    </div>
+                                </div>
+
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="submitButton"></label>
+                                    <div class="col-md-8">
+                                        <button type="submit" id="submitButton" name="submitButton"
+                                                class="btn btn-success">Save</button>
+                                        <button type="button" class="btn btn-inverse"
+                                                onclick="window.history.back()">Cancel</button>
+                                    </div>
+
+                                </div>
+
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${mode == 'MODE_NEW'}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9">
+            <div class="card">
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Pembentukan Nasabah Baru</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Pemeliharaan Catatan Nasabah </a></li>
+                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Pemeliharaan Data Nasabah </a></li>
+                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Pemantauan Data Nasabah </a></li>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="active tab-pane" id="activity">
+                    <!-- Post -->
+                    <section class="content">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card card-primary">
+             <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">DATA NASABAH - PERORANGAN</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px"></th>
+                      <th></th>
+                      <th></th>
+                      <th style="width: 40px"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td></td>
+                      <td>NIK</td>
+                      
+                      <td><span class="badge bg-danger">12345678</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Nama Sesuai ID</td>
+                      
+                      <td><span >Nino</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Nama Lengkap</td>
+                      
+                      <td><span >Nino bagus Prasetyo</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Identitas</td>
+                      
+                      <td><span >12345678</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Tempat Lahir</td>
+                      
+                      <td><span >12345678</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Alamat</td>
+                      
+                      <td><span >Jakarta</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Kode Pos</td>
+                      
+                      <td><span >45678</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Provinsi</td>
+                      
+                      <td><span >45678</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Kota/Kab</td>
+                      
+                      <td><span >45678</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Kecamatan</td>
+                      
+                      <td><span >Bekasi</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Kelurahan</td>
+                      
+                      <td><span >Tambun</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>NPWP</td>
+                      
+                      <td><span >222245678</span></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Email</td>
+                      
+                      <td><span >nino@gmail.com</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <div class="col-md-6">
+          <div class="card card-secondary">
+            <div class="card-header">
+              
+
+              <div class="card-tools">
+                <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Striped Full Width Table</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Task</th>
+                      <th>Progress</th>
+                      <th style="width: 40px">Label</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1.</td>
+                      <td>Update software</td>
+                      <td>
+                        <div class="progress progress-xs">
+                          <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-danger">55%</span></td>
+                    </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td>Clean database</td>
+                      <td>
+                        <div class="progress progress-xs">
+                          <div class="progress-bar bg-warning" style="width: 70%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-warning">70%</span></td>
+                    </tr>
+                    <tr>
+                      <td>3.</td>
+                      <td>Cron job running</td>
+                      <td>
+                        <div class="progress progress-xs progress-striped active">
+                          <div class="progress-bar bg-primary" style="width: 30%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-primary">30%</span></td>
+                    </tr>
+                    <tr>
+                      <td>4.</td>
+                      <td>Fix and squish bugs</td>
+                      <td>
+                        <div class="progress progress-xs progress-striped active">
+                          <div class="progress-bar bg-success" style="width: 90%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-success">90%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+          <!-- /.card -->
+        </div>
+        
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <a href="#" class="btn btn-secondary">Cancel</a>
+          <input type="submit" value="Create new Porject" class="btn btn-success float-right">
+        </div>
+      </div>
+    </section>
+                   
+                  </div>
+                  <!-- /.tab-pane -->
+                  <div class="tab-pane" id="timeline">
+                    
+                      <!-- timeline time label -->
+                      <form class="form-horizontal">
+                      <div class="form-group row">
+                        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                          <input type="email" class="form-control" id="inputName" placeholder="Name">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                          <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <button type="submit" class="btn btn-danger">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                     
+                     
+                    
+                  </div>
+                  <!-- /.tab-pane -->
+
+                  <div class="tab-pane" id="settings">
+                    <form class="form-horizontal">
+                      <div class="form-group row">
+                        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                          <input type="email" class="form-control" id="inputName" placeholder="Name">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                          <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <button type="submit" class="btn btn-danger">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+            </div>
+            <!-- /.nav-tabs-custom -->
+          </div>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+
+<!-- SlimScroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- page script -->
+<script src="/js/jquery.dataTables.min.js"></script>
+<script src="/js/dataTables.bootstrap.min.js"></script>
+<script>
+    $(function () {
+        $('#example1').DataTable({
+            "ordering": false
+        });
+        $('#table2').DataTable();
+    });
+</script>
+</body>
+</html>

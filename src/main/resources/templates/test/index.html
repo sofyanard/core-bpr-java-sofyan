@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    	table {
+			font-family: arial, sans-serif;
+			width: 100%;
+		}
+    	td, th {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+		a {
+			text-align: left;
+			padding: 8px;
+		}
+    </style>
+</head>
+<body>
+    <h1>Test - Index</h1>
+    <p><a th:href="@{/test/create}">Create New</a></p>
+    <table style="border: 1px solid #dddddd;width: 100%;">
+    	<thead>
+    		<tr>
+	    		<th>ID</th>
+	    		<th>Name</th>
+	    		<th>Email</th>
+	    		<th></th>
+    		</tr>
+    	</thead>
+    	<tbody>
+	    	<tr th:each="test : ${tests}">
+	    		<td th:text="${test.id}"></td>
+	    		<td th:text="${test.name}"></td>
+	    		<td th:text="${test.email}"></td>
+	    		<td><a href="#">Detail</a></td>
+	    	</tr>
+    	</tbody>
+    </table>
+</body>
+</html>

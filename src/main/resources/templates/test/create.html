@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Test - Create</h1>
+    <form action="#" method="POST" th:action="@{/test/save}" th:object="${test}">
+		<table>
+			<tr>
+				<td>Name :</td>
+				<td><input type="text" name="name" th:field=*{name}></td>
+			</tr>
+			<tr>
+				<td>Email :</td>
+				<td><input type="text" name="email" th:field=*{email}></td>
+			</tr>
+		</table>
+		<p>
+			<button type="submit">Save</button>
+		</p>
+	</form>
+	
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			alert('hello!');
+		})
+	</script>
+</body>
+</html>
