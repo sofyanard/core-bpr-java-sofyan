@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,14 +32,16 @@ public class NasabahBasic {
 	@Column(name = "homeadd")
 	private String homeadd;
 	
-	@Column(name = "homekota")
-	private String homekota;
+	@ManyToOne
+	@JoinColumn(name = "homekota", referencedColumnName = "kotacode")
+	private ParameterKotaKab homekota;
 	
 	@Column(name = "officeadd")
 	private String officeadd;
 	
-	@Column(name = "officecity")
-	private String officecity;
+	@ManyToOne
+	@JoinColumn(name = "officecity", referencedColumnName = "kotacode")
+	private ParameterKotaKab officecity;
 	
 	@Column(name = "noid")
 	private String noid;
@@ -70,7 +74,7 @@ public class NasabahBasic {
 		return homeadd;
 	}
 
-	public String getHomekota() {
+	public ParameterKotaKab getHomekota() {
 		return homekota;
 	}
 
@@ -78,7 +82,7 @@ public class NasabahBasic {
 		return officeadd;
 	}
 
-	public String getOfficecity() {
+	public ParameterKotaKab getOfficecity() {
 		return officecity;
 	}
 

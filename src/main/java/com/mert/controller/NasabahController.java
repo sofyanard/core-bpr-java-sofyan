@@ -251,6 +251,19 @@ public class NasabahController {
 		return modelAndView;
 	}
 	
+	/*
+	@RequestMapping(value="/searchedit", method = RequestMethod.GET)
+	public ModelAndView SearchEdit() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		List<NasabahBasic> listNasabah = nasabahBasicService.findAll();
+		modelAndView.addObject("listNasabah", listNasabah);
+		modelAndView.setViewName("nasabah/searchedit");
+		return modelAndView;
+	} 
+	*/
+	
 	@RequestMapping(value="/searchedit", method = RequestMethod.GET)
 	public ModelAndView SearchEdit(String keyword) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -268,18 +281,24 @@ public class NasabahController {
 		return modelAndView;
 	}
 	
-	/*
-	@RequestMapping(value="/searchedit", method = RequestMethod.GET)
-	public ModelAndView SearchEdit() {
+	@RequestMapping(value="/searchcatatan", method = RequestMethod.GET)
+	public ModelAndView SearchCatatan(String keyword) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("control", getUser().getRole().getRole());
-		List<NasabahBasic> listNasabah = nasabahBasicService.findAll();
+		List<NasabahBasic> listNasabah;
+		if ((keyword != null) && (keyword != "")) {
+			listNasabah = nasabahBasicService.findByKeyword(keyword);
+		} else {
+			listNasabah = nasabahBasicService.findAll();
+			// listNasabah = null;
+		}
 		modelAndView.addObject("listNasabah", listNasabah);
-		modelAndView.setViewName("nasabah/searchedit");
+		modelAndView.setViewName("nasabah/searchcatatan");
 		return modelAndView;
-	} 
-	*/
+	}
+	
+	
 	
 	@RequestMapping("/list")
 	public ModelAndView list() {

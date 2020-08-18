@@ -323,7 +323,7 @@
 						<td th:text="${nasabah.tipenasabah} == '1' ? ${nasabah.noid} : ${nasabah.appno}"></td>
 						<td th:text="${nasabah.nonpwp}"></td>
 						<td th:text="${nasabah.tipenasabah} == '1' ? ${nasabah.homeadd} : ${nasabah.officeadd}"></td>
-						<td th:text="${nasabah.tipenasabah} == '1' ? ${nasabah.homekota} : ${nasabah.officecity}"></td>
+						<td th:text="${nasabah.tipenasabah} == '1' ? ${nasabah.homekota.kotadesc} : ${nasabah.officecity.kotadesc}"></td>
 						<td><a th:href="@{'/nasabah/edit/' + (${nasabah.tipenasabah} == '1' ? 'perorangan' : 'badanusaha') + '/' + ${nasabah.nonasabah}}"><span class="glyphicon glyphicon-pencil"></span> View</a></td>
 					</tr>
 				</tbody>

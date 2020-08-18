@@ -9,10 +9,12 @@ import com.mert.model.ParameterSandiBIOJK;
 import com.mert.model.ParameterProvinsi;
 import com.mert.model.ParameterKotaKab;
 import com.mert.model.ParameterKodeDokumen;
+import com.mert.model.ParameterKategoriCatatan;
 import com.mert.repository.ParameterSandiBIOJKRepository;
 import com.mert.repository.ParameterProvinsiRepository;
 import com.mert.repository.ParameterKotaKabRepository;
 import com.mert.repository.ParameterKodeDokumenRepository;
+import com.mert.repository.ParameterKategoriCatatanRepository;
 
 @Service
 public class ParameterService {
@@ -28,6 +30,9 @@ public class ParameterService {
 	
 	@Autowired
 	private ParameterKodeDokumenRepository parameterKodeDokumenRepository;
+	
+	@Autowired
+	private ParameterKategoriCatatanRepository parameterKategoriCatatanRepository;
 	
 	public List<ParameterProvinsi> listAllProvinsi() {
 		return parameterProvinsiRepository.findAll();
@@ -175,6 +180,10 @@ public class ParameterService {
 	
 	public List<ParameterKodeDokumen> listAllKodeDokumen() {
 		return parameterKodeDokumenRepository.findAll();
+	}
+	
+	public List<ParameterKategoriCatatan> listAllKategoriCatatan() {
+		return parameterKategoriCatatanRepository.findAll();
 	}
 
 }
