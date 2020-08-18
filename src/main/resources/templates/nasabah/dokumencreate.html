@@ -290,179 +290,55 @@
 			<div class="container">
 				<legend>Data Nasabah</legend>
 			
-				<ul class="nav nav-pills">
-					<li role="presentation"><a th:href="@{'/nasabah/edit/perorangan/' + ${nasabahJobnSpouse.nonasabah}}">Basic Data Perorangan</a></li>
-					<li role="presentation" class="active"><a href="#">Data Pekerjaan & Pasangan</a></li>
-					<li role="presentation"><a th:href="@{'/nasabah/edit/laporperorangan/' + ${nasabahJobnSpouse.nonasabah}}">Data Sandi Pelaporan</a></li>
-					<li role="presentation"><a th:href="@{'/nasabah/dokumen/index/' + ${nasabahJobnSpouse.nonasabah}}">Data Dokumen Nasabah</a></li>
+				<!-- if perorangan -->
+				<ul class="nav nav-pills" th:if="${tipenasabah} == '1'">
+					<li role="presentation"><a th:href="@{'/nasabah/edit/perorangan/' + ${nonasabah}}">Basic Data Perorangan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/edit/jobnspouse/' + ${nonasabah}}">Data Pekerjaan & Pasangan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/edit/laporperorangan/' + ${nonasabah}}">Data Sandi Pelaporan</a></li>
+					<li role="presentation"  class="active"><a href="#">Data Dokumen Nasabah</a></li>
+				</ul>
+				<!-- if badanusaha -->
+				<ul class="nav nav-pills" th:if="${tipenasabah} == '2'">
+					<li role="presentation"><a th:href="@{'/nasabah/edit/badanusaha/' + ${nonasabah}}">Basic Data Badan Usaha</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/pengurus/index/' + ${nonasabah}}">Data Pengurus Perusahaan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/edit/laporbadanusaha/' + ${nonasabah}}">Data Sandi Pelaporan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/lapkeu/index/' + ${nonasabah}}">Data Laporan Keuangan</a></li>
+					<li role="presentation" class="active"><a href="#">Data Dokumen Nasabah</a></li>
 				</ul>
 				<br/>
 				
 				<!-- Form Name -->
-				<form action="#" method="POST" th:action="@{/nasabah/update/jobnspouse}" th:object="${nasabahJobnSpouse}" class="form-horizontal" role="form">
+				<form enctype="multipart/form-data" action="#" method="POST" th:action="@{'/nasabah/dokumen/insert/' + ${nonasabah}}" th:object="${nasabahDokumen}" class="form-horizontal" role="form">
 				<fieldset>
 					<div class="row">
 						<div class="col-md-6">
 							
-						<!-- Text input-->
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="jobtype">Pekerjaan</label>
-							<div class="col-md-9">
-								<select class="selectpicker" data-live-search="true" id="jobtype" name="jobtype" th:field=*{jobtype} >
-									<option value=""> -- pilih -- </option>
-									<option th:each="jobcode: ${jobcodes}" th:value="${jobcode.sandicode}" th:text="${jobcode.sandidesc}"></option>
-								</select>
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="dokcode">DocType</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="dokcode" id="dokcode" th:field=*{dokcode} required>
+										<option th:each="kodedokumen: ${kodedokumens}" th:value="${kodedokumen.dokcode}" th:text="${kodedokumen.dokdesc}"></option>
+									</select>
+								</div>
 							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="workplace">Nama Tempat Bekerja</label>
-							<div class="col-md-9">
-								<input type="text" placeholder="Nama Tempat Bekerja" class="form-control" id="workplace" name="workplace" th:field=*{workplace} />
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="caption">Caption</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="Caption" class="form-control" id="caption" name="caption" th:field=*{caption} required/>
+								</div>
 							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="bidusaha">Bidang Usaha</label>
-							<div class="col-md-9">
-								<select class="selectpicker" data-live-search="true" id="bidusaha" name="bidusaha" th:field=*{bidusaha} >
-									<option value=""> -- pilih -- </option>
-									<option th:each="bidusaha: ${bidusahas}" th:value="${bidusaha.sandicode}" th:text="${bidusaha.sandidesc}"></option>
-								</select>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="uploadFile">File</label>
+								<div class="col-md-9">
+									<input type="file" placeholder="Upload File" class="form-control" id="uploadFile" name="uploadFile" required />
+								</div>
 							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="income">Income / Tahun</label>
-							<div class="col-md-9">
-								<input type="number" placeholder="Income / Tahun" class="form-control" id="income" name="income" th:field=*{income} />
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="officeadd">Alamat</label>
-							<div class="col-md-9">
-								<input type="text" placeholder="Alamat" class="form-control" id="officeadd" name="officeadd" th:field=*{officeadd} />
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="officeprov">Provinsi</label>
-							<div class="col-md-9">
-								<select class="selectpicker" data-live-search="true" name="officeprov" id="officeprov" th:field=*{officeprov} >
-									<option th:each="provinsi: ${provinsis}" th:value="${provinsi.provinsicode}" th:text="${provinsi.provinsidesc}"></option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="officecity">Kota/Kabupaten</label>
-							<div class="col-md-9">
-								<select class="form-control" id="officecity" name="officecity" th:field=*{officecity} >
-									<option th:each="kota: ${kotas}" th:value="${kota.kotacode}" th:if="${nasabahJobnSpouse.officecity} == ${kota.kotacode}" selected="selected" th:text="${kota.kotadesc}">
-									<option th:each="kota: ${kotas}" th:value="${kota.kotacode}" th:if="${nasabahJobnSpouse.officecity} != ${kota.kotacode}" th:text="${kota.kotadesc}">
-								</select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="officekec">Kecamatan</label>
-							<div class="col-md-9">
-								<input type="text" placeholder="Kecamatan" class="form-control" id="officekec" name="officekec" th:field=*{officekec} />
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="officekel">Kelurahan</label>
-							<div class="col-md-9">
-								<input type="text" placeholder="Kelurahan" class="form-control" id="officekel" name="officekel" th:field=*{officekel} />
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="officekodepos">Kode Pos</label>
-							<div class="col-md-9">
-								<input type="number" placeholder="Kode Pos" class="form-control" id="officekodepos" name="officekodepos" th:field=*{officekodepos} />
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label" for="officephnno">Telepon Kantor</label>
-							<div class="col-md-9">
-								<input type="text" placeholder="Telepon Kantor" class="form-control" id="officephnno" name="officephnno" th:field=*{officephnno} />
-							</div>
-						</div>
 							
 						</div>
 						<div class="col-md-6">
 						
-							<div class="form-group">
-								<label class="col-md-3 control-label">No Nasabah</label>
-								<div class="col-md-9">
-									<input type="text" placeholder="No Nasabah" class="form-control" id="nonasabah" name="nonasabah" th:field=*{nonasabah} readonly />
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<div class="col-md-3"></div>
-								<div class="col-md-9"></div>
-							</div>
-							
-							<div class="form-group">
-								<div class="col-md-3"></div>
-								<div class="col-md-9"><h3>Data Pasangan</h3></div>
-							</div>
-							
-							<div class="form-group">
-								<label class="col-md-3 control-label" for="spousename">Nama Pasangan</label>
-								<div class="col-md-9">
-									<input type="text" placeholder="Nama Pasangan" class="form-control" id="spousename" name="spousename" th:field=*{spousename} />
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<label class="col-md-3 control-label">Tempat Tanggal Lahir Pasangan</label>
-								<div class="col-md-5">
-									<input type="text" placeholder="Tempat Lahir Pasangan" class="form-control" id="spousebirthplace" name="spousebirthplace" th:field=*{spousebirthplace} />
-								</div>
-								<div class="col-md-4">
-									<input type="date" placeholder="Tanggal Lahir Pasangan" class="form-control" id="spousebod" name="spousebod" th:field=*{spousebod} />
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<label class="col-md-3 control-label">Identitas Pasangan</label>
-								<div class="col-md-3">
-									<select class="form-control" id="spouseidtype" name="spouseidtype" th:field=*{spouseidtype}>
-										<option th:each="jenisid: ${jenisids}" th:value="${jenisid.sandicode}" th:text="${jenisid.sandidesc}"></option>
-									</select>
-								</div>
-								<div class="col-md-6">
-									<input type="text" placeholder="No Identitas Pasangan" class="form-control" id="spouseidno" name="spouseidno" th:field=*{spouseidno} />
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<label class="col-md-3 control-label" for="spousejob">Pekerjaan Pasangan</label>
-								<div class="col-md-9">
-									<select class="selectpicker" data-live-search="true" id="spousejob" name="spousejob" th:field=*{spousejob} >
-										<option value=""> -- pilih -- </option>
-										<option th:each="jobcode: ${jobcodes}" th:value="${jobcode.sandicode}" th:text="${jobcode.sandidesc}"></option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<label class="col-md-3 control-label" for="spouseedu">Pendidikan Pasangan</label>
-								<div class="col-md-9">
-									<select class="selectpicker" data-live-search="true" id="spouseedu" name="spouseedu" th:field=*{spouseedu} >
-										<option value=""> -- pilih -- </option>
-										<option th:each="pendidikan: ${pendidikans}" th:value="${pendidikan.sandicode}" th:text="${pendidikan.sandidesc}"></option>
-									</select>
-								</div>
-							</div>
-
 						</div>
 					</div>
 					<div class="row">
@@ -471,7 +347,7 @@
 							<label class="col-md-3 control-label" for="submitButton"></label>
 							<div class="col-md-9">
 								<button type="submit" id="submitButton" name="submitButton" class="btn btn-success">Save</button>
-								<a th:href="@{'/nasabah/edit/jobnspouse/' + ${nasabahJobnSpouse.nonasabah}}" class="btn btn-inverse">Cancel</a>
+								<a th:href="@{'/nasabah/dokumen/index/' + ${nonasabah}}" class="btn btn-inverse">Cancel</a>
 							</div>
 						</div>
 					</div>
@@ -502,13 +378,13 @@
 <script>
 	$(document).ready(function () {
 
-		$('#officeprov').change(function () {
+		$('#provinsi').change(function () {
 			$.ajax({
-                url: '/parameter/listkotakabbyprov/' + $('#officeprov').val(),
+                url: '/parameter/listkotakabbyprov/' + $('#provinsi').val(),
                 success: function (result) {
-                    $('#officecity').empty();
+                    $('#kota').empty();
                     $.each(result, function () {
-                        $('#officecity').append($('<option></option>').attr('value', this.kotacode).text(this.kotadesc));
+                        $('#kota').append($('<option></option>').attr('value', this.kotacode).text(this.kotadesc));
                     });
                 }
             });

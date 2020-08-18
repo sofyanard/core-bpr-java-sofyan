@@ -3,6 +3,8 @@ target/
 .mvn/
 .settings/
 
+upload/
+
 ### STS ###
 .apt_generated
 .classpath

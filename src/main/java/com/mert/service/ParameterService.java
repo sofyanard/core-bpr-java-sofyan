@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.mert.model.ParameterSandiBIOJK;
 import com.mert.model.ParameterProvinsi;
 import com.mert.model.ParameterKotaKab;
+import com.mert.model.ParameterKodeDokumen;
 import com.mert.repository.ParameterSandiBIOJKRepository;
 import com.mert.repository.ParameterProvinsiRepository;
 import com.mert.repository.ParameterKotaKabRepository;
+import com.mert.repository.ParameterKodeDokumenRepository;
 
 @Service
 public class ParameterService {
@@ -23,6 +25,9 @@ public class ParameterService {
 	
 	@Autowired
 	private ParameterKotaKabRepository parameterKotaKabRepository;
+	
+	@Autowired
+	private ParameterKodeDokumenRepository parameterKodeDokumenRepository;
 	
 	public List<ParameterProvinsi> listAllProvinsi() {
 		return parameterProvinsiRepository.findAll();
@@ -166,6 +171,10 @@ public class ParameterService {
 	
 	public List<ParameterSandiBIOJK> listSandiBIOJKValuta() {
 		return parameterSandiBIOJKRepository.findByKategoricode("VALUTA");
+	}
+	
+	public List<ParameterKodeDokumen> listAllKodeDokumen() {
+		return parameterKodeDokumenRepository.findAll();
 	}
 
 }
