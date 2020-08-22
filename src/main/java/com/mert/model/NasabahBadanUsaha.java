@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,8 +21,9 @@ public class NasabahBadanUsaha {
 	@Column(name = "nonasabah")
 	private Long nonasabah;
 
-	@Column(name = "prefix")
-	private String prefix;
+	@ManyToOne
+	@JoinColumn(name = "prefix", referencedColumnName = "bucode")
+	private ParameterBadanUsaha prefix;
 
 	@Column(name = "namalengkap")
 	private String namalengkap;
@@ -79,8 +82,9 @@ public class NasabahBadanUsaha {
 	@Column(name = "officefaxno")
 	private String officefaxno;
 
-	@Column(name = "officestatus")
-	private String officestatus;
+	@ManyToOne
+	@JoinColumn(name = "officestatus", referencedColumnName = "homestatuscode")
+	private ParameterHomeStatus officestatus;
 
 	@Column(name = "contactperson")
 	private String contactperson;
@@ -97,11 +101,11 @@ public class NasabahBadanUsaha {
 		this.nonasabah = nonasabah;
 	}
 
-	public String getPrefix() {
+	public ParameterBadanUsaha getPrefix() {
 		return prefix;
 	}
 
-	public void setPrefix(String prefix) {
+	public void setPrefix(ParameterBadanUsaha prefix) {
 		this.prefix = prefix;
 	}
 
@@ -249,11 +253,11 @@ public class NasabahBadanUsaha {
 		this.officefaxno = officefaxno;
 	}
 
-	public String getOfficestatus() {
+	public ParameterHomeStatus getOfficestatus() {
 		return officestatus;
 	}
 
-	public void setOfficestatus(String officestatus) {
+	public void setOfficestatus(ParameterHomeStatus officestatus) {
 		this.officestatus = officestatus;
 	}
 

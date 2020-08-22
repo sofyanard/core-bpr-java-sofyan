@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +24,9 @@ public class NasabahPengurus {
 	@Column(name = "nama")
 	private String nama;
 	
-	@Column(name = "gender")
-	private String gender;
+	@ManyToOne
+	@JoinColumn(name = "gender", referencedColumnName = "gendercode")
+	private ParameterGender gender;
 	
 	@Column(name = "jabatan")
 	private String jabatan;
@@ -31,8 +34,9 @@ public class NasabahPengurus {
 	@Column(name = "saham")
 	private Double saham;
 	
-	@Column(name = "idcode")
-	private String idcode;
+	@ManyToOne
+	@JoinColumn(name = "idcode", referencedColumnName = "jenisidcode")
+	private ParameterJenisID idcode;
 	
 	@Column(name = "noid")
 	private String noid;
@@ -84,11 +88,11 @@ public class NasabahPengurus {
 		this.nama = nama;
 	}
 
-	public String getGender() {
+	public ParameterGender getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(ParameterGender gender) {
 		this.gender = gender;
 	}
 
@@ -108,11 +112,11 @@ public class NasabahPengurus {
 		this.saham = saham;
 	}
 
-	public String getIdcode() {
+	public ParameterJenisID getIdcode() {
 		return idcode;
 	}
 
-	public void setIdcode(String idcode) {
+	public void setIdcode(ParameterJenisID idcode) {
 		this.idcode = idcode;
 	}
 

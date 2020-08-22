@@ -311,7 +311,7 @@
 								<label class="col-md-3 control-label" for="noid">Nama</label>
 								<div class="col-md-3">
 									<select class="form-control" id="prefix" name="jenisid" th:field=*{prefix}>
-										<option th:each="jenisbu: ${jenisbus}" th:value="${jenisbu.sandicode}" th:text="${jenisbu.sandidesc}"></option>
+										<option th:each="jenisbu: ${jenisbus}" th:value="${jenisbu.bucode}" th:text="${jenisbu.budesc}"></option>
 									</select>
 								</div>
 								<div class="col-md-6">
@@ -461,9 +461,7 @@
 								<div class="col-md-9">
 									<select class="selectpicker" data-live-search="true" id="officestatus" name="officestatus" th:field=*{officestatus} >
 										<option value=""> -- pilih -- </option>
-										<option value="1">Milik Sendiri</option>
-										<option value="2">Sewa</option>
-										<option value="4">Pinjaman</option>
+										<option th:each="homestatus: ${homestatuses}" th:value="${homestatus.homestatuscode}" th:text="${homestatus.homestatusdesc}"></option>
 									</select>
 								</div>
 							</div>

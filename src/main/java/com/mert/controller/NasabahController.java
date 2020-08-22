@@ -54,11 +54,13 @@ public class NasabahController {
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nasabahPerorangan", new NasabahPerorangan());
-		modelAndView.addObject("jenisids", parameterService.listSandiBIOJKJenisID());
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
+		modelAndView.addObject("genders", parameterService.ListGenders());
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("negaras", parameterService.listSandiBIOJKKodeNegara());
 		modelAndView.addObject("pendidikans", parameterService.listSandiBIOJKPendidikan());
-		modelAndView.addObject("maritals", parameterService.listSandiBIOJKMarital());
+		modelAndView.addObject("maritals", parameterService.ListAllMarital());
+		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
 		modelAndView.setViewName("nasabah/createperorangan");
 		return modelAndView;
 	}
@@ -69,9 +71,10 @@ public class NasabahController {
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nasabahBadanUsaha", new NasabahBadanUsaha());
-		modelAndView.addObject("jenisbus", parameterService.listSandiBIOJKJenisBU());
+		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
 		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
+		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
 		modelAndView.setViewName("nasabah/createbadanusaha");
 		return modelAndView;
 	}
@@ -117,12 +120,14 @@ public class NasabahController {
 		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahPerorangan nasabahPerorangan = nasabahService.FindByIdPerorangan(nonasabah);
 		modelAndView.addObject("nasabahPerorangan", nasabahPerorangan);
-		modelAndView.addObject("jenisids", parameterService.listSandiBIOJKJenisID());
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
+		modelAndView.addObject("genders", parameterService.ListGenders());
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahPerorangan.getHomeprovinsi()));
 		modelAndView.addObject("negaras", parameterService.listSandiBIOJKKodeNegara());
 		modelAndView.addObject("pendidikans", parameterService.listSandiBIOJKPendidikan());
-		modelAndView.addObject("maritals", parameterService.listSandiBIOJKMarital());
+		modelAndView.addObject("maritals", parameterService.ListAllMarital());
+		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
 		modelAndView.setViewName("nasabah/editperorangan");
 		return modelAndView;
 	}
@@ -134,10 +139,11 @@ public class NasabahController {
 		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahBadanUsaha nasabahBadanUsaha = nasabahService.FindByIdBadanUsaha(nonasabah);
 		modelAndView.addObject("nasabahBadanUsaha", nasabahBadanUsaha);
-		modelAndView.addObject("jenisbus", parameterService.listSandiBIOJKJenisBU());
+		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
 		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahBadanUsaha.getOfficeprov()));
+		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
 		modelAndView.setViewName("nasabah/editbadanusaha");
 		return modelAndView;
 	}
@@ -164,7 +170,7 @@ public class NasabahController {
 		nasabahUpdate.setDateupdate(new Date());
 		nasabahService.SaveNasabahUpdate(nasabahUpdate);
 		// Generate View
-		ModelAndView modelAndView = new ModelAndView("redirect:/nasabah/edit/perorangan/" + nasabahBadanUsaha.getNonasabah());
+		ModelAndView modelAndView = new ModelAndView("redirect:/nasabah/edit/badanusaha/" + nasabahBadanUsaha.getNonasabah());
 		return modelAndView;
 	}
 	
@@ -179,7 +185,7 @@ public class NasabahController {
 		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahJobnSpouse.getOfficeprov()));
-		modelAndView.addObject("jenisids", parameterService.listSandiBIOJKJenisID());
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
 		modelAndView.addObject("pendidikans", parameterService.listSandiBIOJKPendidikan());
 		modelAndView.setViewName("nasabah/editjobnspouse");
 		return modelAndView;
@@ -207,6 +213,7 @@ public class NasabahController {
 		modelAndView.addObject("nasabahLaporPerorangan", nasabahLaporPerorangan);
 		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());
 		modelAndView.addObject("hubungans", parameterService.listSandiBIOJKHubungan());
+		modelAndView.addObject("incomes", parameterService.ListAllSourceIncome());
 		modelAndView.setViewName("nasabah/editlaporperorangan");
 		return modelAndView;
 	}
@@ -221,6 +228,7 @@ public class NasabahController {
 		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());
 		modelAndView.addObject("hubungans", parameterService.listSandiBIOJKHubungan());
 		modelAndView.addObject("lembagas", parameterService.listSandiBIOJKPeringkat());
+		modelAndView.addObject("incomes", parameterService.ListAllSourceIncome());
 		modelAndView.setViewName("nasabah/editlaporbadanusaha");
 		return modelAndView;
 	}

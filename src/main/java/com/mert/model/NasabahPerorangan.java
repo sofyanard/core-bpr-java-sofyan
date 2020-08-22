@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,8 +27,9 @@ public class NasabahPerorangan {
 	@Column(name = "namalengkap")
 	private String namalengkap;
 	
-	@Column(name = "gender")
-	private String gender;
+	@ManyToOne
+	@JoinColumn(name = "gender", referencedColumnName = "gendercode")
+	private ParameterGender gender;
 	
 	@Column(name = "placebirth")
 	private String placebirth;
@@ -53,8 +56,9 @@ public class NasabahPerorangan {
 	@Column(name = "homekel")
 	private String homekel;
 	
-	@Column(name = "homestatus")
-	private String homestatus;
+	@ManyToOne
+	@JoinColumn(name = "homestatus", referencedColumnName = "homestatuscode")
+	private ParameterHomeStatus homestatus;
 	
 	@Column(name = "homephone")
 	private String homephone;
@@ -68,14 +72,16 @@ public class NasabahPerorangan {
 	@Column(name = "citizen")
 	private String citizen;
 	
-	@Column(name = "marital")
-	private String marital;
+	@ManyToOne
+	@JoinColumn(name = "marital", referencedColumnName = "maritalcode")
+	private ParameterMarital marital;
 	
 	@Column(name = "pendidikan")
 	private String pendidikan;
 	
-	@Column(name = "jenisid")
-	private String jenisid;
+	@ManyToOne
+	@JoinColumn(name = "jenisid", referencedColumnName = "jenisidcode")
+	private ParameterJenisID jenisid;
 	
 	@Column(name = "noid")
 	private String noid;
@@ -120,11 +126,11 @@ public class NasabahPerorangan {
 		this.namalengkap = namalengkap;
 	}
 
-	public String getGender() {
+	public ParameterGender getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(ParameterGender gender) {
 		this.gender = gender;
 	}
 
@@ -192,11 +198,11 @@ public class NasabahPerorangan {
 		this.homekel = homekel;
 	}
 
-	public String getHomestatus() {
+	public ParameterHomeStatus getHomestatus() {
 		return homestatus;
 	}
 
-	public void setHomestatus(String homestatus) {
+	public void setHomestatus(ParameterHomeStatus homestatus) {
 		this.homestatus = homestatus;
 	}
 
@@ -232,11 +238,11 @@ public class NasabahPerorangan {
 		this.citizen = citizen;
 	}
 
-	public String getMarital() {
+	public ParameterMarital getMarital() {
 		return marital;
 	}
 
-	public void setMarital(String marital) {
+	public void setMarital(ParameterMarital marital) {
 		this.marital = marital;
 	}
 
@@ -248,11 +254,11 @@ public class NasabahPerorangan {
 		this.pendidikan = pendidikan;
 	}
 
-	public String getJenisid() {
+	public ParameterJenisID getJenisid() {
 		return jenisid;
 	}
 
-	public void setJenisid(String jenisid) {
+	public void setJenisid(ParameterJenisID jenisid) {
 		this.jenisid = jenisid;
 	}
 

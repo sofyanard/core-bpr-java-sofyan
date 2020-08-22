@@ -318,11 +318,7 @@
 								<label class="col-md-3 control-label" for="gender">Tipe</label>
 								<div class="col-md-9">
 									<select class="selectpicker" data-live-search="true" id="gender" name="gender" th:field=*{gender} >
-										<option value=""> -- pilih -- </option>
-										<option value="L">Laki-Laki</option>
-										<option value="P">Perempuan</option>
-										<option value="B">Badan Usaha</option>
-										<option value="M">Masyarakat</option>
+										<option th:each="gender: ${genders}" th:value="${gender.gendercode}" th:text="${gender.genderdesc}"></option>
 									</select>
 								</div>
 							</div>
@@ -331,7 +327,7 @@
 								<label class="col-md-3 control-label" for="noid">Identitas</label>
 								<div class="col-md-3">
 									<select class="form-control" id="idcode" name="idcode" th:field=*{idcode}>
-										<option th:each="jenisid: ${jenisids}" th:value="${jenisid.sandicode}" th:text="${jenisid.sandidesc}"></option>
+										<option th:each="jenisid: ${jenisids}" th:value="${jenisid.jenisidcode}" th:text="${jenisid.jenisiddesc}"></option>
 									</select>
 								</div>
 								<div class="col-md-6">

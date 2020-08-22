@@ -320,9 +320,7 @@
 								<div class="col-md-9">
 									<select class="selectpicker" data-live-search="true" id="sourceincome" name="sourceincome" th:field=*{sourceincome} >
 										<option value=""> -- pilih -- </option>
-										<option value="1">Gaji</option>
-										<option value="2">Usaha</option>
-										<option value="3">Lainnya</option>
+										<option th:each="income: ${incomes}" th:value="${income.incomecode}" th:text="${income.incomedesc}"></option>
 									</select>
 								</div>
 							</div>

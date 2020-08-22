@@ -59,8 +59,9 @@ public class NasabahPengurusController {
 		NasabahPengurus nasabahPengurus = new NasabahPengurus();
 		modelAndView.addObject("nasabahPengurus", nasabahPengurus);
 		modelAndView.addObject("jabatans", parameterService.listSandiBIOJKJabatan());
-		modelAndView.addObject("jenisids", parameterService.listSandiBIOJKJenisID());
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
+		modelAndView.addObject("genders", parameterService.ListAllGender());
 		modelAndView.setViewName("nasabah/penguruscreate");
 		return modelAndView;
 	}
@@ -82,9 +83,10 @@ public class NasabahPengurusController {
 		NasabahPengurus nasabahPengurus = nasabahPengurusService.findById(id);
 		modelAndView.addObject("nasabahPengurus", nasabahPengurus);
 		modelAndView.addObject("jabatans", parameterService.listSandiBIOJKJabatan());
-		modelAndView.addObject("jenisids", parameterService.listSandiBIOJKJenisID());
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahPengurus.getProvinsi()));
+		modelAndView.addObject("genders", parameterService.ListAllGender());
 		modelAndView.setViewName("nasabah/pengurusedit");
 		return modelAndView;
 	}

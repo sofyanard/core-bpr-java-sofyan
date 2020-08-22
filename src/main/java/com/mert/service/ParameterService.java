@@ -10,11 +10,23 @@ import com.mert.model.ParameterProvinsi;
 import com.mert.model.ParameterKotaKab;
 import com.mert.model.ParameterKodeDokumen;
 import com.mert.model.ParameterKategoriCatatan;
+import com.mert.model.ParameterJenisID;
+import com.mert.model.ParameterGender;
+import com.mert.model.ParameterHomeStatus;
+import com.mert.model.ParameterMarital;
+import com.mert.model.ParameterBadanUsaha;
+import com.mert.model.ParameterSourceIncome;
 import com.mert.repository.ParameterSandiBIOJKRepository;
 import com.mert.repository.ParameterProvinsiRepository;
 import com.mert.repository.ParameterKotaKabRepository;
 import com.mert.repository.ParameterKodeDokumenRepository;
 import com.mert.repository.ParameterKategoriCatatanRepository;
+import com.mert.repository.ParameterJenisIDRepository;
+import com.mert.repository.ParameterGenderRepository;
+import com.mert.repository.ParameterHomeStatusRepository;
+import com.mert.repository.ParameterMaritalRepository;
+import com.mert.repository.ParameterBadanUsahaRepository;
+import com.mert.repository.ParameterSourceIncomeRepository;
 
 @Service
 public class ParameterService {
@@ -33,6 +45,26 @@ public class ParameterService {
 	
 	@Autowired
 	private ParameterKategoriCatatanRepository parameterKategoriCatatanRepository;
+	
+	@Autowired
+	private ParameterJenisIDRepository parameterJenisIDRepository;
+	
+	@Autowired
+	private ParameterGenderRepository parameterGenderRepository;
+	
+	@Autowired
+	private ParameterHomeStatusRepository parameterHomeStatusRepository;
+	
+	@Autowired
+	private ParameterMaritalRepository parameterMaritalRepository;
+	
+	@Autowired
+	private ParameterBadanUsahaRepository parameterBadanUsahaRepository;
+	
+	@Autowired
+	private ParameterSourceIncomeRepository parameterSourceIncomeRepository;
+	
+	
 	
 	public List<ParameterProvinsi> listAllProvinsi() {
 		return parameterProvinsiRepository.findAll();
@@ -184,6 +216,34 @@ public class ParameterService {
 	
 	public List<ParameterKategoriCatatan> listAllKategoriCatatan() {
 		return parameterKategoriCatatanRepository.findAll();
+	}
+	
+	public List<ParameterJenisID> listAllJenisID() {
+		return parameterJenisIDRepository.findAll();
+	}
+	
+	public List<ParameterGender> ListAllGender() {
+		return parameterGenderRepository.findAll();
+	}
+	
+	public List<ParameterGender> ListGenders() {
+		return parameterGenderRepository.findGenders();
+	}
+	
+	public List<ParameterHomeStatus> ListAllHomeStatus() {
+		return parameterHomeStatusRepository.findAll();
+	}
+	
+	public List<ParameterMarital> ListAllMarital() {
+		return parameterMaritalRepository.findAll();
+	}
+	
+	public List<ParameterBadanUsaha> ListAllBadanUsaha() {
+		return parameterBadanUsahaRepository.findAll();
+	}
+	
+	public List<ParameterSourceIncome> ListAllSourceIncome() {
+		return parameterSourceIncomeRepository.findAll();
 	}
 
 }

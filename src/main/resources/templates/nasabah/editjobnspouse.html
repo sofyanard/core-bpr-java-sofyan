@@ -435,7 +435,7 @@
 								<label class="col-md-3 control-label">Identitas Pasangan</label>
 								<div class="col-md-3">
 									<select class="form-control" id="spouseidtype" name="spouseidtype" th:field=*{spouseidtype}>
-										<option th:each="jenisid: ${jenisids}" th:value="${jenisid.sandicode}" th:text="${jenisid.sandidesc}"></option>
+										<option th:each="jenisid: ${jenisids}" th:value="${jenisid.jenisidcode}" th:text="${jenisid.jenisiddesc}"></option>
 									</select>
 								</div>
 								<div class="col-md-6">

@@ -2,13 +2,19 @@ package com.mert.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 @Entity
 @Table(name = "sandibiojk")
-public class ParameterSandiBIOJK {
+@IdClass(ParameterSandiBIOJKID.class)
+public class ParameterSandiBIOJK implements Serializable {
 	
+	@Id
 	@Column(name = "kategoricode")
 	private String kategoricode;
 	
