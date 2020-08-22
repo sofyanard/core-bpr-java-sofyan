@@ -36,6 +36,8 @@
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 	<![endif]-->
+	
+	<link href="/css/bootselect.css" rel="stylesheet">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -224,10 +226,8 @@
            				 </span>
 					</a>
 					<ul class="treeview-menu">
-						<li><a th:href="@{/nasabah/create/perorangan}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
-						<li><a th:href="@{/nasabah/searchedit}"><i class="fa fa-edit"></i>Pemeliharaan Data Nasabah</a></li>
-						<li><a th:href="@{/nasabah/searchcatatan}"><i class="fa fa-bookmark"></i>Pemeliharaan Catatan Nasabah</a></li>
-						<li><a th:href="@{/nasabah/searchinquiry}"><i class="fa fa-book"></i>Pemantauan Data Nasabah</a></li>
+						<li><a th:href="@{/admin/kategoris/new}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
+						<li><a th:href="@{/admin/kategoris/all}"><i class="fa fa-file-text"></i> All Kategori</a></li>
 					</ul>
 				</li>
 				<li th:if="${control == 'ADMIN'}" class="treeview">
@@ -275,118 +275,215 @@
 		</section>
 		<!-- /.sidebar -->
 	</aside>
-
+	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
-		<section class="content-header">
-			<h1>
-				Home Page
-			</h1>
-		</section>
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
 
 		<!-- Main content -->
 		<section class="content">
-			<div th:if="${control == 'ADMIN'}" >
-				<div class="row">
-					<div class=" col-lg-offset-1   col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-yellow">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${userCount}"></span></h3>
-
-								<p>User Registrations</p>
-							</div>
-							<div class="icon">
-								<i class="ion ion-person"></i>
-							</div>
-							<a th:href="@{/users/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-					<div class="col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-green">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${adminCount}"></span></h3>
-								<p>Admin Registrations</p>
-							</div>
-							<div class="icon">
-								<i class="ion ion-person"></i>
-							</div>
-							<a th:href="@{/users/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-					<div class="col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-blue">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${taskCount}"></span></h3>
-								<p>Number of Content</p>
-							</div>
-							<div class="icon">
-								<i class="icon ion-compose"></i>
-							</div>
-							<a th:href="@{/admin/tasks/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-offset-3 col-lg-4 col-xs-6">
-					<h2 class="headline text-black"> WELCOME <span class="hidden-xs" th:utext="${auth.name}"></span></h2>
-					<!-- /.error-content -->
-				</div>
-			</div>
-			<div class="row">
-
-				<div class="col-lg-offset-3 col-md-4">
-					<!-- Widget: user widget style 1 -->
-					<div class="box box-widget widget-user">
-						<!-- Add the bg color to the header using any of the bg-* classes -->
-						<div class="widget-user-header bg-purple-active">
-							<h3 class="widget-user-username"> <span class="hidden-xs" th:utext="${auth.name}"></span></h3>
-							<h5 class="widget-user-desc"> <span class="hidden-xs" th:utext="${auth.role.role}"></span></h5>
-						</div>
-						<div class="widget-user-image">
-							<img class="img-circle" src="/images/avatar5.png" alt="User Avatar">
-						</div>
-						<div class="box-footer">
-							<div class="row">
-								<div class="col-sm-4 border-right">
-									<div class="description-block">
-									</div>
-									<!-- /.description-block -->
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Data Nasabah</legend>
+			
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/nasabah/inquiry/badanusaha/' + ${nonasabah}}">Basic Data Badan Usaha</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/pengurus/inquiry/' + ${nonasabah}}">Data Pengurus Perusahaan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/inquiry/laporbadanusaha/' + ${nonasabah}}">Data Sandi Pelaporan</a></li>
+					<li role="presentation" class="active"><a href="#">Data Laporan Keuangan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/dokumen/inquiry/' + ${nonasabah}}">Data Dokumen Nasabah</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form action="#" method="GET" th:object="${nasabahLapKeu}" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Periode</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="periode" name="periode" th:field=*{periode} readonly />
 								</div>
-								<!-- /.col -->
-								<div class="col-sm-4 border-right">
-									<div class="description-block">
-										<h5 class="description-header"> <span class="hidden-xs" th:utext="${userTaskSize}"></span></h5>
-										<span class="description-text">TASKS</span>
-									</div>
-									<!-- /.description-block -->
-								</div>
-								<!-- /.col -->
-								<div class="col-sm-4">
-									<div class="description-block">
-									</div>
-									<!-- /.description-block -->
-								</div>
-								<!-- /.col -->
 							</div>
-							<!-- /.row -->
+						</div>
+						<div class="col-md-6">
+							<input type="hidden" placeholder="ID" class="form-control" id="id" name="id" th:field=*{id} />
+							<input type="hidden" placeholder="No Nasabah" class="form-control" id="nonasabah" name="nonasabah" th:field=*{nonasabah} />
 						</div>
 					</div>
-				</div>
+					<div class="row">
+						<div class="col-md-4">
+						
+							<h5>ASET</h5>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="kas">Kas</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="kas" name="kas" th:field=*{kas} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="piutang">Piutang</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="piutang" name="piutang" th:field=*{piutang} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="investasi">Investasi</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="investasi" name="investasi" th:field=*{investasi} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="asetlancarlain">Aset Lancar Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="asetlancarlain" name="asetlancarlain" th:field=*{asetlancarlain} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="asettidaklancar">Aset Non Lancar Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="asettidaklancar" name="asettidaklancar" th:field=*{asettidaklancar} readonly />
+								</div>
+							</div>
+							
+							<br/>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="modal">EKUITAS</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="modal" name="modal" th:field=*{modal} readonly />
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-4">
+						
+							<h5>LIABILITAS</h5>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pinjamanpendek">Pinjaman Jangka Pendek</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pinjamanpendek" name="pinjamanpendek" th:field=*{pinjamanpendek} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="utangusahapendek">Utang Jangka Pendek</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="utangusahapendek" name="utangusahapendek" th:field=*{utangusahapendek} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="liabpendeklain">Liab Jangka Pendek Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="liabpendeklain" name="liabpendeklain" th:field=*{liabpendeklain} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pinjamanpanjang">Pinjaman Jangka Panjang</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pinjamanpanjang" name="pinjamanpanjang" th:field=*{pinjamanpanjang} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="utangusahapanjang">Utang Jangka Panjang</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="utangusahapanjang" name="utangusahapanjang" th:field=*{utangusahapanjang} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="liabpanjanglain">Liab Jangka Panjang Lain</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="liabpanjanglain" name="liabpanjanglain" th:field=*{liabpanjanglain} readonly />
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-4">
+						
+							<h5>LABA RUGI</h5>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pendapatanopr">Pendapatan Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pendapatanopr" name="pendapatanopr" th:field=*{pendapatanopr} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="bebanopr">Beban Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="bebanopr" name="bebanopr" th:field=*{bebanopr} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="pendapatannonopr">Pendapatan Non Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="pendapatannonopr" name="pendapatannonopr" th:field=*{pendapatannonopr} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="bebannonopr">Beban Non Operasional</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="bebannonopr" name="bebannonopr" th:field=*{bebannonopr} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="lababruto">Laba Bruto</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="lababruto" name="lababruto" th:field=*{lababruto} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="labasebelumpajak">Laba Sebelum Pajak</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="labasebelumpajak" name="labasebelumpajak" th:field=*{labasebelumpajak} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-6 control-label" for="labatahunberjalan">Laba Tahun Berjalan</label>
+								<div class="col-md-6">
+									<input type="number" class="form-control" id="labatahunberjalan" name="labatahunberjalan" th:field=*{labatahunberjalan} readonly />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<div class="row">
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="submitButton"></label>
+							<div class="col-md-9">
+								<a th:href="@{'/nasabah/lapkeu/inquiry/' + ${nonasabah}}" class="btn btn-inverse">Back</a>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
 			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
 
-			<!-- /.error-page -->
 		</section>
 		<!-- /.content -->
 	</div>
@@ -397,8 +494,30 @@
 
 <!-- jQuery 2.2.3 -->
 <script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+
+		$('#provinsi').change(function () {
+			$.ajax({
+                url: '/parameter/listkotakabbyprov/' + $('#provinsi').val(),
+                success: function (result) {
+                    $('#kota').empty();
+                    $.each(result, function () {
+                        $('#kota').append($('<option></option>').attr('value', this.kotacode).text(this.kotadesc));
+                    });
+                }
+            });
+		});
+	});
+</script>
+
 <!-- FastClick -->
 <script src="/js/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -425,5 +544,6 @@
 <script src="/js/dashboard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
 </body>
 </html>

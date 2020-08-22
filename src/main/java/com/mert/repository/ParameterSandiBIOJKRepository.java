@@ -8,5 +8,8 @@ import com.mert.model.ParameterSandiBIOJK;
 import com.mert.model.ParameterSandiBIOJKID;
 
 public interface ParameterSandiBIOJKRepository extends JpaRepository<ParameterSandiBIOJK, ParameterSandiBIOJKID> {
+	
 	List<ParameterSandiBIOJK> findByKategoricode(String kategoricode);
+	
+	
 }

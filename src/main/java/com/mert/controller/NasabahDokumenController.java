@@ -139,5 +139,19 @@ public class NasabahDokumenController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
 	}
+	
+	@RequestMapping(value="/inquiry/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView inquiry(@PathVariable Long nonasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		modelAndView.addObject("nonasabah", nonasabah);
+		List<NasabahDokumen> listDokumen = nasabahDokumenService.listByNonasabah(nonasabah);
+		modelAndView.addObject("listDokumen", listDokumen);
+		String tipenasabah = nasabahBasicService.findByNonasabah(nonasabah).getTipenasabah();
+		modelAndView.addObject("tipenasabah", tipenasabah);
+		modelAndView.setViewName("nasabah/dokumeninquiry");
+		return modelAndView;
+	}
 
 }

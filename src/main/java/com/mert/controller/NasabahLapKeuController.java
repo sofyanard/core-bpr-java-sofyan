@@ -97,5 +97,29 @@ public class NasabahLapKeuController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/nasabah/lapkeu/index/" + nonasabah);
 		return modelAndView;
 	}
+	
+	@RequestMapping(value="/inquiry/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView inquiry(@PathVariable Long nonasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		modelAndView.addObject("nonasabah", nonasabah);
+		List<NasabahLapKeu> listLapKeu = nasabahLapKeuService.listByNonasabah(nonasabah);
+		modelAndView.addObject("listLapKeu", listLapKeu);
+		modelAndView.setViewName("nasabah/lapkeuinquiry");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/detail/{nonasabah}/{id}", method = RequestMethod.GET)
+	public ModelAndView detail(@PathVariable Long nonasabah, @PathVariable int id) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		modelAndView.addObject("nonasabah", nonasabah);
+		NasabahLapKeu nasabahLapKeu = nasabahLapKeuService.findById(id);
+		modelAndView.addObject("nasabahLapKeu", nasabahLapKeu);
+		modelAndView.setViewName("nasabah/lapkeudetail");
+		return modelAndView;
+	}
 
 }

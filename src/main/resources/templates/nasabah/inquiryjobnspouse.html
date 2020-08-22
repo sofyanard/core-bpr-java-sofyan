@@ -36,6 +36,8 @@
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 	<![endif]-->
+	
+	<link href="/css/bootselect.css" rel="stylesheet">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -224,10 +226,8 @@
            				 </span>
 					</a>
 					<ul class="treeview-menu">
-						<li><a th:href="@{/nasabah/create/perorangan}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
-						<li><a th:href="@{/nasabah/searchedit}"><i class="fa fa-edit"></i>Pemeliharaan Data Nasabah</a></li>
-						<li><a th:href="@{/nasabah/searchcatatan}"><i class="fa fa-bookmark"></i>Pemeliharaan Catatan Nasabah</a></li>
-						<li><a th:href="@{/nasabah/searchinquiry}"><i class="fa fa-book"></i>Pemantauan Data Nasabah</a></li>
+						<li><a th:href="@{/admin/kategoris/new}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
+						<li><a th:href="@{/admin/kategoris/all}"><i class="fa fa-file-text"></i> All Kategori</a></li>
 					</ul>
 				</li>
 				<li th:if="${control == 'ADMIN'}" class="treeview">
@@ -275,118 +275,199 @@
 		</section>
 		<!-- /.sidebar -->
 	</aside>
-
+	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
-		<section class="content-header">
-			<h1>
-				Home Page
-			</h1>
-		</section>
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
 
 		<!-- Main content -->
 		<section class="content">
-			<div th:if="${control == 'ADMIN'}" >
-				<div class="row">
-					<div class=" col-lg-offset-1   col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-yellow">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${userCount}"></span></h3>
-
-								<p>User Registrations</p>
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Data Nasabah</legend>
+			
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/nasabah/inquiry/perorangan/' + ${nasabahJobnSpouse.nonasabah}}">Basic Data Perorangan</a></li>
+					<li role="presentation" class="active"><a href="#">Data Pekerjaan & Pasangan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/inquiry/laporperorangan/' + ${nasabahJobnSpouse.nonasabah}}">Data Sandi Pelaporan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/dokumen/inquiry/' + ${nasabahJobnSpouse.nonasabah}}">Data Dokumen Nasabah</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form action="#" method="GET" th:object="${nasabahJobnSpouse}" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+							
+						<!-- Text input-->
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="jobtype">Pekerjaan</label>
+							<div class="col-md-9">
+								<select class="form-control" id="jobtype" name="jobtype" th:field=*{jobtype} disabled >
+									<option th:each="jobcode: ${jobcodes}" th:value="${jobcode.sandicode}" th:text="${jobcode.sandidesc}"></option>
+								</select>
 							</div>
-							<div class="icon">
-								<i class="ion ion-person"></i>
-							</div>
-							<a th:href="@{/users/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
 						</div>
-					</div>
-					<div class="col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-green">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${adminCount}"></span></h3>
-								<p>Admin Registrations</p>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="workplace">Nama Tempat Bekerja</label>
+							<div class="col-md-9">
+								<input type="text" placeholder="Nama Tempat Bekerja" class="form-control" id="workplace" name="workplace" th:field=*{workplace} readonly />
 							</div>
-							<div class="icon">
-								<i class="ion ion-person"></i>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="bidusaha">Bidang Usaha</label>
+							<div class="col-md-9">
+								<select class="form-control" id="bidusaha" name="bidusaha" th:field=*{bidusaha} disabled >
+									<option th:each="bidusaha: ${bidusahas}" th:value="${bidusaha.sandicode}" th:text="${bidusaha.sandidesc}"></option>
+								</select>
 							</div>
-							<a th:href="@{/users/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
 						</div>
-					</div>
-					<div class="col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-blue">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${taskCount}"></span></h3>
-								<p>Number of Content</p>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="income">Income / Tahun</label>
+							<div class="col-md-9">
+								<input type="number" placeholder="Income / Tahun" class="form-control" id="income" name="income" th:field=*{income} readonly />
 							</div>
-							<div class="icon">
-								<i class="icon ion-compose"></i>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="officeadd">Alamat</label>
+							<div class="col-md-9">
+								<input type="text" placeholder="Alamat" class="form-control" id="officeadd" name="officeadd" th:field=*{officeadd} readonly />
 							</div>
-							<a th:href="@{/admin/tasks/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
 						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-offset-3 col-lg-4 col-xs-6">
-					<h2 class="headline text-black"> WELCOME <span class="hidden-xs" th:utext="${auth.name}"></span></h2>
-					<!-- /.error-content -->
-				</div>
-			</div>
-			<div class="row">
-
-				<div class="col-lg-offset-3 col-md-4">
-					<!-- Widget: user widget style 1 -->
-					<div class="box box-widget widget-user">
-						<!-- Add the bg color to the header using any of the bg-* classes -->
-						<div class="widget-user-header bg-purple-active">
-							<h3 class="widget-user-username"> <span class="hidden-xs" th:utext="${auth.name}"></span></h3>
-							<h5 class="widget-user-desc"> <span class="hidden-xs" th:utext="${auth.role.role}"></span></h5>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="officeprov">Provinsi</label>
+							<div class="col-md-9">
+								<select class="form-control" name="officeprov" id="officeprov" th:field=*{officeprov} disabled >
+									<option th:each="provinsi: ${provinsis}" th:value="${provinsi.provinsicode}" th:text="${provinsi.provinsidesc}"></option>
+								</select>
+							</div>
 						</div>
-						<div class="widget-user-image">
-							<img class="img-circle" src="/images/avatar5.png" alt="User Avatar">
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="officecity">Kota/Kabupaten</label>
+							<div class="col-md-9">
+								<select class="form-control" id="officecity" name="officecity" th:field=*{officecity} disabled >
+									<option th:each="kota: ${kotas}" th:value="${kota.kotacode}" th:if="${nasabahJobnSpouse.officecity} == ${kota.kotacode}" selected="selected" th:text="${kota.kotadesc}">
+									<option th:each="kota: ${kotas}" th:value="${kota.kotacode}" th:if="${nasabahJobnSpouse.officecity} != ${kota.kotacode}" th:text="${kota.kotadesc}">
+								</select>
+							</div>
 						</div>
-						<div class="box-footer">
-							<div class="row">
-								<div class="col-sm-4 border-right">
-									<div class="description-block">
-									</div>
-									<!-- /.description-block -->
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="officekec">Kecamatan</label>
+							<div class="col-md-9">
+								<input type="text" placeholder="Kecamatan" class="form-control" id="officekec" name="officekec" th:field=*{officekec} readonly />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="officekel">Kelurahan</label>
+							<div class="col-md-9">
+								<input type="text" placeholder="Kelurahan" class="form-control" id="officekel" name="officekel" th:field=*{officekel} readonly />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="officekodepos">Kode Pos</label>
+							<div class="col-md-9">
+								<input type="number" placeholder="Kode Pos" class="form-control" id="officekodepos" name="officekodepos" th:field=*{officekodepos} readonly />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="officephnno">Telepon Kantor</label>
+							<div class="col-md-9">
+								<input type="text" placeholder="Telepon Kantor" class="form-control" id="officephnno" name="officephnno" th:field=*{officephnno} readonly />
+							</div>
+						</div>
+							
+						</div>
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label">No Nasabah</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="No Nasabah" class="form-control" id="nonasabah" name="nonasabah" th:field=*{nonasabah} readonly />
 								</div>
-								<!-- /.col -->
-								<div class="col-sm-4 border-right">
-									<div class="description-block">
-										<h5 class="description-header"> <span class="hidden-xs" th:utext="${userTaskSize}"></span></h5>
-										<span class="description-text">TASKS</span>
-									</div>
-									<!-- /.description-block -->
-								</div>
-								<!-- /.col -->
-								<div class="col-sm-4">
-									<div class="description-block">
-									</div>
-									<!-- /.description-block -->
-								</div>
-								<!-- /.col -->
 							</div>
-							<!-- /.row -->
+							
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<div class="col-md-9"></div>
+							</div>
+							
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<div class="col-md-9"><h3>Data Pasangan</h3></div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="spousename">Nama Pasangan</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="Nama Pasangan" class="form-control" id="spousename" name="spousename" th:field=*{spousename} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tempat Tanggal Lahir Pasangan</label>
+								<div class="col-md-5">
+									<input type="text" placeholder="Tempat Lahir Pasangan" class="form-control" id="spousebirthplace" name="spousebirthplace" th:field=*{spousebirthplace} readonly />
+								</div>
+								<div class="col-md-4">
+									<input type="date" placeholder="Tanggal Lahir Pasangan" class="form-control" id="spousebod" name="spousebod" th:field=*{spousebod} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Identitas Pasangan</label>
+								<div class="col-md-3">
+									<select class="form-control" id="spouseidtype" name="spouseidtype" th:field=*{spouseidtype} disabled >
+										<option th:each="jenisid: ${jenisids}" th:value="${jenisid.jenisidcode}" th:text="${jenisid.jenisiddesc}"></option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<input type="text" placeholder="No Identitas Pasangan" class="form-control" id="spouseidno" name="spouseidno" th:field=*{spouseidno} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="spousejob">Pekerjaan Pasangan</label>
+								<div class="col-md-9">
+									<select class="form-control" id="spousejob" name="spousejob" th:field=*{spousejob} disabled >
+										<option th:each="jobcode: ${jobcodes}" th:value="${jobcode.sandicode}" th:text="${jobcode.sandidesc}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="spouseedu">Pendidikan Pasangan</label>
+								<div class="col-md-9">
+									<select class="form-control" id="spouseedu" name="spouseedu" th:field=*{spouseedu} disabled >
+										<option th:each="pendidikan: ${pendidikans}" th:value="${pendidikan.sandicode}" th:text="${pendidikan.sandidesc}"></option>
+									</select>
+								</div>
+							</div>
+
 						</div>
 					</div>
-				</div>
+				</fieldset>
+				</form>
+				
 			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
 
-			<!-- /.error-page -->
 		</section>
 		<!-- /.content -->
 	</div>
@@ -397,8 +478,13 @@
 
 <!-- jQuery 2.2.3 -->
 <script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+
 <!-- FastClick -->
 <script src="/js/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -425,5 +511,6 @@
 <script src="/js/dashboard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
 </body>
 </html>

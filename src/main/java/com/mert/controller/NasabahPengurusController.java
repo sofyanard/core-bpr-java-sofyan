@@ -105,5 +105,34 @@ public class NasabahPengurusController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/nasabah/pengurus/index/" + nonasabah);
 		return modelAndView;
 	}
+	
+	@RequestMapping(value="/inquiry/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView inquiry(@PathVariable Long nonasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		modelAndView.addObject("nonasabah", nonasabah);
+		List<NasabahPengurus> listPengurus = nasabahPengurusService.listByNonasabah(nonasabah);
+		modelAndView.addObject("listPengurus", listPengurus);
+		modelAndView.setViewName("nasabah/pengurusinquiry");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/detail/{nonasabah}/{id}", method = RequestMethod.GET)
+	public ModelAndView detail(@PathVariable Long nonasabah, @PathVariable int id) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		modelAndView.addObject("nonasabah", nonasabah);
+		NasabahPengurus nasabahPengurus = nasabahPengurusService.findById(id);
+		modelAndView.addObject("nasabahPengurus", nasabahPengurus);
+		modelAndView.addObject("jabatans", parameterService.listSandiBIOJKJabatan());
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
+		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
+		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahPengurus.getProvinsi()));
+		modelAndView.addObject("genders", parameterService.ListAllGender());
+		modelAndView.setViewName("nasabah/pengurusdetail");
+		return modelAndView;
+	}
 
 }

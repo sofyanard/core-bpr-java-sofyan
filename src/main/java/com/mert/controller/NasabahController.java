@@ -22,6 +22,7 @@ import com.mert.model.NasabahJobnSpouse;
 import com.mert.model.NasabahLaporPerorangan;
 import com.mert.model.NasabahLaporBadanUsaha;
 import com.mert.model.NasabahBasic;
+import com.mert.model.NasabahCatatan;
 import com.mert.service.NasabahService;
 import com.mert.service.NasabahBasicService;
 import com.mert.service.ParameterService;
@@ -259,19 +260,6 @@ public class NasabahController {
 		return modelAndView;
 	}
 	
-	/*
-	@RequestMapping(value="/searchedit", method = RequestMethod.GET)
-	public ModelAndView SearchEdit() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
-		List<NasabahBasic> listNasabah = nasabahBasicService.findAll();
-		modelAndView.addObject("listNasabah", listNasabah);
-		modelAndView.setViewName("nasabah/searchedit");
-		return modelAndView;
-	} 
-	*/
-	
 	@RequestMapping(value="/searchedit", method = RequestMethod.GET)
 	public ModelAndView SearchEdit(String keyword) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -286,6 +274,23 @@ public class NasabahController {
 		}
 		modelAndView.addObject("listNasabah", listNasabah);
 		modelAndView.setViewName("nasabah/searchedit");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/searchinquiry", method = RequestMethod.GET)
+	public ModelAndView SearchInquiry(String keyword) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		List<NasabahBasic> listNasabah;
+		if ((keyword != null) && (keyword != "")) {
+			listNasabah = nasabahBasicService.findByKeyword(keyword);
+		} else {
+			listNasabah = nasabahBasicService.findAll();
+			// listNasabah = null;
+		}
+		modelAndView.addObject("listNasabah", listNasabah);
+		modelAndView.setViewName("nasabah/searchinquiry");
 		return modelAndView;
 	}
 	
@@ -306,15 +311,95 @@ public class NasabahController {
 		return modelAndView;
 	}
 	
-	
-	
-	@RequestMapping("/list")
-	public ModelAndView list() {
+	@RequestMapping(value="/inquiry/perorangan/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView InquiryPerorangan(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("nasabah/list");
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		NasabahPerorangan nasabahPerorangan = nasabahService.FindByIdPerorangan(nonasabah);
+		modelAndView.addObject("nasabahPerorangan", nasabahPerorangan);
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
+		modelAndView.addObject("genders", parameterService.ListGenders());
+		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
+		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahPerorangan.getHomeprovinsi()));
+		modelAndView.addObject("negaras", parameterService.listSandiBIOJKKodeNegara());
+		modelAndView.addObject("pendidikans", parameterService.listSandiBIOJKPendidikan());
+		modelAndView.addObject("maritals", parameterService.ListAllMarital());
+		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
+		NasabahCatatan nasabahCatatan = nasabahBasicService.findCatatanByNonasabah(nonasabah);
+		if (nasabahCatatan == null) {
+			nasabahCatatan = new NasabahCatatan();
+		}
+		modelAndView.addObject("nasabahCatatan", nasabahCatatan);
+		modelAndView.setViewName("nasabah/inquiryperorangan");
 		return modelAndView;
 	}
 	
-
+	@RequestMapping(value="/inquiry/badanusaha/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView InquiryBadanUsaha(@PathVariable Long nonasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		NasabahBadanUsaha nasabahBadanUsaha = nasabahService.FindByIdBadanUsaha(nonasabah);
+		modelAndView.addObject("nasabahBadanUsaha", nasabahBadanUsaha);
+		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
+		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
+		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
+		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahBadanUsaha.getOfficeprov()));
+		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
+		NasabahCatatan nasabahCatatan = nasabahBasicService.findCatatanByNonasabah(nonasabah);
+		if (nasabahCatatan == null) {
+			nasabahCatatan = new NasabahCatatan();
+		}
+		modelAndView.addObject("nasabahCatatan", nasabahCatatan);
+		modelAndView.setViewName("nasabah/inquirybadanusaha");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/inquiry/jobnspouse/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView InquiryJobnSpouse(@PathVariable Long nonasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		NasabahJobnSpouse nasabahJobnSpouse = nasabahService.FindByIdJobnSpouse(nonasabah);
+		modelAndView.addObject("nasabahJobnSpouse", nasabahJobnSpouse);
+		modelAndView.addObject("jobcodes", parameterService.listSandiBIOJKJobCode());
+		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
+		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
+		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahJobnSpouse.getOfficeprov()));
+		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
+		modelAndView.addObject("pendidikans", parameterService.listSandiBIOJKPendidikan());
+		modelAndView.setViewName("nasabah/inquiryjobnspouse");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/inquiry/laporperorangan/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView InquiryLaporPerorangan(@PathVariable Long nonasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		NasabahLaporPerorangan nasabahLaporPerorangan = nasabahService.FindByIdLaporPerorangan(nonasabah);
+		modelAndView.addObject("nasabahLaporPerorangan", nasabahLaporPerorangan);
+		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());
+		modelAndView.addObject("hubungans", parameterService.listSandiBIOJKHubungan());
+		modelAndView.addObject("incomes", parameterService.ListAllSourceIncome());
+		modelAndView.setViewName("nasabah/inquirylaporperorangan");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/inquiry/laporbadanusaha/{nonasabah}", method = RequestMethod.GET)
+	public ModelAndView InquiryLaporBadanUsaha(@PathVariable Long nonasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("control", getUser().getRole().getRole());
+		NasabahLaporBadanUsaha nasabahLaporBadanUsaha = nasabahService.FindByIdLaporBadanUsaha(nonasabah);
+		modelAndView.addObject("nasabahLaporBadanUsaha", nasabahLaporBadanUsaha);
+		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());
+		modelAndView.addObject("hubungans", parameterService.listSandiBIOJKHubungan());
+		modelAndView.addObject("lembagas", parameterService.listSandiBIOJKPeringkat());
+		modelAndView.addObject("incomes", parameterService.ListAllSourceIncome());
+		modelAndView.setViewName("nasabah/inquirylaporbadanusaha");
+		return modelAndView;
+	}
 	
 }

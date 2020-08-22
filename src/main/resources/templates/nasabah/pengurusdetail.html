@@ -36,6 +36,8 @@
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 	<![endif]-->
+	
+	<link href="/css/bootselect.css" rel="stylesheet">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -224,10 +226,8 @@
            				 </span>
 					</a>
 					<ul class="treeview-menu">
-						<li><a th:href="@{/nasabah/create/perorangan}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
-						<li><a th:href="@{/nasabah/searchedit}"><i class="fa fa-edit"></i>Pemeliharaan Data Nasabah</a></li>
-						<li><a th:href="@{/nasabah/searchcatatan}"><i class="fa fa-bookmark"></i>Pemeliharaan Catatan Nasabah</a></li>
-						<li><a th:href="@{/nasabah/searchinquiry}"><i class="fa fa-book"></i>Pemantauan Data Nasabah</a></li>
+						<li><a th:href="@{/admin/kategoris/new}"><i class="fa fa-plus"></i>Pembentukan Nasabah Baru</a></li>
+						<li><a th:href="@{/admin/kategoris/all}"><i class="fa fa-file-text"></i> All Kategori</a></li>
 					</ul>
 				</li>
 				<li th:if="${control == 'ADMIN'}" class="treeview">
@@ -275,118 +275,162 @@
 		</section>
 		<!-- /.sidebar -->
 	</aside>
-
+	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
-		<section class="content-header">
-			<h1>
-				Home Page
-			</h1>
-		</section>
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
 
 		<!-- Main content -->
 		<section class="content">
-			<div th:if="${control == 'ADMIN'}" >
-				<div class="row">
-					<div class=" col-lg-offset-1   col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-yellow">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${userCount}"></span></h3>
-
-								<p>User Registrations</p>
-							</div>
-							<div class="icon">
-								<i class="ion ion-person"></i>
-							</div>
-							<a th:href="@{/users/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-					<div class="col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-green">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${adminCount}"></span></h3>
-								<p>Admin Registrations</p>
-							</div>
-							<div class="icon">
-								<i class="ion ion-person"></i>
-							</div>
-							<a th:href="@{/users/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-					<div class="col-lg-3 col-xs-6">
-						<!-- small box -->
-						<div class="small-box bg-blue">
-							<div class="inner">
-								<h3>      	<span style="color: white; font-weight: bold"
-												  th:utext="${taskCount}"></span></h3>
-								<p>Number of Content</p>
-							</div>
-							<div class="icon">
-								<i class="icon ion-compose"></i>
-							</div>
-							<a th:href="@{/admin/tasks/all}" class="small-box-footer">More info <i
-									class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-offset-3 col-lg-4 col-xs-6">
-					<h2 class="headline text-black"> WELCOME <span class="hidden-xs" th:utext="${auth.name}"></span></h2>
-					<!-- /.error-content -->
-				</div>
-			</div>
-			<div class="row">
-
-				<div class="col-lg-offset-3 col-md-4">
-					<!-- Widget: user widget style 1 -->
-					<div class="box box-widget widget-user">
-						<!-- Add the bg color to the header using any of the bg-* classes -->
-						<div class="widget-user-header bg-purple-active">
-							<h3 class="widget-user-username"> <span class="hidden-xs" th:utext="${auth.name}"></span></h3>
-							<h5 class="widget-user-desc"> <span class="hidden-xs" th:utext="${auth.role.role}"></span></h5>
-						</div>
-						<div class="widget-user-image">
-							<img class="img-circle" src="/images/avatar5.png" alt="User Avatar">
-						</div>
-						<div class="box-footer">
-							<div class="row">
-								<div class="col-sm-4 border-right">
-									<div class="description-block">
-									</div>
-									<!-- /.description-block -->
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Data Nasabah</legend>
+			
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/nasabah/inquiry/badanusaha/' + ${nonasabah}}">Basic Data Badan Usaha</a></li>
+					<li role="presentation" class="active"><a href="#">Data Pengurus Perusahaan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/inquiry/laporbadanusaha/' + ${nonasabah}}">Data Sandi Pelaporan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/lapkeu/inquiry/' + ${nonasabah}}">Data Laporan Keuangan</a></li>
+					<li role="presentation"><a th:href="@{'/nasabah/dokumen/inquiry/' + ${nonasabah}}">Data Dokumen Nasabah</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form action="#" method="GET" th:object="${nasabahPengurus}" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+							
+							<!-- Text input-->
+							<input type="hidden" placeholder="ID" class="form-control" id="id" name="id" th:field=*{id} />
+							<input type="hidden" placeholder="No Nasabah" class="form-control" id="nonasabah" name="nonasabah" th:field=*{nonasabah} />
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="nama">Nama</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="Nama" class="form-control" id="nama" name="nama" th:field=*{nama} readonly />
 								</div>
-								<!-- /.col -->
-								<div class="col-sm-4 border-right">
-									<div class="description-block">
-										<h5 class="description-header"> <span class="hidden-xs" th:utext="${userTaskSize}"></span></h5>
-										<span class="description-text">TASKS</span>
-									</div>
-									<!-- /.description-block -->
-								</div>
-								<!-- /.col -->
-								<div class="col-sm-4">
-									<div class="description-block">
-									</div>
-									<!-- /.description-block -->
-								</div>
-								<!-- /.col -->
 							</div>
-							<!-- /.row -->
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="gender">Tipe</label>
+								<div class="col-md-9">
+									<select class="form-control" id="gender" name="gender" th:field=*{gender} disabled >
+										<option th:each="gender: ${genders}" th:value="${gender.gendercode}" th:text="${gender.genderdesc}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="noid">Identitas</label>
+								<div class="col-md-3">
+									<select class="form-control" id="idcode" name="idcode" th:field=*{idcode} disabled >
+										<option th:each="jenisid: ${jenisids}" th:value="${jenisid.jenisidcode}" th:text="${jenisid.jenisiddesc}"></option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<input type="text" placeholder="No Identitas" class="form-control" id="noid" name="noid" th:field=*{noid} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="jabatan">Jabatan</label>
+								<div class="col-md-9">
+									<select class="form-control" id="jabatan" name="jabatan" th:field=*{jabatan} disabled >
+										<option th:each="jabatan: ${jabatans}" th:value="${jabatan.sandicode}" th:text="${jabatan.sandidesc}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="saham">Saham (%)</label>
+								<div class="col-md-9">
+									<input type="number" placeholder="Nama Notaris" class="form-control" id="saham" name="saham" th:field=*{saham} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="status">Status</label>
+								<div class="col-md-9">
+									<select class="form-control" id="status" name="status" th:field=*{status} disabled >
+										<option value="1">Aktif</option>
+										<option value="2">Berakhir</option>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="alamat">Alamat</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="Alamat" class="form-control" id="alamat" name="alamat" th:field=*{alamat} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="provinsi">Provinsi</label>
+								<div class="col-md-9">
+									<select class="form-control" name="provinsi" id="provinsi" th:field=*{provinsi} disabled >
+										<option th:each="provinsi: ${provinsis}" th:value="${provinsi.provinsicode}" th:text="${provinsi.provinsidesc}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="kota">Kota/Kabupaten</label>
+								<div class="col-md-9">
+									<select class="form-control" id="kota" name="kota" th:field=*{kota} disabled >
+										<option th:each="kota: ${kotas}" th:value="${kota.kotacode}" th:if="${nasabahPengurus.kota} == ${kota.kotacode}" selected="selected" th:text="${kota.kotadesc}">
+										<option th:each="kota: ${kotas}" th:value="${kota.kotacode}" th:if="${nasabahPengurus.kota} != ${kota.kotacode}" th:text="${kota.kotadesc}">
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="kecamatan">Kecamatan</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="Kecamatan" class="form-control" id="kecamatan" name="kecamatan" th:field=*{kecamatan} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="officekel">Kelurahan</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="Kelurahan" class="form-control" id="kelurahan" name="kelurahan" th:field=*{kelurahan} readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="kodepos">Kode Pos</label>
+								<div class="col-md-9">
+									<input type="number" placeholder="Kode Pos" class="form-control" id="kodepos" name="kodepos" th:field=*{kodepos} readonly />
+								</div>
+							</div>
+							
 						</div>
 					</div>
-				</div>
+					<div class="row">
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="submitButton"></label>
+							<div class="col-md-9">
+								<a th:href="@{'/nasabah/pengurus/inquiry/' + ${nonasabah}}" class="btn btn-inverse">Back</a>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
 			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
 
-			<!-- /.error-page -->
 		</section>
 		<!-- /.content -->
 	</div>
@@ -397,8 +441,13 @@
 
 <!-- jQuery 2.2.3 -->
 <script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+
 <!-- FastClick -->
 <script src="/js/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -425,5 +474,6 @@
 <script src="/js/dashboard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
 </body>
 </html>
