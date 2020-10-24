@@ -21,7 +21,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mert.model.User;
+import com.mert.model.AppUser;
+import com.mert.model.AppMenu;
+import com.mert.model.AppGroupMenu;
 import com.mert.service.UserService;
+import com.mert.service.AppUserService;
+import com.mert.service.AppMenuService;
+import com.mert.service.AppGroupMenuService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +46,15 @@ public class LoginController {
 
 	@Autowired
 	private UserTaskService userTaskService;
+	
+	@Autowired
+	private AppUserService appUserService;
+	
+	@Autowired
+	private AppMenuService appMenuService;
+	
+	@Autowired
+	private AppGroupMenuService appGroupMenuService;
 
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public ModelAndView login(){
@@ -116,12 +131,16 @@ public class LoginController {
 		modelAndView.addObject("taskCount", taskCount);//Authentication for NavBar
 		//-----------------------------------------
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User loginUser = userService.findUserByEmail(auth.getName());
-		modelAndView.addObject("control", loginUser.getRole().getRole());//Authentication for NavBar
+		// Sofyan 2020-10-23 User loginUser = userService.findUserByEmail(auth.getName());
+		AppUser loginUser = appUserService.findOne(auth.getName());
+		// Sofyan 2020-10-23 modelAndView.addObject("control", loginUser.getRole().getRole());//Authentication for NavBar
+		modelAndView.addObject("control", loginUser.getGroupId().getGroupName());//Authentication for NavBar
 		modelAndView.addObject("auth", loginUser);
 		List<UserTask> userTasks = new ArrayList<>();
-		userTasks = userTaskService.findByUser(loginUser);
-		modelAndView.addObject("userTaskSize", userTasks.size());
+		// Sofyan 2020-10-23 userTasks = userTaskService.findByUser(loginUser);
+		// Sofyan 2020-10-23 modelAndView.addObject("userTaskSize", userTasks.size());
+		// Sofyan 2020-10-23 yg di bawah ini buat dynamic menu
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(loginUser));
 		modelAndView.setViewName("home");
 		return modelAndView;
 	}
