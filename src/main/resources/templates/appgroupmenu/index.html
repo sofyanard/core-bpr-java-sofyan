@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootselect.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4>Group Menu</h4>
+		<p><a class="btn btn-link" th:href="@{/appgroupmenu/create}">Create New</a></p>
+	    
+	    <form action="#" method="GET" th:action="@{/appgroupmenu/index}">
+			<div class="form-group">
+				<label for="GroupId">Group</label>
+				<select class="selectpicker form-control" data-live-search="true" name="GroupId" id="GroupId" >
+					<option th:each="appGroup: ${appGroups}" th:value="${appGroup.GroupId}" th:text="${appGroup.GroupName}"></option>
+				</select>
+			</div>
+			<button type="submit" class="btn btn-primary">Search</button>
+		</form>
+	    
+	    <table class="table">
+	    	<thead>
+	    		<tr>
+		    		<th scope="col" style="display:none;">ID</th>
+		    		<th scope="col">Group</th>
+		    		<th scope="col">Level</th>
+		    		<th scope="col">Menu</th>
+		    		<th scope="col">Level</th>
+		    		<th scope="col">Menu</th>
+		    		<th scope="col"></th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+		    	<tr scope="row" th:each="appGroupMenu : ${appGroupMenus}">
+		    		<td th:text="${appGroupMenu?.Id}" style="display:none;"></td>
+		    		<td th:text="${appGroupMenu?.GroupId.GroupName}"></td>
+		    		<td th:text="${appGroupMenu?.MenuId.Parent?.Level}"></td>
+		    		<td th:text="${appGroupMenu?.MenuId.Parent?.MenuName}"></td>
+		    		<td th:text="${appGroupMenu?.MenuId.Level}"></td>
+		    		<td th:text="${appGroupMenu?.MenuId.MenuName}"></td>
+		    		<td>
+		    			<a th:href="@{'/appgroupmenu/delete/' + ${appGroupMenu.Id}}">Delete</a>
+		    		</td>
+		    	</tr>
+	    	</tbody>
+	    </table>
+	</div>
+	
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-select.min.js"></script>
+</body>
+</html>

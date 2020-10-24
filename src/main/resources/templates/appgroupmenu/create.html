@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootselect.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4>Group Menu</h4>
+	    <form action="#" method="POST" th:action="@{/appgroupmenu/insert}" th:object="${appGroupMenu}">
+			<div class="form-group">
+				<label for="GroupId">Group</label>
+				<select class="selectpicker form-control" data-live-search="true" name="GroupId" id="GroupId" th:field=*{GroupId} required >
+					<option th:each="appGroup: ${appGroups}" th:value="${appGroup.GroupId}" th:text="${appGroup.GroupName}"></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="MenuId">Menu</label>
+				<select class="selectpicker form-control" data-live-search="true" name="MenuId" id="MenuId" th:field=*{MenuId} required >
+					<option th:each="appMenu: ${appMenus}" th:value="${appMenu.MenuId}" th:text="${appMenu.MenuName}"></option>
+				</select>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<p><a class="btn btn-link" th:href="@{/appgroupmenu/index}">Back to List</a></p>
+	</div>
+	
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-select.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+			
+		});
+	</script>
+</body>
+</html>

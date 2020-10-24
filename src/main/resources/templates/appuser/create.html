@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootselect.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4>User</h4>
+	    <form action="#" method="POST" th:action="@{/appuser/insert}" th:object="${appUser}">
+			<div class="form-group">
+				<label for="UserId">User Id</label>
+				<input type="text" class="form-control" name="UserId" id="UserId" th:field=*{UserId} required>
+			</div>
+			<div class="form-group">
+				<label for="FullName">Full Name</label>
+				<input type="text" class="form-control" name="FullName" id="FullName" th:field=*{FullName} required>
+			</div>
+			<div class="form-group">
+				<label for="Password">Password</label>
+				<input type="password" class="form-control" name="Password" id="Password" th:field=*{Password} >
+			</div>
+			<div class="form-group">
+				<label for="GroupId">Group</label>
+				<select class="selectpicker form-control" data-live-search="true" name="GroupId" id="GroupId" th:field=*{GroupId} required >
+					<option th:each="appGroup: ${appGroups}" th:value="${appGroup.GroupId}" th:text="${appGroup.GroupName}"></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="UnitId">Unit</label>
+				<select class="selectpicker form-control" data-live-search="true" name="UnitId" id="UnitId" th:field=*{UnitId} required >
+					<option th:each="appUnit: ${appUnits}" th:value="${appUnit.UnitId}" th:text="${appUnit.UnitName}"></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="Email">Email</label>
+				<input type="text" class="form-control" name="Email" id="Email" th:field=*{Email} >
+			</div>
+			<div class="form-group">
+				<label for="Phone">Phone</label>
+				<input type="text" class="form-control" name="Phone" id="Phone" th:field=*{Phone} >
+			</div>
+			<div class="form-group">
+				<label for="ApprovalLimit">Approval Limit</label>
+				<input type="number" class="form-control" name="ApprovalLimit" id="ApprovalLimit" th:field=*{ApprovalLimit} >
+			</div>
+			<div class="form-group">
+				<label for="RekBukuBesar">Rek Buku Besar</label>
+				<input type="text" class="form-control" name="RekBukuBesar" id="RekBukuBesar" th:field=*{RekBukuBesar} >
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<p><a class="btn btn-link" th:href="@{/appuser/index}">Back to List</a></p>
+	</div>
+	
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-select.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+			
+		});
+	</script>
+</body>
+</html>

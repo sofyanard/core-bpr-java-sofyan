@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootselect.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4>Unit</h4>
+	    <form action="#" method="POST" th:action="@{/appunit/update}" th:object="${appUnit}">
+			<div class="form-group">
+				<label for="UnitId">Unit Id</label>
+				<input type="text" class="form-control" name="UnitId" id="UnitId" th:field=*{UnitId} readonly>
+			</div>
+			<div class="form-group">
+				<label for="UnitName">Unit Name</label>
+				<input type="text" class="form-control" name="UnitName" id="UnitName" th:field=*{UnitName} required>
+			</div>
+			<div class="form-group">
+				<label for="KodeBpr">Kode BPR</label>
+				<input type="text" class="form-control" name="KodeBpr" id="KodeBpr" th:field=*{KodeBpr} >
+			</div>
+			<div class="form-group">
+				<label for="Alamat">Alamat</label>
+				<input type="text" class="form-control" name="Alamat" id="Alamat" th:field=*{Alamat} >
+			</div>
+			<div class="form-group">
+				<label for="PropinsiId">Propinsi</label>
+				<select class="selectpicker form-control" data-live-search="true" name="PropinsiId" id="PropinsiId" th:field=*{PropinsiId} required >
+					<option th:each="provinsi: ${provinsis}" th:value="${provinsi.provinsicode}" th:text="${provinsi.provinsidesc}"></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="KotaId">Kota</label>
+				<select class="selectpicker form-control" data-live-search="true" name="KotaId" id="KotaId" th:field=*{KotaId} required >
+					<option th:each="kota: ${kotas}" th:value="${kota.kotacode}" th:text="${kota.kotadesc}"></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="IsActive">Is Active</label>
+				<input type="text" class="form-control" name="IsActive" id="IsActive" th:field=*{IsActive} >
+			</div>
+			<button type="submit" class="btn btn-primary">Save</button>
+		</form>
+		<p><a class="btn btn-link" th:href="@{/appunit/index}">Back to List</a></p>
+	</div>
+	
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-select.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+			$('#PropinsiId').change(function () {
+				$.ajax({
+	                url: '/parameter/listkotakabbyprov/' + $('#PropinsiId').val(),
+	                success: function (result) {
+	                    $('#KotaId').empty();
+	                    $.each(result, function () {
+	                        $('#KotaId').append($('<option></option>').attr('value', this.kotacode).text(this.kotadesc));
+	                    });
+	                    $('.selectpicker').selectpicker('refresh');
+	                }
+	            });
+			});
+		});
+	</script>
+</body>
+</html>

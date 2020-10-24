@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4>Group</h4>
+	    <p><a class="btn btn-link" th:href="@{/appgroup/create}">Create New</a></p>
+	    <table class="table">
+	    	<thead>
+	    		<tr>
+		    		<th scope="col">ID</th>
+		    		<th scope="col">Name</th>
+		    		<th scope="col">Is Active</th>
+		    		<th scope="col"></th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+		    	<tr scope="row" th:each="appGroup : ${appGroups}">
+		    		<td th:text="${appGroup.GroupId}"></td>
+		    		<td th:text="${appGroup.GroupName}"></td>
+		    		<td th:text="${appGroup.IsActive}"></td>
+		    		<td>
+		    			<a th:href="@{'/appgroup/edit/' + ${appGroup.GroupId}}">Edit</a>
+		    		</td>
+		    	</tr>
+	    	</tbody>
+	    </table>
+	</div>
+</body>
+</html>

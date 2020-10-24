@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4>Unit</h4>
+	    <p><a class="btn btn-link" th:href="@{/appunit/create}">Create New</a></p>
+	    <table class="table">
+	    	<thead>
+	    		<tr>
+		    		<th scope="col">ID</th>
+		    		<th scope="col">Name</th>
+		    		<th scope="col">Kode BPR</th>
+		    		<th scope="col">Alamat</th>
+		    		<th scope="col">Propinsi</th>
+		    		<th scope="col">Kota</th>
+		    		<th scope="col">Is Active</th>
+		    		<th scope="col"></th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+		    	<tr scope="row" th:each="appUnit : ${appUnits}">
+		    		<td th:text="${appUnit.UnitId}"></td>
+		    		<td th:text="${appUnit.UnitName}"></td>
+		    		<td th:text="${appUnit.KodeBpr}"></td>
+		    		<td th:text="${appUnit.Alamat}"></td>
+		    		<td th:text="${appUnit.PropinsiId.provinsidesc}"></td>
+		    		<td th:text="${appUnit.KotaId.kotadesc}"></td>
+		    		<td th:text="${appUnit.IsActive}"></td>
+		    		<td>
+		    			<a th:href="@{'/appunit/edit/' + ${appUnit.UnitId}}">Edit</a>
+		    		</td>
+		    	</tr>
+	    	</tbody>
+	    </table>
+	</div>
+</body>
+</html>
