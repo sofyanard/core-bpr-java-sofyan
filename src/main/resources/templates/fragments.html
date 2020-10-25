@@ -10,6 +10,10 @@
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<!-- Bootstrap 3.3.6 -->
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	
+	<!-- Bootstrap Select -->
+	<link href="/css/bootselect.css" rel="stylesheet">
+	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
 	<!-- Ionicons -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
@@ -280,10 +284,19 @@
 </div>
 <!-- ./wrapper -->
 
+<div th:fragment="scripts">
 <!-- jQuery 2.2.3 -->
 <script src="/js/jquery-2.2.3.min.js"></script>
+
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+
 <!-- Bootstrap 3.3.6 -->
 <script src="/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap Select -->
+<script src="/js/bootstrap-select.min.js"></script>
+
 <!-- FastClick -->
 <script src="/js/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -310,5 +323,6 @@
 <script src="/js/dashboard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</div>
 </body>
 </html>
