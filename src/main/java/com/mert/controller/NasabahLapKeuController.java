@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mert.model.User;
+import com.mert.model.AppUser;
 import com.mert.model.NasabahLapKeu;
 import com.mert.model.NasabahPengurus;
-import com.mert.service.UserService;
+import com.mert.service.AppUserService;
 import com.mert.service.NasabahLapKeuService;
 import com.mert.service.ParameterService;
 
@@ -23,7 +23,7 @@ import com.mert.service.ParameterService;
 public class NasabahLapKeuController {
 	
 	@Autowired
-	private UserService userService;
+	private AppUserService appUserService;
 	
 	@Autowired
 	private NasabahLapKeuService nasabahLapKeuService;
@@ -33,9 +33,9 @@ public class NasabahLapKeuController {
 	
 	
 	
-	private User getUser(){
+	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
+		AppUser user = appUserService.findOne(auth.getName());
 		return user;
 	}
 	
@@ -43,7 +43,6 @@ public class NasabahLapKeuController {
 	public ModelAndView index(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahLapKeu> listLapKeu = nasabahLapKeuService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listLapKeu", listLapKeu);
@@ -55,7 +54,6 @@ public class NasabahLapKeuController {
 	public ModelAndView create(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahLapKeu nasabahLapKeu = new NasabahLapKeu();
 		modelAndView.addObject("nasabahLapKeu", nasabahLapKeu);
@@ -75,7 +73,6 @@ public class NasabahLapKeuController {
 	public ModelAndView edit(@PathVariable Long nonasabah, @PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahLapKeu nasabahLapKeu = nasabahLapKeuService.findById(id);
 		modelAndView.addObject("nasabahLapKeu", nasabahLapKeu);
@@ -102,7 +99,6 @@ public class NasabahLapKeuController {
 	public ModelAndView inquiry(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahLapKeu> listLapKeu = nasabahLapKeuService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listLapKeu", listLapKeu);
@@ -114,7 +110,6 @@ public class NasabahLapKeuController {
 	public ModelAndView detail(@PathVariable Long nonasabah, @PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahLapKeu nasabahLapKeu = nasabahLapKeuService.findById(id);
 		modelAndView.addObject("nasabahLapKeu", nasabahLapKeu);

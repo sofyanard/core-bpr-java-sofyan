@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mert.model.User;
+import com.mert.model.AppUser;
 import com.mert.model.NasabahDokumen;
-import com.mert.service.UserService;
+import com.mert.service.AppUserService;
 import com.mert.service.NasabahDokumenService;
 import com.mert.service.NasabahBasicService;
 import com.mert.service.ParameterService;
@@ -33,7 +33,7 @@ import com.mert.service.ParameterService;
 public class NasabahDokumenController {
 	
 	@Autowired
-	private UserService userService;
+	private AppUserService appUserService;
 	
 	@Autowired
 	private NasabahDokumenService nasabahDokumenService;
@@ -50,9 +50,9 @@ public class NasabahDokumenController {
 	
 	
 	
-	private User getUser(){
+	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
+		AppUser user = appUserService.findOne(auth.getName());
 		return user;
 	}
 	
@@ -60,7 +60,6 @@ public class NasabahDokumenController {
 	public ModelAndView index(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahDokumen> listDokumen = nasabahDokumenService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listDokumen", listDokumen);
@@ -74,7 +73,6 @@ public class NasabahDokumenController {
 	public ModelAndView create(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahDokumen nasabahDokumen = new NasabahDokumen();
 		modelAndView.addObject("nasabahDokumen", nasabahDokumen);
@@ -144,7 +142,6 @@ public class NasabahDokumenController {
 	public ModelAndView inquiry(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahDokumen> listDokumen = nasabahDokumenService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listDokumen", listDokumen);

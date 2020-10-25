@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mert.model.User;
-import com.mert.service.UserService;
+import com.mert.model.AppUser;
+import com.mert.service.AppUserService;
 import com.mert.model.NasabahPerorangan;
 import com.mert.model.NasabahBadanUsaha;
 import com.mert.model.NasabahCreate;
@@ -32,7 +32,7 @@ import com.mert.service.ParameterService;
 public class NasabahController {
 	
 	@Autowired
-	private UserService userService;
+	private AppUserService appUserService;
 	
 	@Autowired
 	private NasabahService nasabahService;
@@ -43,9 +43,9 @@ public class NasabahController {
 	@Autowired
 	private ParameterService parameterService;
 	
-	private User getUser(){
+	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
+		AppUser user = appUserService.findOne(auth.getName());
 		return user;
 	}
 	
@@ -53,7 +53,6 @@ public class NasabahController {
 	public ModelAndView CreatePerorangan() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nasabahPerorangan", new NasabahPerorangan());
 		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
 		modelAndView.addObject("genders", parameterService.ListGenders());
@@ -70,7 +69,6 @@ public class NasabahController {
 	public ModelAndView CreateBadanUsaha() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nasabahBadanUsaha", new NasabahBadanUsaha());
 		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
 		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
@@ -118,7 +116,6 @@ public class NasabahController {
 	public ModelAndView EditPerorangan(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahPerorangan nasabahPerorangan = nasabahService.FindByIdPerorangan(nonasabah);
 		modelAndView.addObject("nasabahPerorangan", nasabahPerorangan);
 		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
@@ -137,7 +134,6 @@ public class NasabahController {
 	public ModelAndView EditBadanUsaha(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahBadanUsaha nasabahBadanUsaha = nasabahService.FindByIdBadanUsaha(nonasabah);
 		modelAndView.addObject("nasabahBadanUsaha", nasabahBadanUsaha);
 		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
@@ -179,7 +175,6 @@ public class NasabahController {
 	public ModelAndView EditJobnSpouse(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahJobnSpouse nasabahJobnSpouse = nasabahService.FindByIdJobnSpouse(nonasabah);
 		modelAndView.addObject("nasabahJobnSpouse", nasabahJobnSpouse);
 		modelAndView.addObject("jobcodes", parameterService.listSandiBIOJKJobCode());
@@ -209,7 +204,6 @@ public class NasabahController {
 	public ModelAndView EditLaporPerorangan(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahLaporPerorangan nasabahLaporPerorangan = nasabahService.FindByIdLaporPerorangan(nonasabah);
 		modelAndView.addObject("nasabahLaporPerorangan", nasabahLaporPerorangan);
 		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());
@@ -223,7 +217,6 @@ public class NasabahController {
 	public ModelAndView EditLaporBadanUsaha(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahLaporBadanUsaha nasabahLaporBadanUsaha = nasabahService.FindByIdLaporBadanUsaha(nonasabah);
 		modelAndView.addObject("nasabahLaporBadanUsaha", nasabahLaporBadanUsaha);
 		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());
@@ -264,7 +257,6 @@ public class NasabahController {
 	public ModelAndView SearchEdit(String keyword) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		List<NasabahBasic> listNasabah;
 		if ((keyword != null) && (keyword != "")) {
 			listNasabah = nasabahBasicService.findByKeyword(keyword);
@@ -281,7 +273,6 @@ public class NasabahController {
 	public ModelAndView SearchInquiry(String keyword) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		List<NasabahBasic> listNasabah;
 		if ((keyword != null) && (keyword != "")) {
 			listNasabah = nasabahBasicService.findByKeyword(keyword);
@@ -298,7 +289,6 @@ public class NasabahController {
 	public ModelAndView SearchCatatan(String keyword) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		List<NasabahBasic> listNasabah;
 		if ((keyword != null) && (keyword != "")) {
 			listNasabah = nasabahBasicService.findByKeyword(keyword);
@@ -315,7 +305,6 @@ public class NasabahController {
 	public ModelAndView InquiryPerorangan(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahPerorangan nasabahPerorangan = nasabahService.FindByIdPerorangan(nonasabah);
 		modelAndView.addObject("nasabahPerorangan", nasabahPerorangan);
 		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
@@ -339,7 +328,6 @@ public class NasabahController {
 	public ModelAndView InquiryBadanUsaha(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahBadanUsaha nasabahBadanUsaha = nasabahService.FindByIdBadanUsaha(nonasabah);
 		modelAndView.addObject("nasabahBadanUsaha", nasabahBadanUsaha);
 		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
@@ -360,7 +348,6 @@ public class NasabahController {
 	public ModelAndView InquiryJobnSpouse(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahJobnSpouse nasabahJobnSpouse = nasabahService.FindByIdJobnSpouse(nonasabah);
 		modelAndView.addObject("nasabahJobnSpouse", nasabahJobnSpouse);
 		modelAndView.addObject("jobcodes", parameterService.listSandiBIOJKJobCode());
@@ -377,7 +364,6 @@ public class NasabahController {
 	public ModelAndView InquiryLaporPerorangan(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahLaporPerorangan nasabahLaporPerorangan = nasabahService.FindByIdLaporPerorangan(nonasabah);
 		modelAndView.addObject("nasabahLaporPerorangan", nasabahLaporPerorangan);
 		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());
@@ -391,7 +377,6 @@ public class NasabahController {
 	public ModelAndView InquiryLaporBadanUsaha(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		NasabahLaporBadanUsaha nasabahLaporBadanUsaha = nasabahService.FindByIdLaporBadanUsaha(nonasabah);
 		modelAndView.addObject("nasabahLaporBadanUsaha", nasabahLaporBadanUsaha);
 		modelAndView.addObject("golongans", parameterService.listSandiBIOJKGolongan());

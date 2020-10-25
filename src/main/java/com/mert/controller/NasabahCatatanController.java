@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mert.model.User;
+import com.mert.model.AppUser;
 import com.mert.model.NasabahCatatan;
-import com.mert.service.UserService;
+import com.mert.service.AppUserService;
 import com.mert.service.NasabahCatatanService;
 import com.mert.service.ParameterService;
 
@@ -20,7 +20,7 @@ import com.mert.service.ParameterService;
 public class NasabahCatatanController {
 	
 	@Autowired
-	private UserService userService;
+	private AppUserService appUserService;
 	
 	@Autowired
 	private NasabahCatatanService nasabahCatatanService;
@@ -30,9 +30,9 @@ public class NasabahCatatanController {
 	
 	
 	
-	private User getUser(){
+	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
+		AppUser user = appUserService.findOne(auth.getName());
 		return user;
 	}
 	
@@ -40,7 +40,6 @@ public class NasabahCatatanController {
 	public ModelAndView index(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
-		modelAndView.addObject("control", getUser().getRole().getRole());
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahCatatan nasabahCatatan = nasabahCatatanService.findById(nonasabah);
 		if (nasabahCatatan == null) {
