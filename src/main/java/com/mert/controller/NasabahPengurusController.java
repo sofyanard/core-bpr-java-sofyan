@@ -42,6 +42,7 @@ public class NasabahPengurusController {
 	public ModelAndView index(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahPengurus> listPengurus = nasabahPengurusService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listPengurus", listPengurus);
@@ -53,6 +54,7 @@ public class NasabahPengurusController {
 	public ModelAndView create(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahPengurus nasabahPengurus = new NasabahPengurus();
 		modelAndView.addObject("nasabahPengurus", nasabahPengurus);
@@ -76,6 +78,7 @@ public class NasabahPengurusController {
 	public ModelAndView edit(@PathVariable Long nonasabah, @PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahPengurus nasabahPengurus = nasabahPengurusService.findById(id);
 		modelAndView.addObject("nasabahPengurus", nasabahPengurus);
@@ -107,6 +110,7 @@ public class NasabahPengurusController {
 	public ModelAndView inquiry(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahPengurus> listPengurus = nasabahPengurusService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listPengurus", listPengurus);
@@ -118,6 +122,7 @@ public class NasabahPengurusController {
 	public ModelAndView detail(@PathVariable Long nonasabah, @PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahPengurus nasabahPengurus = nasabahPengurusService.findById(id);
 		modelAndView.addObject("nasabahPengurus", nasabahPengurus);

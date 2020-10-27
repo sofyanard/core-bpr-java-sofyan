@@ -40,6 +40,7 @@ public class NasabahCatatanController {
 	public ModelAndView index(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahCatatan nasabahCatatan = nasabahCatatanService.findById(nonasabah);
 		if (nasabahCatatan == null) {

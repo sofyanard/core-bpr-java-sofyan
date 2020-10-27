@@ -43,6 +43,7 @@ public class NasabahLapKeuController {
 	public ModelAndView index(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahLapKeu> listLapKeu = nasabahLapKeuService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listLapKeu", listLapKeu);
@@ -54,6 +55,7 @@ public class NasabahLapKeuController {
 	public ModelAndView create(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahLapKeu nasabahLapKeu = new NasabahLapKeu();
 		modelAndView.addObject("nasabahLapKeu", nasabahLapKeu);
@@ -73,6 +75,7 @@ public class NasabahLapKeuController {
 	public ModelAndView edit(@PathVariable Long nonasabah, @PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahLapKeu nasabahLapKeu = nasabahLapKeuService.findById(id);
 		modelAndView.addObject("nasabahLapKeu", nasabahLapKeu);
@@ -99,6 +102,7 @@ public class NasabahLapKeuController {
 	public ModelAndView inquiry(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahLapKeu> listLapKeu = nasabahLapKeuService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listLapKeu", listLapKeu);
@@ -110,6 +114,7 @@ public class NasabahLapKeuController {
 	public ModelAndView detail(@PathVariable Long nonasabah, @PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahLapKeu nasabahLapKeu = nasabahLapKeuService.findById(id);
 		modelAndView.addObject("nasabahLapKeu", nasabahLapKeu);

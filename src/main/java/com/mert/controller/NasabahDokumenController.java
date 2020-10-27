@@ -60,6 +60,7 @@ public class NasabahDokumenController {
 	public ModelAndView index(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahDokumen> listDokumen = nasabahDokumenService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listDokumen", listDokumen);
@@ -73,6 +74,7 @@ public class NasabahDokumenController {
 	public ModelAndView create(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		NasabahDokumen nasabahDokumen = new NasabahDokumen();
 		modelAndView.addObject("nasabahDokumen", nasabahDokumen);
@@ -142,6 +144,7 @@ public class NasabahDokumenController {
 	public ModelAndView inquiry(@PathVariable Long nonasabah) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nonasabah", nonasabah);
 		List<NasabahDokumen> listDokumen = nasabahDokumenService.listByNonasabah(nonasabah);
 		modelAndView.addObject("listDokumen", listDokumen);
