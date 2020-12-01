@@ -1,5 +1,6 @@
 package com.mert.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,27 @@ public class NasabahBasicService {
 	}
 	
 	public List<NasabahBasic> findByKeyword(String keyword) {
-		return nasabahBasicRepository.findByKeyword(keyword);
+		return nasabahBasicRepository.findByKeyword(keyword.toLowerCase());
 	}
 	
 	public NasabahBasic findByNonasabah(Long nonasabah) {
 		return nasabahBasicRepository.findByNonasabah(nonasabah);
+	}
+	
+	public List<NasabahBasic> searchByProp(Long nonasabah, String noid, String nama) {
+		if (nonasabah != null) {
+			NasabahBasic nasabahBasic = nasabahBasicRepository.findByNonasabah(nonasabah);
+			List<NasabahBasic> listNasabahBasic = new ArrayList<NasabahBasic>();
+			listNasabahBasic.add(nasabahBasic);
+			return listNasabahBasic;
+		} else if ((noid != "") && (noid != null)) {
+			return nasabahBasicRepository.findByNoid(noid);
+		} else if ((nama != "") && (nama != null)) {
+			return nasabahBasicRepository.findByKeyword(nama.toLowerCase());
+		} else {
+			//return nasabahBasicRepository.findAll();
+			return new ArrayList<NasabahBasic>();
+		}
 	}
 	
 	public NasabahCatatan findCatatanByNonasabah(Long nonasabah) {

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.mert.model.ParameterProvinsi;
 import com.mert.model.ParameterKotaKab;
+import com.mert.model.ParameterProduk;
 import com.mert.service.ParameterService;
+import com.mert.service.ParameterProdukService;
 
 @RestController
 @RequestMapping("/parameter")
@@ -18,6 +20,9 @@ public class ParameterRestController {
 	
 	@Autowired
 	private ParameterService parameterService;
+	
+	@Autowired
+	private ParameterProdukService parameterProdukService;
 	
 	@RequestMapping(value="/test", method = RequestMethod.GET)
 	public String test(String message) {
@@ -32,6 +37,11 @@ public class ParameterRestController {
 	@RequestMapping(value="/listkotakabbyprov/{provinsicode}", method = RequestMethod.GET)
 	public List<ParameterKotaKab> listKotaKabByProv(@PathVariable String provinsicode) {
 		return parameterService.listKotaKabByProv(provinsicode);
+	}
+	
+	@RequestMapping(value="/getproductdetail/{productId}", method = RequestMethod.GET)
+	public ParameterProduk getProductDetail(@PathVariable String productId) {
+		return parameterProdukService.findOne(productId);
 	}
 	
 }

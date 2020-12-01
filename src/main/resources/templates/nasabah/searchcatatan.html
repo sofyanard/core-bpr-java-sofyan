@@ -25,12 +25,15 @@
 				<legend>Pemeliharaan Catatan Nasabah</legend>
 				<br/>
 				<div class="row">
-					<div class="col-md-6">
-						<form action="#" method="GET" th:action="@{/nasabah/searchedit}" class="form-inline" role="form">
+					<div class="col-md-12">
+						<form action="#" method="GET" th:action="@{/nasabah/searchcatatan}" class="form-inline" role="form">
 							<div class="form-group">
 								&nbsp;&nbsp;
-								<input type="text" placeholder="Nama" class="form-control" name="keyword" />
-								<button type="submit" class="btn btn-success">Search</button>
+								<input type="number" placeholder="No Nasabah" class="form-control" name="nonasabah" th:value="${nonasabah}" />&nbsp;
+								<input type="number" placeholder="No KTP" class="form-control" name="noid" th:value="${noid}" />&nbsp;
+								<input type="text" placeholder="Nama" class="form-control" name="nama" th:value="${nama}" />&nbsp;
+								<button type="submit" class="btn btn-success">Search</button>&nbsp;
+								<a th:href="@{/nasabah/searchcatatan}" class="btn btn-danger">Clear</button>
 							</div>
 						</form>						
 					</div>

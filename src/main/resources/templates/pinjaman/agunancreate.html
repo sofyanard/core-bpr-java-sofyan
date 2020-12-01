@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pemeliharaan Agunan dan Penjaminan</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation" class="active"><a href="#">Agunan</a></li>
+					<li role="presentation" class="disabled"><a th:href="@{#}">Dokumen Agunan (*)</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/jaminan/create/' + ${nofasilitas}}">Penjaminan</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form id="form1" action="#" method="POST" th:action="@{'/pinjaman/agunan/insert/' + ${nofasilitas}}" th:object="${dataAgunan}" class="form-horizontal" role="form">
+				<fieldset>
+					<input type="hidden" id="NoNasabah" name="NoNasabah" th:field=*{NoNasabah} />
+					<input type="hidden" id="NamaNasabah" name="NamaNasabah" th:field=*{NamaNasabah} />
+					<div class="row">
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoFasilitas">No Fasilitas</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoFasilitas" name="NoFasilitas" th:field=*{NoFasilitas} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoFasilitas')}" th:errors="*{NoFasilitas}">NoFasilitas Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoAgunan">No Agunan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoAgunan" name="NoAgunan" th:field=*{NoAgunan} placeholder="(*)" disabled />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoAgunan')}" th:errors="*{NoAgunan}">NoAgunan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="JenisAgunan">Jenis Agunan</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="JenisAgunan" id="JenisAgunan" th:field=*{JenisAgunan} required>
+										<option th:each="jenisAgunan: ${listJenisAgunan}" th:value="${jenisAgunan.JenisAgunanId}" th:text="${jenisAgunan.JenisAgunanName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('JenisAgunan')}" th:errors="*{JenisAgunan}">JenisAgunan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="DokPemilikan">Jenis Sertifikat</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="DokPemilikan" id="DokPemilikan" th:field=*{DokPemilikan} required>
+										<option th:each="sertifikat: ${listSertifikat}" th:value="${sertifikat.dokcode}" th:text="${sertifikat.dokdesc}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('DokPemilikan')}" th:errors="*{DokPemilikan}">JenisAgunan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoDok">No Sertifikat</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoDok" name="NoDok" th:field=*{NoDok} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoDok')}" th:errors="*{NoDok}">NoDok Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NamaPemilik">Nama Pemilik</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NamaPemilik" name="NamaPemilik" th:field=*{NamaPemilik} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('NamaPemilik')}" th:errors="*{NamaPemilik}">NamaPemilik Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Alamat">Alamat</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Alamat" name="Alamat" th:field=*{Alamat} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('Alamat')}" th:errors="*{Alamat}">Alamat Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Provinsi">Provinsi</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Provinsi" id="Provinsi" th:field=*{Provinsi} >
+										<option th:each="provinsi: ${provinsis}" th:value="${provinsi.provinsicode}" th:text="${provinsi.provinsidesc}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Provinsi')}" th:errors="*{Provinsi}">Provinsi Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="KotaKabupaten">Kota/Kabupaten</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="KotaKabupaten" id="KotaKabupaten" th:field=*{KotaKabupaten} >
+										
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('KotaKabupaten')}" th:errors="*{KotaKabupaten}">KotaKabupaten Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Kecamatan">Kecamatan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Kecamatan" name="Kecamatan" th:field=*{Kecamatan} />
+									<span class="text-danger" th:if="${#fields.hasErrors('Kecamatan')}" th:errors="*{Kecamatan}">Kecamatan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Kelurahan">Kelurahan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Kelurahan" name="Kelurahan" th:field=*{Kelurahan} />
+									<span class="text-danger" th:if="${#fields.hasErrors('Kelurahan')}" th:errors="*{Kelurahan}">Kelurahan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="KodePos">Kode Pos</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="KodePos" name="KodePos" th:field=*{KodePos} />
+									<span class="text-danger" th:if="${#fields.hasErrors('KodePos')}" th:errors="*{KodePos}">KodePos Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="StatusAgunan">Status Agunan</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="StatusAgunan" id="StatusAgunan" th:field=*{StatusAgunan} >
+										<option th:each="statusAgunan: ${listStatusAgunan}" th:value="${statusAgunan.StatusAgunanId}" th:text="${statusAgunan.StatusAgunanName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('StatusAgunan')}" th:errors="*{StatusAgunan}">StatusAgunan Error</span>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NilaiPasar">Nilai Pasar</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="NilaiPasar" name="NilaiPasar" th:field=*{NilaiPasar} />
+									<span class="text-danger" th:if="${#fields.hasErrors('NilaiPasar')}" th:errors="*{NilaiPasar}">NilaiPasar Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NilaiNjop">Nilai NJOP</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="NilaiNjop" name="NilaiNjop" th:field=*{NilaiNjop} />
+									<span class="text-danger" th:if="${#fields.hasErrors('NilaiNjop')}" th:errors="*{NilaiNjop}">NilaiNjop Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NilaiAppraisal">Nilai Appraisal</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="NilaiAppraisal" name="NilaiAppraisal" th:field=*{NilaiAppraisal} />
+									<span class="text-danger" th:if="${#fields.hasErrors('NilaiAppraisal')}" th:errors="*{NilaiAppraisal}">NilaiAppraisal Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AppraisalDate">Tanggal Appraisal</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="AppraisalDate" name="AppraisalDate" th:field=*{AppraisalDate} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AppraisalDate')}" th:errors="*{AppraisalDate}">AppraisalDate Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Penilai">Nama Penilai</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Penilai" name="Penilai" th:field=*{Penilai} />
+									<span class="text-danger" th:if="${#fields.hasErrors('Penilai')}" th:errors="*{Penilai}">Penilai Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="PeringkatSb">Peringkat SB</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="PeringkatSb" name="PeringkatSb" th:field=*{PeringkatSb} />
+									<span class="text-danger" th:if="${#fields.hasErrors('PeringkatSb')}" th:errors="*{PeringkatSb}">PeringkatSb Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="LembagaRating">Lembaga Rating</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="LembagaRating" id="LembagaRating" th:field=*{LembagaRating} >
+										<option value=""></option>
+										<option th:each="lembagaRating: ${listLembagaRating}" th:value="${lembagaRating.LembagaRatingId}" th:text="${lembagaRating.LembagaRatingName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('LembagaRating')}" th:errors="*{LembagaRating}">LembagaRating Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="RatingDate">Tanggal Rating</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="RatingDate" name="RatingDate" th:field=*{RatingDate} />
+									<span class="text-danger" th:if="${#fields.hasErrors('RatingDate')}" th:errors="*{RatingDate}">RatingDate Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Asuransi">Asuransi</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Asuransi" id="Asuransi" th:field=*{Asuransi} >
+										<option th:each="yesNo: ${listYesNo}" th:value="${yesNo.yesNoId}" th:text="${yesNo.yesNoName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Asuransi')}" th:errors="*{Asuransi}">Asuransi Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Pengikatan">Pengikatan</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Pengikatan" id="Pengikatan" th:field=*{Pengikatan} >
+										<option th:each="pengikatan: ${listPengikatan}" th:value="${pengikatan.PengikatanId}" th:text="${pengikatan.PengikatanName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Pengikatan')}" th:errors="*{Pengikatan}">Pengikatan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="DatePengikatan">Tanggal Pengikatan</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="DatePengikatan" name="DatePengikatan" th:field=*{DatePengikatan} />
+									<span class="text-danger" th:if="${#fields.hasErrors('DatePengikatan')}" th:errors="*{DatePengikatan}">DatePengikatan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Notaris">Notaris</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Notaris" name="Notaris" th:field=*{Notaris} />
+									<span class="text-danger" th:if="${#fields.hasErrors('Notaris')}" th:errors="*{Notaris}">Notaris Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Note">Catatan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Note" name="Note" th:field=*{Note} />
+									<span class="text-danger" th:if="${#fields.hasErrors('Note')}" th:errors="*{Note}">Note Error</span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="row">
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="submitButton"></label>
+							<div class="col-md-9">
+								<button type="submit" id="submitButton" name="submitButton" class="btn btn-success">Save</button>
+								<a th:href="@{'/pinjaman/agunan/create/' + ${nofasilitas}}" class="btn btn-inverse">Cancel</a>
+							</div>
+						</div>
+						<div class="col">
+							(*) akan aktif setelah data di-save
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+		
+		$('#Provinsi').change(function () {
+			$.ajax({
+                url: '/parameter/listkotakabbyprov/' + $('#Provinsi').val(),
+                success: function (result) {
+                    $('#KotaKabupaten').empty();
+                    $.each(result, function () {
+                        $('#KotaKabupaten').append($('<option></option>').attr('value', this.kotacode).text(this.kotadesc));
+                        $('#KotaKabupaten').selectpicker('refresh');
+                    });
+                }
+            });
+		});
+
+	});
+	
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

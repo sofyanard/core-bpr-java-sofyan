@@ -1,5 +1,6 @@
 package com.mert.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -261,52 +262,43 @@ public class NasabahController {
 	}
 	
 	@RequestMapping(value="/searchedit", method = RequestMethod.GET)
-	public ModelAndView SearchEdit(String keyword) {
+	public ModelAndView SearchEdit(Long nonasabah, String noid, String nama) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
-		List<NasabahBasic> listNasabah;
-		if ((keyword != null) && (keyword != "")) {
-			listNasabah = nasabahBasicService.findByKeyword(keyword);
-		} else {
-			listNasabah = nasabahBasicService.findAll();
-			// listNasabah = null;
-		}
+		List<NasabahBasic> listNasabah = nasabahBasicService.searchByProp(nonasabah, noid, nama);
 		modelAndView.addObject("listNasabah", listNasabah);
+		modelAndView.addObject("nonasabah", nonasabah);
+		modelAndView.addObject("noid", noid);
+		modelAndView.addObject("nama", nama);
 		modelAndView.setViewName("nasabah/searchedit");
 		return modelAndView;
 	}
 	
 	@RequestMapping(value="/searchinquiry", method = RequestMethod.GET)
-	public ModelAndView SearchInquiry(String keyword) {
+	public ModelAndView SearchInquiry(Long nonasabah, String noid, String nama) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
-		List<NasabahBasic> listNasabah;
-		if ((keyword != null) && (keyword != "")) {
-			listNasabah = nasabahBasicService.findByKeyword(keyword);
-		} else {
-			listNasabah = nasabahBasicService.findAll();
-			// listNasabah = null;
-		}
+		List<NasabahBasic> listNasabah = nasabahBasicService.searchByProp(nonasabah, noid, nama);
 		modelAndView.addObject("listNasabah", listNasabah);
+		modelAndView.addObject("nonasabah", nonasabah);
+		modelAndView.addObject("noid", noid);
+		modelAndView.addObject("nama", nama);
 		modelAndView.setViewName("nasabah/searchinquiry");
 		return modelAndView;
 	}
 	
 	@RequestMapping(value="/searchcatatan", method = RequestMethod.GET)
-	public ModelAndView SearchCatatan(String keyword) {
+	public ModelAndView SearchCatatan(Long nonasabah, String noid, String nama) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
-		List<NasabahBasic> listNasabah;
-		if ((keyword != null) && (keyword != "")) {
-			listNasabah = nasabahBasicService.findByKeyword(keyword);
-		} else {
-			listNasabah = nasabahBasicService.findAll();
-			// listNasabah = null;
-		}
+		List<NasabahBasic> listNasabah = nasabahBasicService.searchByProp(nonasabah, noid, nama);
 		modelAndView.addObject("listNasabah", listNasabah);
+		modelAndView.addObject("nonasabah", nonasabah);
+		modelAndView.addObject("noid", noid);
+		modelAndView.addObject("nama", nama);
 		modelAndView.setViewName("nasabah/searchcatatan");
 		return modelAndView;
 	}

@@ -12,6 +12,10 @@ public interface NasabahBasicRepository extends JpaRepository<NasabahBasic, Long
 	
 	NasabahBasic findByNonasabah(Long nonasabah);
 	
-	@Query(value = "select * from datanasabah n where n.namalengkap like %:keyword% ", nativeQuery=true)
+	List<NasabahBasic> findByNoid(String noid);
+	
+	@Query(value = "select * from datanasabah n where lower(n.namalengkap) like %:keyword% ", nativeQuery=true)
 	List<NasabahBasic> findByKeyword(@Param("keyword") String keyword);
+	
+	
 }

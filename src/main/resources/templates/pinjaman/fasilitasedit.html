@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pembentukan Pinjaman Baru</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation" class="active"><a href="#">Fasilitas</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/dokfasilitas/index/' + ${nofasilitas}}">Dokumen Fasilitas</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/join/index/' + ${nofasilitas}}">Join Rekening</a></li>
+					<li role="presentation"><a th:href="@{#}">Cetak Data</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/angsuran/index/' + ${nofasilitas}}">Skala Angsuran</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form id="form1" action="#" method="POST" th:action="@{'/pinjaman/fasilitas/update/' + ${nofasilitas}}" th:object="${fasilitasKredit}" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoNasabah">No Nasabah</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoNasabah" name="NoNasabah" th:field=*{NoNasabah} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoNasabah')}" th:errors="*{NoNasabah}">NoNasabah Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NamaNasabah">Nama Nasabah</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NamaNasabah" name="NamaNasabah" th:field=*{NamaNasabah} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NamaNasabah')}" th:errors="*{NamaNasabah}">NamaNasabah Error</span>
+								</div>
+							</div>
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoFasilitas">No Fasilitas</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoFasilitas" name="NoFasilitas" th:field=*{NoFasilitas} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoFasilitas')}" th:errors="*{NoFasilitas}">NoFasilitas Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Produk">Produk</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Produk" id="Produk" th:field=*{Produk} required>
+										<option th:value="${produk.Code}" th:text="${produk.Desc}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Produk')}" th:errors="*{Produk}">Produk Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="BungaPersen">Bunga (%)</label>
+								<div class="col-md-4">
+									<input type="number" class="form-control" id="BungaPersen" name="BungaPersen" th:field=*{BungaPersen} readonly required />
+									<span class="text-danger" th:if="${#fields.hasErrors('BungaPersen')}" th:errors="*{BungaPersen}">BungaPersen Error</span>
+								</div>
+								<div class="col-md-5">
+									<select class="selectpicker" data-live-search="true" name="HitungBunga" id="HitungBunga" th:field=*{HitungBunga} required>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('HitungBunga')}" th:errors="*{HitungBunga}">HitungBunga Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Kurs">Kurs</label>
+								<div class="col-md-4">
+									<input type="number" class="form-control" id="Kurs" name="Kurs" th:field=*{Kurs} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('Kurs')}" th:errors="*{Kurs}">Kurs Error</span>
+								</div>
+								<div class="col-md-5">
+									<select class="selectpicker" data-live-search="true" name="Valuta" id="Valuta" th:field=*{Valuta} required>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Valuta')}" th:errors="*{Valuta}">Valuta Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Plafond">Plafond</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="Plafond" name="Plafond" th:field=*{Plafond} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('Plafond')}" th:errors="*{Plafond}">Plafond Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="EqvPlafond">Eqv Plafond</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="EqvPlafond" name="EqvPlafond" th:field=*{EqvPlafond} readonly required />
+									<span class="text-danger" th:if="${#fields.hasErrors('EqvPlafond')}" th:errors="*{EqvPlafond}">EqvPlafond Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Tenor">Tenor (bulan)</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="Tenor" name="Tenor" th:field=*{Tenor} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('Tenor')}" th:errors="*{Tenor}">Tenor Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="TujuanKredit">Tujuan</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="TujuanKredit" id="TujuanKredit" th:field=*{TujuanKredit} required>
+										<option th:each="purpose: ${listPurpose}" th:value="${purpose.PurposeId}" th:text="${purpose.PurposeName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('TujuanKredit')}" th:errors="*{TujuanKredit}">TujuanKredit Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Agunan">Agunan</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Agunan" id="Agunan" th:field=*{Agunan}>
+										<option th:each="yesNo: ${listYesNo}" th:value="${yesNo.yesNoId}" th:text="${yesNo.yesNoName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Agunan')}" th:errors="*{Agunan}">Agunan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NilaiBank">Nilai Bank</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="NilaiBank" name="NilaiBank" th:field=*{NilaiBank} />
+									<span class="text-danger" th:if="${#fields.hasErrors('NilaiBank')}" th:errors="*{NilaiBank}">NilaiBank Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="LtvPersen">LTV (%)</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="LtvPersen" name="LtvPersen" th:field=*{LtvPersen} />
+									<span class="text-danger" th:if="${#fields.hasErrors('LtvPersen')}" th:errors="*{LtvPersen}">LtvPersen Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="PledgingPersen">Pledging (%)</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="PledgingPersen" name="PledgingPersen" th:field=*{PledgingPersen} />
+									<span class="text-danger" th:if="${#fields.hasErrors('PledgingPersen')}" th:errors="*{PledgingPersen}">PledgingPersen Error</span>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="ProvisiPersen">Biaya Provisi (%)</label>
+								<div class="col-md-8">
+									<input type="number" class="form-control" id="ProvisiPersen" name="ProvisiPersen" th:field=*{ProvisiPersen} />
+									<span class="text-danger" th:if="${#fields.hasErrors('ProvisiPersen')}" th:errors="*{ProvisiPersen}">ProvisiPersen Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="ProvisiAmount">Biaya Provisi Nominal</label>
+								<div class="col-md-8">
+									<input type="number" class="form-control" id="ProvisiAmount" name="ProvisiAmount" th:field=*{ProvisiAmount} />
+									<span class="text-danger" th:if="${#fields.hasErrors('ProvisiAmount')}" th:errors="*{ProvisiAmount}">ProvisiAmount Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtAdmin">Biaya Admin</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtAdmin" name="AmtAdmin" th:field=*{AmtAdmin} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtAdmin')}" th:errors="*{AmtAdmin}">AmtAdmin Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtNotaris">Biaya Notaris</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtNotaris" name="AmtNotaris" th:field=*{AmtNotaris} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtNotaris')}" th:errors="*{AmtNotaris}">AmtNotaris Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtAsuransi">Biaya Asuransi</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtAsuransi" name="AmtAsuransi" th:field=*{AmtAsuransi} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtAsuransi')}" th:errors="*{AmtAsuransi}">AmtAsuransi Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtAppraisal">Biaya Appraisal</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtAppraisal" name="AmtAppraisal" th:field=*{AmtAppraisal} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtAppraisal')}" th:errors="*{AmtAppraisal}">AmtAppraisal Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtMaterai">Biaya Materai</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtMaterai" name="AmtMaterai" th:field=*{AmtMaterai} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtMaterai')}" th:errors="*{AmtMaterai}">AmtMaterai Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-5 control-label" for="PinaltiPokokPersen">Pinalti Angsuran Pokok (%)</label>
+								<div class="col-md-7">
+									<input type="number" class="form-control" id="PinaltiPokokPersen" name="PinaltiPokokPersen" th:field=*{PinaltiPokokPersen} />
+									<span class="text-danger" th:if="${#fields.hasErrors('PinaltiPokokPersen')}" th:errors="*{PinaltiPokokPersen}">PinaltiPokokPersen Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-5 control-label" for="PinaltiBungaPersen">Pinalti Angsuran Bunga (%)</label>
+								<div class="col-md-7">
+									<input type="number" class="form-control" id="PinaltiBungaPersen" name="PinaltiBungaPersen" th:field=*{PinaltiBungaPersen} />
+									<span class="text-danger" th:if="${#fields.hasErrors('PinaltiBungaPersen')}" th:errors="*{PinaltiBungaPersen}">PinaltiBungaPersen Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="PinaltiLunasPersen">Pinalti Pelunasan (%)</label>
+								<div class="col-md-4">
+									<input type="number" class="form-control" id="PinaltiLunasPersen" name="PinaltiLunasPersen" th:field=*{PinaltiLunasPersen} />
+									<span class="text-danger" th:if="${#fields.hasErrors('PinaltiLunasPersen')}" th:errors="*{PinaltiLunasPersen}">PinaltiLunasPersen Error</span>
+								</div>
+								<div class="col-md-4">
+									<select class="selectpicker" data-live-search="true" name="PinaltiFlag" id="PinaltiFlag" th:field=*{PinaltiFlag}>
+										<option th:each="pinalti: ${listPinalti}" th:value="${pinalti.pinaltiId}" th:text="${pinalti.pinaltiName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('PinaltiFlag')}" th:errors="*{PinaltiFlag}">PinaltiFlag Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="TakeOver">Take Over</label>
+								<div class="col-md-3">
+									<select class="selectpicker" data-live-search="true" name="TakeOver" id="TakeOver" th:field=*{TakeOver}>
+										<option th:each="yesNo: ${listYesNo}" th:value="${yesNo.yesNoId}" th:text="${yesNo.yesNoName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('TakeOver')}" th:errors="*{TakeOver}">TakeOver Error</span>
+								</div>
+								<div class="col-md-6">
+									<select class="selectpicker" data-live-search="true" name="Bank" id="Bank" th:field=*{Bank}>
+										<option value=""></option>
+										<option th:each="bank: ${listBank}" th:value="${bank.BankId}" th:text="${bank.BankName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Bank')}" th:errors="*{Bank}">Bank Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="FasKhusus">Fasilitas Khusus</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="FasKhusus" id="FasKhusus" th:field=*{FasKhusus} required>
+										<option th:each="yesNo: ${listYesNo}" th:value="${yesNo.yesNoId}" th:text="${yesNo.yesNoName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('FasKhusus')}" th:errors="*{FasKhusus}">FasKhusus Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Segment">Segment</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Segment" id="Segment" th:field=*{Segment}>
+										<option value=""></option>
+										<option th:each="segment: ${listSegment}" th:value="${segment.SegmentId}" th:text="${segment.SegmentName}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Segment')}" th:errors="*{Segment}">Segment Error</span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="row">
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="submitButton"></label>
+							<div class="col-md-9">
+								<button type="submit" id="submitButton" name="submitButton" class="btn btn-success">Save</button>
+								<a th:href="@{'/pinjaman/fasilitas/edit/' + ${nofasilitas}}" class="btn btn-inverse">Cancel</a>
+								<button type="button" class="btn btn-primary">Submit for Approval</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+		requestProduct();
+
+		$('#Produk').change(function () {
+			requestProduct();
+		});
+		
+		$('#Kurs').change(function () {
+			hitungEqv();
+		});
+		
+		$('#Plafond').change(function () {
+			hitungEqv();
+		});
+	});
+	
+	function hitungEqv() {
+		var kurs = $('#Kurs').val() == '' ? 0 : $('#Kurs').val();
+		var plafond = $('#Plafond').val() == '' ? 0 : $('#Plafond').val();
+		var eqv = kurs * plafond;
+		$('#EqvPlafond').val(eqv);
+	}
+	
+	function requestProduct() {
+		$.ajax({
+                url: '/parameter/getproductdetail/' + $('#Produk').val(),
+                success: function (result) {
+                    // $('#BungaPersen').val(result.bungaCd.rate);
+                    
+                    $('#Valuta').empty();
+                    $('#Valuta').append($('<option></option>').attr('value', result.valuta.code).text(result.valuta.desc));
+                    $('#Valuta').selectpicker('refresh');
+                    
+                    $('#HitungBunga').empty();
+                    $('#HitungBunga').append($('<option></option>').attr('value', result.hitungBunga.code).text(result.hitungBunga.desc));
+                    $('#HitungBunga').selectpicker('refresh');
+                }
+            });
+	}
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

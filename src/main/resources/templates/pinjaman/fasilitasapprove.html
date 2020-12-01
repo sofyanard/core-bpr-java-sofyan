@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Persetujuan Pinjaman</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation" class="active"><a href="#">Fasilitas</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/dokfasilitas/inquiry/' + ${nofasilitas}}">Dokumen Fasilitas</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/dokagunan/inquirybyfac/' + ${nofasilitas}}">Dokumen Agunan</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form id="form1" action="#" method="POST" th:action="@{'/pinjaman/fasilitas/override/' + ${nofasilitas}}" th:object="${fasilitasKreditOverrideModel}" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoNasabah">No Nasabah</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoNasabah" name="NoNasabah" th:field=*{NoNasabah} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoNasabah')}" th:errors="*{NoNasabah}">NoNasabah Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NamaNasabah">Nama Nasabah</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NamaNasabah" name="NamaNasabah" th:field=*{NamaNasabah} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NamaNasabah')}" th:errors="*{NamaNasabah}">NamaNasabah Error</span>
+								</div>
+							</div>
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoFasilitas">No Fasilitas</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoFasilitas" name="NoFasilitas" th:field=*{NoFasilitas} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoFasilitas')}" th:errors="*{NoFasilitas}">NoFasilitas Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Produk">Produk</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Produk" id="Produk" th:field=*{Produk} required>
+										<option th:value="${produk.Code}" th:text="${produk.Desc}"></option>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Produk')}" th:errors="*{Produk}">Produk Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="BungaPersen">Bunga (%)</label>
+								<div class="col-md-4">
+									<input type="number" class="form-control" id="BungaPersen" name="BungaPersen" th:field=*{BungaPersen} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('BungaPersen')}" th:errors="*{BungaPersen}">BungaPersen Error</span>
+								</div>
+								<div class="col-md-5">
+									<select class="selectpicker" data-live-search="true" name="HitungBunga" id="HitungBunga" th:field=*{HitungBunga} required>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('HitungBunga')}" th:errors="*{HitungBunga}">HitungBunga Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Kurs">Kurs</label>
+								<div class="col-md-4">
+									<input type="number" class="form-control" id="Kurs" name="Kurs" th:field=*{Kurs} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('Kurs')}" th:errors="*{Kurs}">Kurs Error</span>
+								</div>
+								<div class="col-md-5">
+									<select class="selectpicker" data-live-search="true" name="Valuta" id="Valuta" th:field=*{Valuta} required>
+									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('Valuta')}" th:errors="*{Valuta}">Valuta Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Plafond">Plafond</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="Plafond" name="Plafond" th:field=*{Plafond} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('Plafond')}" th:errors="*{Plafond}">Plafond Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="EqvPlafond">Eqv Plafond</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="EqvPlafond" name="EqvPlafond" th:field=*{EqvPlafond} readonly required />
+									<span class="text-danger" th:if="${#fields.hasErrors('EqvPlafond')}" th:errors="*{EqvPlafond}">EqvPlafond Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Tenor">Tenor (bulan)</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="Tenor" name="Tenor" th:field=*{Tenor} required />
+									<span class="text-danger" th:if="${#fields.hasErrors('Tenor')}" th:errors="*{Tenor}">Tenor Error</span>
+								</div>
+							</div>
+							
+							<br/>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tujuan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${fasilitasKredit.getTujuanKredit().getPurposeName()}" readonly />
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="ProvisiAmount">Biaya Provisi</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="ProvisiAmount" name="ProvisiAmount" th:field=*{ProvisiAmount} />
+									<span class="text-danger" th:if="${#fields.hasErrors('ProvisiAmount')}" th:errors="*{ProvisiAmount}">ProvisiAmount Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtAdmin">Biaya Admin</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtAdmin" name="AmtAdmin" th:field=*{AmtAdmin} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtAdmin')}" th:errors="*{AmtAdmin}">AmtAdmin Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtNotaris">Biaya Notaris</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtNotaris" name="AmtNotaris" th:field=*{AmtNotaris} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtNotaris')}" th:errors="*{AmtNotaris}">AmtNotaris Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtAsuransi">Biaya Asuransi</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtAsuransi" name="AmtAsuransi" th:field=*{AmtAsuransi} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtAsuransi')}" th:errors="*{AmtAsuransi}">AmtAsuransi Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtAppraisal">Biaya Appraisal</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtAppraisal" name="AmtAppraisal" th:field=*{AmtAppraisal} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtAppraisal')}" th:errors="*{AmtAppraisal}">AmtAppraisal Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="AmtMaterai">Biaya Materai</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="AmtMaterai" name="AmtMaterai" th:field=*{AmtMaterai} />
+									<span class="text-danger" th:if="${#fields.hasErrors('AmtMaterai')}" th:errors="*{AmtMaterai}">AmtMaterai Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label">Agunan</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" th:value="${fasilitasKredit.getAgunan().getYesNoName()}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="NilaiBank">Nilai Bank</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" th:value="${fasilitasKredit.NilaiBank != null ? #numbers.formatDecimal(fasilitasKredit.NilaiBank, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="LtvPersen">LTV (%)</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" th:value="${fasilitasKredit.LtvPersen != null ? #numbers.formatDecimal(fasilitasKredit.LtvPersen, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label">Golongan Penjamin</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" th:value="${((asuransiPenjaminan != null) && (asuransiPenjaminan.GolPenjamin != null)) ? asuransiPenjaminan.getGolPenjamin().getGolPenjaminName() : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label">Nama Penjamin</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" th:value="${((asuransiPenjaminan != null) && (asuransiPenjaminan.NamaPenjamin != null)) ? asuransiPenjaminan.getNamaPenjamin() : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label">Nilai Penjaminan (%)</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" th:value="${((asuransiPenjaminan != null) && (asuransiPenjaminan.PersenJamin != null)) ? #numbers.formatDecimal(asuransiPenjaminan.PersenJamin, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label">Catatan Penjamin</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" th:value="${((asuransiPenjaminan != null) && (asuransiPenjaminan.Note != null)) ? asuransiPenjaminan.getNote() : ''}" readonly />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<div class="row">
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="override"></label>
+							<div class="col-md-9">
+								<button type="submit" id="override" name="override" class="btn btn-primary">Update</button>
+								<a th:href="@{'/pinjaman/fasilitas/override/' + ${nofasilitas}}" class="btn btn-inverse">Cancel</a>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
+				<br/>
+				<form id="form1" action="#" method="POST" th:action="@{'/pinjaman/fasilitas/approval/' + ${nofasilitas}}" th:object="${fasilitasKreditApprovalModel}" class="form-horizontal" role="form">
+					<div class="row">
+						<div class="col-md-10">
+						
+							<input type="hidden" name="NoFasilitas" th:value="${nofasilitas}" />
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NotePutusan">Catatan Keputusan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NotePutusan" name="NotePutusan" th:field=*{NotePutusan} />
+									<span class="text-danger" th:if="${#fields.hasErrors('NotePutusan')}" th:errors="*{NotePutusan}">NotePutusan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Reason">Alasan Penolakan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Reason" name="Reason" th:field=*{Reason} />
+									<span class="text-danger" th:if="${#fields.hasErrors('Reason')}" th:errors="*{Reason}">Reason Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Putusan">Keputusan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="Putusan" name="Putusan" th:field=*{Putusan} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('Putusan')}" th:errors="*{Putusan}">Putusan Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="NoRef">No Referensi</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="NoRef" name="NoRef" th:field=*{NoRef} readonly />
+									<span class="text-danger" th:if="${#fields.hasErrors('NoRef')}" th:errors="*{NoRef}">NoRef Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="action"></label>
+								<div class="col-md-9">
+									<button type="submit" class="btn btn-success" id="approve" name="action" value="approve">Terima</button>&nbsp;&nbsp;
+									<button type="submit" class="btn btn-danger" id="reject" name="action" value="reject">Tolak</button>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</form>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+		requestProduct();
+		disableButton();
+
+		$('#Produk').change(function () {
+			requestProduct();
+		});
+		
+		$('#Kurs').change(function () {
+			hitungEqv();
+		});
+		
+		$('#Plafond').change(function () {
+			hitungEqv();
+		});
+	});
+	
+	function hitungEqv() {
+		var kurs = $('#Kurs').val() == '' ? 0 : $('#Kurs').val();
+		var plafond = $('#Plafond').val() == '' ? 0 : $('#Plafond').val();
+		var eqv = kurs * plafond;
+		$('#EqvPlafond').val(eqv);
+	}
+	
+	function requestProduct() {
+		$.ajax({
+                url: '/parameter/getproductdetail/' + $('#Produk').val(),
+                success: function (result) {
+                    // $('#BungaPersen').val(result.bungaCd.rate);
+                    
+                    $('#Valuta').empty();
+                    $('#Valuta').append($('<option></option>').attr('value', result.valuta.code).text(result.valuta.desc));
+                    $('#Valuta').selectpicker('refresh');
+                    
+                    $('#HitungBunga').empty();
+                    $('#HitungBunga').append($('<option></option>').attr('value', result.hitungBunga.code).text(result.hitungBunga.desc));
+                    $('#HitungBunga').selectpicker('refresh');
+                }
+            });
+	}
+	
+	function disableButton() {
+		if (($('#Putusan').val().toUpperCase() == "TERIMA") || ($('#Putusan').val().toUpperCase() == "TOLAK")) {
+			$('#override').attr('disabled', 'disabled');
+			$('#approve').attr('disabled', 'disabled');
+			$('#reject').attr('disabled', 'disabled');
+		}
+	}
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

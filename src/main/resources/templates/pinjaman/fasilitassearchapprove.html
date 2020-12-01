@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Persetujuan Pinjaman</legend>
+				<br/>
+				<h5>Pencarian Fasilitas Kredit</h5>
+				<div class="row">
+					<div class="col-md-12">
+						<form action="#" method="GET" th:action="@{/pinjaman/fasilitas/searchapprove}" class="form-inline" role="form">
+							<div class="form-group">
+								&nbsp;&nbsp;
+								<input type="text" placeholder="No Fasilitas" class="form-control" name="nofasilitas" th:value="${nofasilitas}" />&nbsp;
+								<input type="number" placeholder="No Nasabah" class="form-control" name="nonasabah" th:value="${nonasabah}" />&nbsp;
+								<input type="text" placeholder="Nama Nasabah" class="form-control" name="namanasabah" th:value="${namanasabah}" />&nbsp;
+								<button type="submit" class="btn btn-success">Search</button>&nbsp;
+								<a th:href="@{/pinjaman/fasilitas/searchapprove}" class="btn btn-danger">Clear</button>
+							</div>
+						</form>						
+					</div>
+				</div>
+				<br/>
+				<table id="table1" class="table table-bordered table-striped" width="80%">
+				<thead>
+					<tr class="table-active">
+						<th>No Nasabah</th>
+						<th>Nama Nasabah</th>
+						<th>No Fasilitas</th>
+						<th>Produk</th>
+						<th>Plafond (IDR)</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="fasilitas : ${listFasilitas}">
+						<td th:text="${fasilitas.NoNasabah}"></td>
+						<td th:text="${fasilitas.NamaNasabah}"></td>
+						<td th:text="${fasilitas.NoFasilitas}"></td>
+						<td th:text="${fasilitas.Produk.getDesc()}"></td>
+						<td th:text="${#numbers.formatDecimal(fasilitas.EqvPlafond, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
+						<td><a th:href="@{'/pinjaman/fasilitas/override/' + ${fasilitas.NoFasilitas}}"><span class="glyphicon glyphicon-expand"></span> Process</a></td>
+					</tr>
+				</tbody>
+				</table>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>
