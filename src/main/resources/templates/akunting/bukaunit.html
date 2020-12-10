@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Proses Buka Unit</legend>
+				
+				<div class="alert alert-danger alert-dismissible" th:if="${(errMsg != null) && (errMsg != '')}">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<h4><i class="icon fa fa-ban"></i> Error!</h4>
+					<h5 th:text="${errMsg}"></h5>
+				</div>
+				<br/>
+				
+				<div class="row">
+					<div class="col-md-9">
+					
+						<form id="form1" action="#" method="POST" th:action="@{'/akunting/bukaunit/' + ${unitId}}" th:object="${eodUnitStatus}" class="form-horizontal" role="form">
+						
+							<input type="hidden" name="UnitId" th:value="${unitId}" />
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tanggal Operasional</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${#dates.format(oprDate, 'dd-MM-yyyy')}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${eodUnitStatus.UnitId.UnitId + ' - ' + eodUnitStatus.UnitId.UnitName}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Status</label>
+								<div class="col-md-9">
+									<input type="text" placeholder="Caption" class="form-control" th:value="${eodUnitStatus.StatusUnit.OpenCloseName}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Waktu Buka</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${eodUnitStatus.DateBuka != null ? #dates.format(eodUnitStatus.DateBuka, 'dd-MM-yyyy HH:mm') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Waktu Tutup</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${eodUnitStatus.DateTutup != null ? #dates.format(eodUnitStatus.DateTutup, 'dd-MM-yyyy HH:mm') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="submitButton"></label>
+								<div class="col-md-9">
+									<button type="submit" id="submitButton" name="submitButton" class="btn btn-primary" th:disabled="${eodUnitStatus.StatusUnit.OpenCloseId == '1' ? true : false}">Proses Buka Unit</button>
+								</div>
+							</div>
+							
+						</form>
+						
+					</div>
+				</div>
+				
+			</div>	
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$("#form1").validate();
+		
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

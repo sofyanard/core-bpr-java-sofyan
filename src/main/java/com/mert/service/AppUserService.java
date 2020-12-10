@@ -1,6 +1,8 @@
 package com.mert.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,18 @@ public class AppUserService {
 		});
 		
 		return listAppParentChildMenuModel;
+	}
+	
+	public List<AppUser> listBukuBesarUsersByUnit(String unitId) {
+		return appUserRepository.listBukuBesarUsersByUnit(unitId);
+	}
+	
+	public List<AppUser> listOpenBukuBesarUsersByUnit(String unitId, String strDate) {
+		return appUserRepository.listOpenBukuBesarUsersByUnit(unitId, strDate);
+	}
+	
+	public List<AppUser> listOpenBukuBesarKasUsersByUnit(String unitId, String strDate) {
+		return appUserRepository.listOpenBukuBesarKasUsersByUnit(unitId, strDate);
 	}
 
 }

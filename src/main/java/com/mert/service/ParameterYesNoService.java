@@ -25,5 +25,9 @@ public class ParameterYesNoService {
 	public void save(ParameterYesNo parameterYesNo) {
 		parameterYesNoRepository.save(parameterYesNo);
 	}
+	
+	public void delete(String id) {
+		parameterYesNoRepository.delete(id);
+	}
 
 }
