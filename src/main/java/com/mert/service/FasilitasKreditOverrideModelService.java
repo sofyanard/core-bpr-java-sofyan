@@ -29,5 +29,9 @@ public class FasilitasKreditOverrideModelService {
 	public void delete(String id) {
 		fasilitasKreditOverrideModelRepository.delete(id);
 	}
+	
+	public FasilitasKreditOverrideModel findByNoRef(String noref) {
+		return fasilitasKreditOverrideModelRepository.findByNoRef(noref);
+	}
 
 }

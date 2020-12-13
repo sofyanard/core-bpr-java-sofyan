@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -61,7 +62,12 @@ public class TranHistory {
 	private Double ValueKredit;
 	
 	@Column(name = "note")
+	@Size(max = 50)
 	private String Note;
+	
+	@Column(name = "other_note")
+	@Size(max = 50)
+	private String OtherNote;
 	
 	
 	
@@ -161,6 +167,14 @@ public class TranHistory {
 
 	public void setNote(String note) {
 		Note = note;
+	}
+	
+	public String getOtherNote() {
+		return OtherNote;
+	}
+
+	public void setOtherNote(String otherNote) {
+		OtherNote = otherNote;
 	}
 	
 	

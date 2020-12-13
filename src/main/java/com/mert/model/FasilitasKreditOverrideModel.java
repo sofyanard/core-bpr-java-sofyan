@@ -1,5 +1,8 @@
 package com.mert.model;
 
+import java.util.Date;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +15,8 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "fasilitaskredit")
@@ -107,9 +112,11 @@ public class FasilitasKreditOverrideModel {
 	@Size(min=1, max=50)
 	private String NotePutusan;
 	
-	@ManyToOne
-	@JoinColumn(name = "putusan", referencedColumnName = "putusan_id")
-	private ParameterPutusan Putusan;
+	// @ManyToOne
+	// @JoinColumn(name = "putusan", referencedColumnName = "putusan_id")
+	// private ParameterPutusan Putusan;
+	@Column(name = "putusan")
+	private String Putusan;
 	
 	@Column(name = "reason")
 	@Size(min=1, max=50)
@@ -264,11 +271,19 @@ public class FasilitasKreditOverrideModel {
 		NotePutusan = notePutusan;
 	}
 
-	public ParameterPutusan getPutusan() {
+	// public ParameterPutusan getPutusan() {
+	// 	return Putusan;
+	// }
+
+	// public void setPutusan(ParameterPutusan putusan) {
+	// 	Putusan = putusan;
+	// }
+	
+	public String getPutusan() {
 		return Putusan;
 	}
 
-	public void setPutusan(ParameterPutusan putusan) {
+	public void setPutusan(String putusan) {
 		Putusan = putusan;
 	}
 

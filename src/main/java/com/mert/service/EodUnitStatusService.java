@@ -73,8 +73,11 @@ public class EodUnitStatusService {
 	}
 	
 	// Check if Specific Unit is Open
-	public boolean checkIfUnitIsOpen(String unitId) {
+	public boolean checkIfUnitIsOpen(String unitId) throws Exception {
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
+		if (eodUnitStatus == null) {
+			return false;
+		}
 		if (eodUnitStatus.getStatusUnit().getOpenCloseId().trim().equals("1")) {
 			return true;
 		} else {
@@ -83,8 +86,11 @@ public class EodUnitStatusService {
 	}
 	
 	// Check if Specific Unit is Close
-	public boolean checkIfUnitIsClose(String unitId) {
+	public boolean checkIfUnitIsClose(String unitId) throws Exception {
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
+		if (eodUnitStatus == null) {
+			throw new Exception("Unit belum dibuka!");
+		}
 		if (eodUnitStatus.getStatusUnit().getOpenCloseId().trim().equals("0")) {
 			return true;
 		} else {
@@ -93,8 +99,11 @@ public class EodUnitStatusService {
 	}
 	
 	// Check if Specific User is Open
-	public boolean checkIfUserIsOpen(String userId) {
+	public boolean checkIfUserIsOpen(String userId) throws Exception {
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
+		if (eodUnitStatus == null) {
+			return false;
+		}
 		if (eodUnitStatus.getStatusUser().getOpenCloseId().trim().equals("1")) {
 			return true;
 		} else {
@@ -103,8 +112,11 @@ public class EodUnitStatusService {
 	}
 	
 	// Check if Specific User is Close
-	public boolean checkIfUserIsClose(String userId) {
+	public boolean checkIfUserIsClose(String userId) throws Exception {
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
+		if (eodUnitStatus == null) {
+			throw new Exception("User belum dibuka!");
+		}
 		if (eodUnitStatus.getStatusUser().getOpenCloseId().trim().equals("0")) {
 			return true;
 		} else {
