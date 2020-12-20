@@ -25,5 +25,9 @@ public class ParameterSegmentService {
 	public void save(ParameterSegment parameterSegment) {
 		parameterSegmentRepository.save(parameterSegment);
 	}
+	
+	public void delete(String id) {
+		parameterSegmentRepository.delete(id);
+	}
 
 }

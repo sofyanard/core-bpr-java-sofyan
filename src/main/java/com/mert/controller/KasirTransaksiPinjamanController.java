@@ -1,5 +1,6 @@
 package com.mert.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mert.model.AppUser;
 import com.mert.model.FasilitasKreditOverrideModel;
+import com.mert.model.FasilitasKreditPembayaranModel;
 import com.mert.model.ParameterKodeBiaya;
 import com.mert.model.Transaksi1001Input;
 import com.mert.service.AppUserService;
 import com.mert.service.FasilitasKreditOverrideModelService;
+import com.mert.service.FasilitasKreditPembayaranModelService;
 import com.mert.service.ParameterKodeBiayaService;
 import com.mert.service.TransaksiService;
 
@@ -36,6 +39,9 @@ public class KasirTransaksiPinjamanController {
 	
 	@Autowired
 	private FasilitasKreditOverrideModelService fasilitasKreditOverrideModelService;
+	
+	@Autowired
+	private FasilitasKreditPembayaranModelService fasilitasKreditPembayaranModelService;
 	
 	@Autowired
 	private ParameterKodeBiayaService parameterKodeBiayaService;
@@ -76,6 +82,25 @@ public class KasirTransaksiPinjamanController {
 		
 		if (fasilitasKredit == null) {
 			String errMsg = "Fasilitas dengan No Referensi " + noReferensi + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/biayaadminkredittunaisearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		FasilitasKreditPembayaranModel fasilitasKredit2 = fasilitasKreditPembayaranModelService.findOne(fasilitasKredit.getNoFasilitas());
+		
+		if ((fasilitasKredit2.getPembayaranBiayaTranRef() != null) &&
+				(fasilitasKredit2.getPembayaranBiayaDate() != null) &&
+				(fasilitasKredit2.getPembayaranBiayaAmount() != null)) {
+			
+			String trxRef = fasilitasKredit2.getPembayaranBiayaTranRef().toString();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String paydate = formatter.format(fasilitasKredit2.getPembayaranBiayaDate());
+			String payamount = fasilitasKredit2.getPembayaranBiayaAmount().toString();
+			
+			String errMsg = "Biaya-biaya atas Fasilitas dengan No Referensi " + noReferensi + 
+					" sudah dibayar pada " + paydate + 
+					" sejumlah " + payamount + 
+					" Transaction Ref No " + trxRef + "!";
 			modelAndView.setViewName("redirect:/kasir/pinjaman/biayaadminkredittunaisearch?errMsg=" + errMsg);
 			return modelAndView;
 		}

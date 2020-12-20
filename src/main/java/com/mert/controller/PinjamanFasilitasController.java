@@ -2,6 +2,7 @@ package com.mert.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mert.model.AppUser;
 import com.mert.service.AppUserService;
+import com.mert.model.AppUnit;
+import com.mert.service.AppUnitService;
 import com.mert.model.NasabahBasic;
 import com.mert.service.NasabahBasicService;
 import com.mert.model.FasilitasKredit;
@@ -29,6 +32,12 @@ import com.mert.model.FasilitasKreditOverrideModel;
 import com.mert.service.FasilitasKreditOverrideModelService;
 import com.mert.model.FasilitasKreditApprovalModel;
 import com.mert.service.FasilitasKreditApprovalModelService;
+import com.mert.model.FasilitasKreditPembayaranModel;
+import com.mert.service.FasilitasKreditPembayaranModelService;
+import com.mert.model.FasilitasKreditAktifasiModel;
+import com.mert.service.FasilitasKreditAktifasiModelService;
+import com.mert.model.RekeningKredit;
+import com.mert.service.RekeningKreditService;
 import com.mert.model.ParameterProduk;
 import com.mert.service.ParameterProdukService;
 import com.mert.model.ParameterPurpose;
@@ -43,6 +52,8 @@ import com.mert.model.ParameterSegment;
 import com.mert.service.ParameterSegmentService;
 import com.mert.model.AsuransiPenjaminan;
 import com.mert.service.AsuransiPenjaminanService;
+import com.mert.model.StatusRekg;
+import com.mert.service.StatusRekgService;
 
 @Controller
 @RequestMapping("/pinjaman/fasilitas")
@@ -64,6 +75,15 @@ public class PinjamanFasilitasController {
 	private FasilitasKreditApprovalModelService fasilitasKreditApprovalModelService;
 	
 	@Autowired
+	private FasilitasKreditPembayaranModelService fasilitasKreditPembayaranModelService;
+	
+	@Autowired
+	private FasilitasKreditAktifasiModelService fasilitasKreditAktifasiModelService;
+	
+	@Autowired
+	private RekeningKreditService rekeningKreditService;
+	
+	@Autowired
 	private ParameterProdukService parameterProdukService;
 	
 	@Autowired
@@ -83,6 +103,9 @@ public class PinjamanFasilitasController {
 	
 	@Autowired
 	private AsuransiPenjaminanService asuransiPenjaminanService;
+	
+	@Autowired
+	private StatusRekgService statusRekgService;
 	
 	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -326,6 +349,149 @@ public class PinjamanFasilitasController {
 		// Generate View
 		modelAndView.setViewName("redirect:/pinjaman/fasilitas/override/" + nofasilitas);
 		return modelAndView;
+		
+	}
+	
+	@RequestMapping(value="/aktifasisearch", method = RequestMethod.GET)
+	public ModelAndView AktifasiSearch(String errMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("mode", "MODE_SEARCH");
+		modelAndView.setViewName("pinjaman/aktifasi");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/aktifasisearch", method = RequestMethod.POST)
+	public ModelAndView AktifasiSearchPost(String noReferensi) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		FasilitasKreditOverrideModel fasilitasKredit = fasilitasKreditOverrideModelService.findByNoRef(noReferensi);
+		
+		if (fasilitasKredit == null) {
+			String errMsg = "Fasilitas dengan No Referensi " + noReferensi + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/pinjaman/fasilitas/aktifasisearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		FasilitasKreditAktifasiModel fasilitasKredit2 = fasilitasKreditAktifasiModelService.findOne(fasilitasKredit.getNoFasilitas());
+		
+		if ((fasilitasKredit2.getNoRekening() != null) && (!fasilitasKredit2.getNoRekening().isEmpty())) {
+			String noRek = fasilitasKredit2.getNoRekening();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String activeDate = formatter.format(fasilitasKredit2.getAktifasiDate());
+			
+			String errMsg = "Fasilitas dengan No Referensi " + noReferensi + 
+					" sudah diaktifkan pada " + activeDate + 
+					" No Rekening " + noRek + "!";
+			modelAndView.setViewName("redirect:/pinjaman/fasilitas/aktifasisearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		modelAndView.setViewName("redirect:/pinjaman/fasilitas/aktifasi/" + fasilitasKredit.getNoFasilitas());
+		return modelAndView;
+		
+	}
+	
+	@RequestMapping(value="/aktifasi/{nofasilitas}", method = RequestMethod.GET)
+	public ModelAndView Aktifasi(@PathVariable String nofasilitas, String errMsg, String sccMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		AppUnit appUnit = getUser().getUnitId();
+		modelAndView.addObject("appUnit", appUnit);
+		
+		FasilitasKreditOverrideModel fasilitasKredit = fasilitasKreditOverrideModelService.findOne(nofasilitas);
+		modelAndView.addObject("fasilitasKredit", fasilitasKredit);
+		
+		FasilitasKreditPembayaranModel fasilitasKredit2 = fasilitasKreditPembayaranModelService.findOne(nofasilitas);
+		modelAndView.addObject("fasilitasKredit2", fasilitasKredit2);
+		
+		FasilitasKreditAktifasiModel fasilitasKredit3 = fasilitasKreditAktifasiModelService.findOne(nofasilitas);
+		modelAndView.addObject("fasilitasKredit3", fasilitasKredit3);
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findByNoFasilitas(nofasilitas);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		modelAndView.addObject("nofasilitas", nofasilitas);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("mode", "MODE_AKTIFASI");
+		modelAndView.setViewName("pinjaman/aktifasi");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/aktifasi/{nofasilitas}", method = RequestMethod.POST)
+	public ModelAndView AktifasiPost(@PathVariable String nofasilitas) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		try {
+			this.CreateRekeningFromFasilitas(nofasilitas);
+		}
+		catch (Exception e) {
+			String errMsg = e.getMessage();
+			modelAndView.setViewName("redirect:/pinjaman/fasilitas/aktifasi/" + nofasilitas + "?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		String sccMsg = "Pembentukan dan Aktifasi Rekening Sukses!";
+		modelAndView.setViewName("redirect:/pinjaman/fasilitas/aktifasi/" + nofasilitas + "?sccMsg=" + sccMsg);
+		return modelAndView;
+	}
+	
+	private void CreateRekeningFromFasilitas(String nofasilitas) throws Exception {
+		
+		try {
+			FasilitasKredit fasilitasKredit = fasilitasKreditService.findOne(nofasilitas);
+			
+			String prefix = getUser().getUnitId().getUnitId().substring(0, 3);
+			
+			RekeningKredit rekeningKredit = new RekeningKredit();
+			rekeningKredit.setNoRekening(rekeningKreditService.GetNewNoRekening(prefix));
+			rekeningKredit.setNoFasilitas(nofasilitas);
+			rekeningKredit.setNoNasabah(fasilitasKredit.getNoNasabah());
+			rekeningKredit.setNamaNasabah(fasilitasKredit.getNamaNasabah());
+			rekeningKredit.setUnitId(getUser().getUnitId());
+			rekeningKredit.setProduk(fasilitasKredit.getProduk());
+			rekeningKredit.setValuta(fasilitasKredit.getValuta());
+			rekeningKredit.setPlafond(fasilitasKredit.getPlafond());
+			rekeningKredit.setKurs(fasilitasKredit.getKurs());
+			rekeningKredit.setEqvPlafond(fasilitasKredit.getEqvPlafond());
+			rekeningKredit.setTenor(fasilitasKredit.getTenor());
+			rekeningKredit.setBungaPersen(fasilitasKredit.getBungaPersen());
+			rekeningKredit.setHitungBunga(fasilitasKredit.getHitungBunga());
+			rekeningKredit.setPinaltiBungaPersen(fasilitasKredit.getPinaltiBungaPersen());
+			rekeningKredit.setPinaltiPokokPersen(fasilitasKredit.getPinaltiPokokPersen());
+			rekeningKredit.setPinaltiLunasPersen(fasilitasKredit.getPinaltiLunasPersen());
+			rekeningKredit.setPinaltiFlag(fasilitasKredit.getPinaltiFlag());
+			
+			StatusRekg statusRekg = statusRekgService.findByCode("1");
+			rekeningKredit.setStatusRekening(statusRekg);
+			
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date today = new Date();
+			Date todayWithZeroTime = formatter.parse(formatter.format(today));
+			rekeningKredit.setDueDate(todayWithZeroTime);
+			
+			rekeningKreditService.save(rekeningKredit);
+			
+			// Update Fasilitas Kredit
+			FasilitasKreditAktifasiModel fasilitasKredit2 = fasilitasKreditAktifasiModelService.findOne(nofasilitas);
+			fasilitasKredit2.setNoRekening(rekeningKredit.getNoRekening());
+			fasilitasKredit2.setAktifasiDate(new Date());
+			fasilitasKreditAktifasiModelService.save(fasilitasKredit2);
+
+		}
+		catch (Exception e) {
+			throw e;
+		}
 		
 	}
 
