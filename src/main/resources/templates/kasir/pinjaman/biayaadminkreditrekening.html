@@ -24,7 +24,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<legend>Transaksi Pinjaman - Pembayaran Biaya Admin Kredit Tunai</legend>
+						<legend>Transaksi Pinjaman - Pembayaran Biaya Admin Kredit Beban Rekening</legend>
 					</div>
 					<div class="col-md-6">
 						<div class="collapse navbar-collapse" id="navbar-collapse">
@@ -33,8 +33,8 @@
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu Transaksi <span class="caret"></span></a>
 									<ul class="dropdown-menu" role="menu">
 										<li><a href="home">Home - Transaksi Pinjaman</a></li>
-										<li><a href="#">1001 - Pembayaran Biaya Admin Kredit Tunai</a></li>
-										<li><a href="biayaadminkreditrekeningsearch">1002 - Pembayaran Biaya Admin Kredit Beban Rekening</a></li>
+										<li><a href="biayaadminkredittunaisearch">1001 - Pembayaran Biaya Admin Kredit Tunai</a></li>
+										<li><a href="#">1002 - Pembayaran Biaya Admin Kredit Beban Rekening</a></li>
 										<li><a href="pencairankredittunaisearch">1003 - Pencairan Kredit Tunai</a></li>
 										<li><a href="pencairankreditrekeningsearch">1004 - Pencairan Kredit Ke Rekening</a></li>
 										<li><a href="#">1005 - Pembayaran Angsuran Kredit Tunai</a></li>
@@ -68,12 +68,28 @@
 				
 					<div class="row">
 						<div class="col-md-9">
-							<form id="form1" action="#" method="POST" th:action="@{/kasir/pinjaman/biayaadminkredittunaisearch}" class="form-horizontal" role="form">
+							<form id="form1" action="#" method="POST" th:action="@{/kasir/pinjaman/biayaadminkreditrekeningsearch}" class="form-horizontal" role="form">
 								
 								<div class="form-group row">
 									<label class="col-md-3 control-label" for="noReferensi">No Referensi</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" id="noReferensi" name="noReferensi" required />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-3 control-label" for="noRekBeban">No Rekening Beban</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="noRekBeban" name="noRekBeban" required />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-3 control-label" for="jenisRekBeban">Jenis Rekening Beban</label>
+									<div class="col-md-9">
+										<select class="selectpicker" data-live-search="true" name="jenisRekBeban" id="jenisRekBeban" required>
+											<option th:each="productType: ${listProductType}" th:value="${productType.ProductTypeId}" th:text="${productType.ProductTypeName}"></option>
+										</select>
 									</div>
 								</div>
 								
@@ -94,9 +110,33 @@
 				
 					<div class="row">
 						<div class="col-md-9">
-							<form id="form1" action="#" method="POST" th:action="@{'/kasir/pinjaman/biayaadminkredittunai/' + ${noReferensi}}" th:object="${transaksi1001Input}" class="form-horizontal" role="form">
+							<form id="form1" action="#" method="POST" th:action="@{'/kasir/pinjaman/biayaadminkreditrekening/' + ${noReferensi} + '/' + ${noRekBeban} + '/' + ${jenisRekBeban}}" th:object="${transaksi1002Input}" class="form-horizontal" role="form">
 								
 								<input type="hidden" class="form-control" name="userIdPost" th:field=*{userIdPost} />
+								
+								<div class="form-group row">
+									<label class="col-md-3 control-label" for="noRekBeban">No Rekening Beban</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="noRekBeban" name="noRekBeban" th:field=*{noRekBeban} required readonly />
+										<span class="text-danger" th:if="${#fields.hasErrors('noRekBeban')}" th:errors="*{noRekBeban}">noRekBeban Error</span>
+									</div>
+								</div>
+								
+								<div class="form-group row" th:if="${jenisRekBeban == '2'}">
+									<label class="col-md-3 control-label">Nama Nasabah</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:value="${rektabungan.nama_nasabah}" readonly />
+									</div>
+								</div>
+								
+								<div class="form-group row" th:if="${jenisRekBeban == '4'}">
+									<label class="col-md-3 control-label">Nama Buku Besar</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:value="${rekbukubesar.NamaRekening}" readonly />
+									</div>
+								</div>
+								
+								<hr />
 								
 								<div class="form-group row">
 									<label class="col-md-3 control-label" for="noReferensi">No Referensi</label>
@@ -189,7 +229,7 @@
 									<label class="col-md-3 control-label" for="submitButton"></label>
 									<div class="col-md-9">
 										<button type="submit" id="submitButton" name="submitButton" class="btn btn-primary">Posting</button>
-										<a th:href="@{/kasir/pinjaman/biayaadminkredittunaisearch}" class="btn btn-inverse">Cancel</a>
+										<a th:href="@{/kasir/pinjaman/biayaadminkreditrekeningsearch}" class="btn btn-inverse">Cancel</a>
 									</div>
 								</div>
 								

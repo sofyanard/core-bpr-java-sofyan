@@ -1,5 +1,6 @@
 package com.mert.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -38,6 +39,21 @@ public class RekeningKreditService {
 	
 	public RekeningKredit findByNoFasilitas(String nofasilitas) {
 		return rekeningKreditRepository.findByNoFasilitas(nofasilitas);
+	}
+	
+	public List<RekeningKredit> searchByProp(String norek, Long nonasabah, String nama) {
+		if ((norek != null) && (!norek.trim().isEmpty())) {
+			RekeningKredit rekeningKredit = rekeningKreditRepository.findOne(norek);
+			List<RekeningKredit> listRekeningKredit = new ArrayList<RekeningKredit>();
+			listRekeningKredit.add(rekeningKredit);
+			return listRekeningKredit;
+		} else if (nonasabah != null) {
+			return rekeningKreditRepository.findByNoNasabah(nonasabah);
+		} else if ((nama != null) && (!nama.trim().isEmpty())) {
+			return rekeningKreditRepository.findByNamaNasabah(nama.toLowerCase());
+		} else {
+			return new ArrayList<RekeningKredit>();
+		}
 	}
 	
 	public String GetNewNoRekening(String prefix) {

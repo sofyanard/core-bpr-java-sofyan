@@ -22,31 +22,7 @@
 			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
 			
 			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<legend>Transaksi Pinjaman</legend>
-					</div>
-					<div class="col-md-6">
-						<div class="collapse navbar-collapse" id="navbar-collapse">
-							<ul class="nav navbar-nav">
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu Transaksi <span class="caret"></span></a>
-									<ul class="dropdown-menu" role="menu">
-										<li><a href="#">Home - Transaksi Pinjaman</a></li>
-										<li><a href="biayaadminkredittunaisearch">1001 - Pembayaran Biaya Admin Kredit Tunai</a></li>
-										<li><a href="biayaadminkreditrekeningsearch">1002 - Pembayaran Biaya Admin Kredit Beban Rekening</a></li>
-										<li><a href="pencairankredittunaisearch">1003 - Pencairan Kredit Tunai</a></li>
-										<li><a href="pencairankreditrekeningsearch">1004 - Pencairan Kredit Ke Rekening</a></li>
-										<li><a href="#">1005 - Pembayaran Angsuran Kredit Tunai</a></li>
-										<li><a href="#">1006 - Pembayaran Angsuran Kredit Beban Rekening</a></li>
-										<li><a href="#">1007 - Pelunasan Kredit Tunai</a></li>
-										<li><a href="#">1008 - Pelunasan Kredit Beban Rekening</a></li>
-									</ul>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+				<legend>Pemeliharaan Rekening Pinjaman</legend>
 				
 				<!-- Success Alert -->
 				<div class="alert alert-success alert-dismissible" th:if="${(sccMsg != null) && (sccMsg != '')}">
@@ -63,10 +39,50 @@
 				</div>
 				
 				<br/>
+
+				<div class="row">
+					<div class="col-md-12">
+						<form action="#" method="GET" th:action="@{/pinjaman/rekening/searchedit}" class="form-inline" role="form">
+							<div class="form-group">
+								&nbsp;&nbsp;
+								<input type="number" placeholder="No Rekening" class="form-control" name="norek" th:value="${norek}" />&nbsp;
+								<input type="number" placeholder="No Nasabah" class="form-control" name="nonasabah" th:value="${nonasabah}" />&nbsp;
+								<input type="text" placeholder="Nama Nasabah" class="form-control" name="nama" th:value="${nama}" />&nbsp;
+								<button type="submit" class="btn btn-success">Search</button>&nbsp;
+								<a th:href="@{/pinjaman/rekening/searchedit}" class="btn btn-danger">Clear</button>
+							</div>
+						</form>						
+					</div>
+				</div>
+				<br/>
+				<table id="table1" class="table table-bordered table-striped" width="80%">
+				<thead>
+					<tr class="table-active">
+						<th>No Rekening</th>
+						<th>No Nasabah</th>
+						<th>Nama Nasabah</th>
+						<th>Produk</th>
+						<th>Plafond (IDR)</th>
+						<th>Tenor (bulan)</th>
+						<th>Status</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rek : ${listRekeningKredit}">
+						<td th:text="${rek.NoRekening}"></td>
+						<td th:text="${rek.NoNasabah}"></td>
+						<td th:text="${rek.NamaNasabah}"></td>
+						<td th:text="${rek.Produk.Desc}"></td>
+						<td th:text="${#numbers.formatDecimal(rek.EqvPlafond, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
+						<td th:text="${rek.Tenor}"></td>
+						<td th:text="${rek.StatusRekening.deskripsi}"></td>
+						<td><a th:href="@{'/pinjaman/rekening/edit/' + ${rek.NoRekening}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></td>
+					</tr>
+				</tbody>
+				</table>
 				
-				
-				
-			</div>	
+			</div>
 				
 			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
 
@@ -86,12 +102,21 @@
 <script src="/js/bootstrap.min.js"></script>
 
 <script src="/js/bootstrap-select.min.js"></script>
-<script src="/js/jquery.validate.min.js"></script>
 
 <script>
 	$(document).ready(function () {
-		$("#form1").validate();
-		
+
+		$('#officeprov').change(function () {
+			$.ajax({
+                url: '/parameter/listkotakabbyprov/' + $('#officeprov').val(),
+                success: function (result) {
+                    $('#officecity').empty();
+                    $.each(result, function () {
+                        $('#officecity').append($('<option></option>').attr('value', this.kotacode).text(this.kotadesc));
+                    });
+                }
+            });
+		});
 	});
 </script>
 
