@@ -20,6 +20,7 @@ import com.mert.model.EodUnitStatus;
 import com.mert.model.UserBukuBesarKasStatusViewModel;
 import com.mert.service.EodUnitStatusService;
 import com.mert.service.UnitKasStatusService;
+import com.mert.service.EodTanggalService;
 
 @Controller
 public class KasirBukaTutupController {
@@ -32,6 +33,9 @@ public class KasirBukaTutupController {
 	
 	@Autowired
 	private UnitKasStatusService unitKasStatusService;
+	
+	@Autowired
+	private EodTanggalService eodTanggalService;
 	
 	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -52,7 +56,8 @@ public class KasirBukaTutupController {
 		List<AppUser> listUser = eodUnitStatusService.listAvailableUsersByUnit(unitId);
 		modelAndView.addObject("listUser", listUser);
 		modelAndView.addObject("unitId", unitId);
-		modelAndView.addObject("oprDate", new Date());
+		// modelAndView.addObject("oprDate", new Date());
+		modelAndView.addObject("oprDate", eodTanggalService.getDate());
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.setViewName("kasir/bukakasir");
 		return modelAndView;
@@ -96,7 +101,8 @@ public class KasirBukaTutupController {
 		modelAndView.addObject("listUser", listUserBukuBesarKasStatusViewModel);
 		
 		modelAndView.addObject("unitId", unitId);
-		modelAndView.addObject("oprDate", new Date());
+		// modelAndView.addObject("oprDate", new Date());
+		modelAndView.addObject("oprDate", eodTanggalService.getDate());
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.setViewName("kasir/tutupkasir");
 		return modelAndView;

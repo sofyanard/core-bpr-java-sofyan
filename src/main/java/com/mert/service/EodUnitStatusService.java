@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.mert.model.EodUnitStatus;
 import com.mert.repository.EodUnitStatusRepository;
+import com.mert.repository.EodTanggalRepository;
 import com.mert.model.AppUser;
 import com.mert.model.AppUnit;
 
@@ -33,10 +34,41 @@ public class EodUnitStatusService {
 	@Autowired
 	private ParameterYesNoService parameterYesNoService;
 	
+	@Autowired
+	private EodTanggalService eodTanggalService;
+	
 	private String strToday;
 	
+	/*
 	public EodUnitStatusService() {
-		Date today = new Date();
+		// Date today = new Date();
+		Date today;
+		today = new Date();
+		
+		try {
+			today = eodTanggalService.getDate();
+		}
+		catch (Exception ex) {
+			System.out.println("eodTanggalService ERRORRR : " + ex.getMessage());
+		}
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strToday = formatter.format(today);
+		this.strToday = strToday;
+	}
+	*/
+	
+	public void requestEodTanggal() {
+		Date today;
+		today = new Date();
+		
+		try {
+			today = eodTanggalService.getDate();
+		}
+		catch (Exception ex) {
+			System.out.println("eodTanggalService ERRORRR : " + ex.getMessage());
+		}
+		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String strToday = formatter.format(today);
 		this.strToday = strToday;
@@ -44,36 +76,43 @@ public class EodUnitStatusService {
 	
 	// List Unit and All Users in a Specific Unit
 	public List<EodUnitStatus> findAllByUnit(String unitId) {
+		this.requestEodTanggal();
 		return eodUnitStatusRepository.findAllByUnitAndOpenDate(unitId, this.strToday);
 	}
 	
 	// Find One Specific Unit
 	public EodUnitStatus findUnit(String unitId) {
+		this.requestEodTanggal();
 		return eodUnitStatusRepository.findUnitByUnitAndOpenDate(unitId, this.strToday);
 	}
 	
 	// List All Only Users in a Specific Unit
 	public List<EodUnitStatus> findUsersByUnit(String unitId) {
+		this.requestEodTanggal();
 		return eodUnitStatusRepository.findUsersByUnitAndOpenDate(unitId, this.strToday);
 	}
 	
 	// Find One Specific User
 	public EodUnitStatus findUser(String userId) {
+		this.requestEodTanggal();
 		return eodUnitStatusRepository.findUserByUserAndOpenDate(userId, this.strToday);
 	}
 	
 	// List All Only Units in a Whole Bank
 	public List<EodUnitStatus> findUnits() {
+		this.requestEodTanggal();
 		return eodUnitStatusRepository.findUnitsByOpenDate(this.strToday);
 	}
 	
 	// List All Units and Users in a Whole Bank
 	public List<EodUnitStatus> findUnitsAndUsers() {
+		this.requestEodTanggal();
 		return eodUnitStatusRepository.findAllByOpenDate(this.strToday);
 	}
 	
 	// Check if Specific Unit is Open
 	public boolean checkIfUnitIsOpen(String unitId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
 		if (eodUnitStatus == null) {
 			return false;
