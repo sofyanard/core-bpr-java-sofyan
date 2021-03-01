@@ -25,14 +25,8 @@ public class KodeTran {
 	@Column(name = "post_debit")
 	private String PostDebit;
 	
-	@Column(name = "bukubesar_debit")
-	private String BukuBesarDebit;
-	
 	@Column(name = "post_kredit")
 	private String PostKredit;
-	
-	@Column(name = "bukubesar_kredit")
-	private String BukuBesarKredit;
 	
 	@Column(name = "screen_route")
 	private String ScreenRoute;
@@ -84,28 +78,12 @@ public class KodeTran {
 		PostDebit = postDebit;
 	}
 
-	public String getBukuBesarDebit() {
-		return BukuBesarDebit;
-	}
-
-	public void setBukuBesarDebit(String bukuBesarDebit) {
-		BukuBesarDebit = bukuBesarDebit;
-	}
-
 	public String getPostKredit() {
 		return PostKredit;
 	}
 
 	public void setPostKredit(String postKredit) {
 		PostKredit = postKredit;
-	}
-
-	public String getBukuBesarKredit() {
-		return BukuBesarKredit;
-	}
-
-	public void setBukuBesarKredit(String bukuBesarKredit) {
-		BukuBesarKredit = bukuBesarKredit;
 	}
 
 	public String getScreenRoute() {

@@ -16,6 +16,7 @@ import com.mert.model.FasilitasKreditOverrideModel;
 import com.mert.model.FasilitasKreditPembayaranModel;
 import com.mert.model.ParameterKodeBiaya;
 import com.mert.model.KodeTran;
+import com.mert.model.KodeTranUnit;
 import com.mert.model.RekeningBukuBesar;
 import com.mert.model.TabunganPembentukanRekening;
 import com.mert.model.RekeningKredit;
@@ -43,6 +44,9 @@ public class TransaksiService {
 	
 	@Autowired
 	private KodeTranService kodeTranService;
+	
+	@Autowired
+	private KodeTranUnitService kodeTranUnitService;
 	
 	@Autowired
 	private EodUnitStatusService eodUnitStatusService;
@@ -114,7 +118,7 @@ public class TransaksiService {
 	
 	// Get Rekening Buku Besar Unit
 	private RekeningBukuBesar GetNoRekBukuBesarUnit(AppUnit appUnit) throws Exception {
-		BukuBesar bbUnit = bukuBesarService.findByUnit(appUnit.getUnitId());
+		BukuBesar bbUnit = bukuBesarService.findOne(appUnit.getRekBukuBesar());
 		
 		if (bbUnit == null) {
 			throw new Exception("Buku Besar Unit " + appUnit.getUnitName() + " tidak ditemukan!");
@@ -598,7 +602,15 @@ public class TransaksiService {
 		KodeTran kodeTran = this.GetKodeTran("1001");
 		
 		// Get Rekening Buku Besar Tujuan 1001
-		RekeningBukuBesar rekBBTujuan = this.GetRekeningBukuBesar(kodeTran.getBukuBesarKredit());
+		// RekeningBukuBesar rekBBTujuan = this.GetRekeningBukuBesar(kodeTran.getBukuBesarKredit());
+		KodeTranUnit kodeTranUnit = kodeTranUnitService.findByKoTranAndUnit(kodeTran.getKoTran(), userPost.getUnitId().getUnitId());
+		if (kodeTranUnit == null) {
+			throw new Exception("Buku besar tujuan belum diset di parameter transaksi!");
+		}
+		RekeningBukuBesar rekBBTujuan = this.GetRekeningBukuBesar(kodeTranUnit.getBukuBesarKredit());
+		if (rekBBTujuan == null) {
+			throw new Exception("Rekening buku besar tujuan belum diset di parameter!");
+		}
 		
 		// Get Rekening Buku Besar Biaya Lain
 		RekeningBukuBesar rekBBBiayaLain;
@@ -735,7 +747,15 @@ public class TransaksiService {
 		KodeTran kodeTran = this.GetKodeTran("1002");
 		
 		// Get Rekening Buku Besar Tujuan 1002
-		RekeningBukuBesar rekBBTujuan = this.GetRekeningBukuBesar(kodeTran.getBukuBesarKredit());
+		// RekeningBukuBesar rekBBTujuan = this.GetRekeningBukuBesar(kodeTran.getBukuBesarKredit());
+		KodeTranUnit kodeTranUnit = kodeTranUnitService.findByKoTranAndUnit(kodeTran.getKoTran(), userPost.getUnitId().getUnitId());
+		if (kodeTranUnit == null) {
+			throw new Exception("Buku besar tujuan belum diset di parameter transaksi!");
+		}
+		RekeningBukuBesar rekBBTujuan = this.GetRekeningBukuBesar(kodeTranUnit.getBukuBesarKredit());
+		if (rekBBTujuan == null) {
+			throw new Exception("Rekening buku besar tujuan belum diset di parameter!");
+		}
 		
 		// Get Rekening Buku Besar Biaya Lain
 		RekeningBukuBesar rekBBBiayaLain;

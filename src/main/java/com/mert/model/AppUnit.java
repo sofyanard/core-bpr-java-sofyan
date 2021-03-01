@@ -35,6 +35,9 @@ public class AppUnit {
 	@Column(name = "is_active")
 	private String IsActive;
 	
+	@Column(name = "rek_buku_besar")
+	private String RekBukuBesar;
+	
 	
 	
 	// Getter and Setter
@@ -95,10 +98,18 @@ public class AppUnit {
 		IsActive = isActive;
 	}
 	
+	public String getRekBukuBesar() {
+		return RekBukuBesar;
+	}
+
+	public void setRekBukuBesar(String rekBukuBesar) {
+		RekBukuBesar = rekBukuBesar;
+	}
+	
 	
 	
 	// Constructor
-	
+
 	public AppUnit() {
 		
 	}
