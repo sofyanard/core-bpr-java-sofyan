@@ -1,5 +1,8 @@
 package com.mert.model;
 
+import java.util.Date;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -184,6 +187,39 @@ public class FasilitasKredit {
 	@DecimalMin(value = "1.0", inclusive = false)
     @Digits(integer=14, fraction=2)
 	private Double AmtMaterai;
+	
+	@Column(name = "note_putusan")
+	private String NotePutusan;
+	
+	@Column(name = "putusan")
+	private String Putusan;
+	
+	@Column(name = "reason")
+	private String Reason;
+	
+	@Column(name = "no_ref")
+	private String NoRef;
+	
+	@Column(name = "pembayaran_biaya_date")
+	private Date PembayaranBiayaDate;
+	
+	@Column(name = "pembayaran_biaya_amount")
+	private Double PembayaranBiayaAmount;
+	
+	@Column(name = "pembayaran_biaya_tranref")
+	private UUID PembayaranBiayaTranRef;
+	
+	@Column(name = "aktifasi_date")
+	private Date AktifasiDate;
+	
+	@Column(name = "no_rekening")
+	private String NoRekening;
+	
+	@Column(name = "accrual_provisi")
+	private Double AccrualProvisi;
+	
+	@Column(name = "accrual_admin")
+	private Double AccrualAdmin;
 	
 
 	
@@ -467,6 +503,102 @@ public class FasilitasKredit {
 
 	public void setAmtMaterai(Double amtMaterai) {
 		AmtMaterai = amtMaterai;
+	}
+	
+	public String getNotePutusan() {
+		return NotePutusan;
+	}
+
+	public void setNotePutusan(String notePutusan) {
+		NotePutusan = notePutusan;
+	}
+
+	public String getPutusan() {
+		return Putusan;
+	}
+
+	public void setPutusan(String putusan) {
+		Putusan = putusan;
+	}
+
+	public String getReason() {
+		return Reason;
+	}
+
+	public void setReason(String reason) {
+		Reason = reason;
+	}
+
+	public String getNoRef() {
+		return NoRef;
+	}
+
+	public void setNoRef(String noRef) {
+		NoRef = noRef;
+	}
+
+	public Date getPembayaranBiayaDate() {
+		return PembayaranBiayaDate;
+	}
+
+	public void setPembayaranBiayaDate(Date pembayaranBiayaDate) {
+		PembayaranBiayaDate = pembayaranBiayaDate;
+	}
+
+	public Double getPembayaranBiayaAmount() {
+		return PembayaranBiayaAmount;
+	}
+
+	public void setPembayaranBiayaAmount(Double pembayaranBiayaAmount) {
+		PembayaranBiayaAmount = pembayaranBiayaAmount;
+	}
+
+	public UUID getPembayaranBiayaTranRef() {
+		return PembayaranBiayaTranRef;
+	}
+
+	public void setPembayaranBiayaTranRef(UUID pembayaranBiayaTranRef) {
+		PembayaranBiayaTranRef = pembayaranBiayaTranRef;
+	}
+
+	public Date getAktifasiDate() {
+	 	return AktifasiDate;
+	}
+
+	public void setAktifasiDate(Date aktifasiDate) {
+	 	AktifasiDate = aktifasiDate;
+	}
+
+	public String getNoRekening() {
+	 	return NoRekening;
+	}
+
+	public void setNoRekening(String noRekening) {
+	 	NoRekening = noRekening;
+	}
+
+	public Double getAccrualProvisi() {
+		return AccrualProvisi;
+	}
+
+	public void setAccrualProvisi(Double accrualProvisi) {
+		AccrualProvisi = accrualProvisi;
+	}
+
+	public Double getAccrualAdmin() {
+		return AccrualAdmin;
+	}
+
+	public void setAccrualAdmin(Double accrualAdmin) {
+		AccrualAdmin = accrualAdmin;
+	}
+	
+	
+	
+	// Constructor
+	
+	public FasilitasKredit() {
+		
 	}
 
 	

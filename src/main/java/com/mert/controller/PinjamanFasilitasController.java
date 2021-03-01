@@ -4,11 +4,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.poi.ss.formula.functions.Finance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,6 +39,7 @@ import com.mert.service.FasilitasKreditPembayaranModelService;
 import com.mert.model.FasilitasKreditAktifasiModel;
 import com.mert.service.FasilitasKreditAktifasiModelService;
 import com.mert.model.RekeningKredit;
+import com.mert.model.SkalaAngsuran;
 import com.mert.service.RekeningKreditService;
 import com.mert.model.ParameterProduk;
 import com.mert.service.ParameterProdukService;
@@ -51,9 +54,12 @@ import com.mert.service.ParameterBankService;
 import com.mert.model.ParameterSegment;
 import com.mert.service.ParameterSegmentService;
 import com.mert.model.AsuransiPenjaminan;
+import com.mert.model.DtInstallment;
 import com.mert.service.AsuransiPenjaminanService;
 import com.mert.model.StatusRekg;
 import com.mert.service.StatusRekgService;
+import com.mert.model.SkalaAngsuran;
+import com.mert.service.SkalaAngsuranService;
 
 @Controller
 @RequestMapping("/pinjaman/fasilitas")
@@ -106,6 +112,9 @@ public class PinjamanFasilitasController {
 	
 	@Autowired
 	private StatusRekgService statusRekgService;
+	
+	@Autowired
+	private SkalaAngsuranService skalaAngsuranService;
 	
 	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -482,6 +491,8 @@ public class PinjamanFasilitasController {
 			
 			rekeningKreditService.save(rekeningKredit);
 			
+			this.CreateSkalaAngsuran(rekeningKredit);
+			
 			// Update Fasilitas Kredit
 			FasilitasKreditAktifasiModel fasilitasKredit2 = fasilitasKreditAktifasiModelService.findOne(nofasilitas);
 			fasilitasKredit2.setNoRekening(rekeningKredit.getNoRekening());
@@ -493,6 +504,132 @@ public class PinjamanFasilitasController {
 			throw e;
 		}
 		
+	}
+	
+	private void CreateSkalaAngsuran(RekeningKredit rekeningKredit) throws Exception {
+		
+		try {
+			Double limit = rekeningKredit.getEqvPlafond();
+			Double rate = rekeningKredit.getBungaPersen() / 100.0;
+			String interesttype = rekeningKredit.getHitungBunga().getCode();
+			Integer tenor = rekeningKredit.getTenor();
+			
+			List<DtInstallment> listDtInstallment = new ArrayList<DtInstallment>();
+			DtInstallment dtInstallment;
+			
+			Double jumlangspokok = 0.0;
+			Double jumlangsbunga = 0.0;
+			Double jumltotangsuran = 0.0;
+			
+			Double iapokok;
+			Double iabunga;
+			Double iatotal;
+			Double ipsisa;
+			
+			iapokok = 0.0;
+	        iabunga = 0.0;
+	        iatotal = iapokok + iabunga;
+	        ipsisa = limit;
+	        
+	        jumlangspokok = jumlangspokok + iapokok;
+	        jumlangsbunga = jumlangsbunga + iabunga;
+	        jumltotangsuran = jumltotangsuran + iatotal;
+	        
+	        dtInstallment = new DtInstallment();
+	        
+	        dtInstallment.BulanKe = 0;
+	        dtInstallment.AngsuranPokok = iapokok;
+	        dtInstallment.AngsuranBunga = iabunga;
+	        dtInstallment.TotalAngsuran = iatotal;
+	        dtInstallment.SisaPinjaman = ipsisa;
+	        listDtInstallment.add(dtInstallment);
+	        
+	        for (int i = 1; i <= tenor; i++) {
+	        	
+	        	//Flat
+	        	if (interesttype.equals("F")) {
+	        		iapokok = limit / tenor;
+	        		if (iapokok > ipsisa)
+	                    iapokok = ipsisa;
+	        		iabunga = limit * (rate / 12);
+	        		iatotal = iapokok + iabunga;
+	        		ipsisa = ipsisa - iapokok;
+	        		if (ipsisa < 0)
+	                    ipsisa = 0.0;
+	        	}
+	        	
+	        	//Anuitas
+	        	else if (interesttype.equals("A")) {
+	        		iapokok = Finance.ppmt(rate / 12, i, tenor, -1*limit);
+	                if (iapokok > ipsisa)
+	                    iapokok = ipsisa;
+	                iabunga = Finance.ipmt(rate / 12, i, tenor, -1*limit);
+	                iatotal = iapokok + iabunga;
+	                ipsisa = ipsisa - iapokok;
+	                if (ipsisa < 0)
+	                    ipsisa = 0.0;
+	        	}
+	        	
+	        	else {
+	        		throw new Exception("Invalid Interest Type");
+	        	}
+	        	
+	        	jumlangspokok = jumlangspokok + iapokok;
+	            jumlangsbunga = jumlangsbunga + iabunga;
+	            jumltotangsuran = jumltotangsuran + iatotal;
+	            
+	            dtInstallment = new DtInstallment();
+	            
+	            dtInstallment.BulanKe = i;
+	            dtInstallment.AngsuranPokok = iapokok;
+	            dtInstallment.AngsuranBunga = iabunga;
+	            dtInstallment.TotalAngsuran = iatotal;
+	            dtInstallment.SisaPinjaman = ipsisa;
+	            listDtInstallment.add(dtInstallment);
+	        	
+	        }
+	        
+	        // Insert Skala Angsuran
+	        Date startDate = new Date();
+	        startDate = this.removeTime(startDate);
+	        Date dueDate = startDate;
+	        
+	        for (DtInstallment item : listDtInstallment) {
+	        	
+	        	SkalaAngsuran angs = new SkalaAngsuran();
+	        	
+	        	angs.setNoRekening(rekeningKredit.getNoRekening());
+	        	angs.setBulanKe(item.BulanKe);
+	        	dueDate = this.addMonth(startDate, (Integer)item.BulanKe);
+	        	angs.setDueDate(dueDate);
+	        	angs.setAngsuranPokok(item.AngsuranPokok);
+	        	angs.setAngsuranBunga(item.AngsuranBunga);
+	        	angs.setTotalAngsuran(item.TotalAngsuran);
+	        	angs.setSisaPinjaman(item.SisaPinjaman);
+	        	
+	        	skalaAngsuranService.save(angs);
+	        }
+		}
+		catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	private static Date removeTime(Date date) {    
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+	
+	private static Date addMonth(Date date, Integer numMonth) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MONTH, numMonth);
+		return cal.getTime();
 	}
 
 }
