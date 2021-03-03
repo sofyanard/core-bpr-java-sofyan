@@ -35,6 +35,14 @@ public class EodProgressService {
 		eodProgressRepository.deleteAll();
 	}
 	
+	public boolean Validate(String kodeEod) {
+		EodProgress eodProgress = eodProgressRepository.findOne(kodeEod);
+		if (eodProgress == null)
+			return false;
+		else
+			return true;
+	}
+	
 	public void New(String kodeEod) {
 		EodProgress eodProgress = new EodProgress();
 		eodProgress.setKodeEod(kodeEod);
@@ -63,11 +71,35 @@ public class EodProgressService {
 		eodProgressRepository.save(eodProgress);
 	}
 	
+	public void SetMax(String kodeEod, Integer max) {
+		EodProgress eodProgress = eodProgressRepository.findOne(kodeEod);
+		eodProgress.setCountFinish(max);
+		eodProgressRepository.save(eodProgress);
+	}
+	
+	public void SetNow(String kodeEod, Integer now) {
+		EodProgress eodProgress = eodProgressRepository.findOne(kodeEod);
+		eodProgress.setCountNow(now);
+		eodProgressRepository.save(eodProgress);
+	}
+	
 	public void CountUp(String kodeEod) {
 		EodProgress eodProgress = eodProgressRepository.findOne(kodeEod);
-		Integer countNow = eodProgress.getCountNow();
-		eodProgress.setCountNow(countNow + 1);
-		eodProgressRepository.save(eodProgress);
+		
+		if (eodProgress.getCountFinish() != null) {
+			Integer min, max, now, percent;
+			min = eodProgress.getCountStart();
+			max = eodProgress.getCountFinish();
+			now = eodProgress.getCountFinish();
+			if (now < max)
+				now++;
+			percent = (Integer)(now - min)/(max-min)*100;
+			if (percent > 100)
+				percent = 100;
+			eodProgress.setCountNow(now);
+			eodProgress.setPercentProgress(percent);
+			eodProgressRepository.save(eodProgress);
+		}
 	}
 	
 	public void SetNote(String kodeEod, String note) {

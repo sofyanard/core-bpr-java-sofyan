@@ -15,5 +15,21 @@ public interface FasilitasKreditRepository extends JpaRepository<FasilitasKredit
 	
 	@Query(value = "select * from fasilitaskredit n where lower(n.nama_nasabah) like %:namanasabah% ", nativeQuery=true)
 	List<FasilitasKredit> findByNamaNasabah(@Param("namanasabah") String namanasabah);
+	
+	@Query(value = "select f.* " + 
+			" from fasilitaskredit f " + 
+			" join rekeningkredit r on f.no_fasilitas = r.no_fasilitas " + 
+			" where coalesce(r.disburse, 0.0) <= 0.0 " + 
+			" and r.unit_id = :unitId " +
+			" and to_char(f.pembayaran_biaya_date, 'yyyy-MM-dd') = :strDate ", nativeQuery=true)
+	List<FasilitasKredit> customEodCalculation1001(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select count(1) " + 
+			" from fasilitaskredit f " + 
+			" join rekeningkredit r on f.no_fasilitas = r.no_fasilitas " + 
+			" where coalesce(r.disburse, 0.0) <= 0.0 " + 
+			" and r.unit_id = :unitId " +
+			" and to_char(f.pembayaran_biaya_date, 'yyyy-MM-dd') = :strDate ", nativeQuery=true)
+	Integer customEodCalculation1001Count(@Param("unitId") String unitId, @Param("strDate") String strDate);
 
 }
