@@ -45,5 +45,13 @@ public class SkalaAngsuranService {
 	public List<SkalaAngsuran> findByDueDate(String strDate) {
 		return skalaAngsuranRepository.findByDueDate(strDate);
 	}
+	
+	public List<SkalaAngsuran> customEodCalculation1002(String unitId, String strDate) {
+		return skalaAngsuranRepository.customEodCalculation1002(unitId, strDate);
+	}
+	
+	public Integer customEodCalculation1002Count(String unitId, String strDate) {
+		return skalaAngsuranRepository.customEodCalculation1002Count(unitId, strDate);
+	}
 
 }

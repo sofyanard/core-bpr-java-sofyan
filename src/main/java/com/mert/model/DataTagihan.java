@@ -25,9 +25,10 @@ public class DataTagihan {
 	@Column(name = "id")
 	private Integer Id;
 	
-	@Column(name = "no_rekening")
+	@ManyToOne
+	@JoinColumn(name = "no_rekening", referencedColumnName = "no_rekening")
 	@NotNull
-	private String NoRekening;
+	private RekeningKredit rekeningKredit;
 	
 	@Column(name = "due_date")
 	@NotNull
@@ -88,10 +89,6 @@ public class DataTagihan {
     @Digits(integer=14, fraction=2)
 	private Double TotalLainnya;
 	
-	@ManyToOne
-	// @JoinColumn(name = "no_rekening", referencedColumnName = "no_rekening")
-	private RekeningKredit rekeningKredit;
-	
 	// Getter and Setter
 
 	public Integer getId() {
@@ -102,12 +99,12 @@ public class DataTagihan {
 		Id = id;
 	}
 
-	public String getNoRekening() {
-		return NoRekening;
+	public RekeningKredit getRekeningKredit() {
+		return rekeningKredit;
 	}
 
-	public void setNoRekening(String noRekening) {
-		NoRekening = noRekening;
+	public void setRekeningKredit(RekeningKredit rekeningKredit) {
+		this.rekeningKredit = rekeningKredit;
 	}
 
 	public Date getDueDate() {
@@ -230,14 +227,6 @@ public class DataTagihan {
 		TotalLainnya = totalLainnya;
 	}
 
-	public RekeningKredit getRekeningKredit() {
-		return rekeningKredit;
-	}
-
-	public void setRekeningKredit(RekeningKredit rekeningKredit) {
-		this.rekeningKredit = rekeningKredit;
-	}
-	
 	// Constructor
 	
 	public DataTagihan() {

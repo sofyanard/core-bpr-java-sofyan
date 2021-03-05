@@ -1,6 +1,7 @@
 package com.mert.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,7 +70,7 @@ public class TestEodController {
 				result = eodCalculationService.Calc1001();
 			}
 			else if (kodeEod.equals("1002")) {
-				
+				result = eodCalculationService.Calc1002();
 			}
 			else if (kodeEod.equals("1003")) {
 				
