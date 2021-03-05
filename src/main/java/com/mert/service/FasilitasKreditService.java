@@ -144,5 +144,13 @@ public class FasilitasKreditService {
 	public Integer customEodCalculation1001Count(String unitId, String strDate) {
 		return fasilitasKreditRepository.customEodCalculation1001Count(unitId, strDate);
 	}
+	
+	public List<FasilitasKredit> customEodCalculation1003(String unitId, String strDate) {
+		return fasilitasKreditRepository.customEodCalculation1003(unitId, strDate);
+	}
+	
+	public Integer customEodCalculation1003Count(String unitId, String strDate) {
+		return fasilitasKreditRepository.customEodCalculation1003Count(unitId, strDate);
+	}
 
 }

@@ -73,7 +73,16 @@ public class TestEodController {
 				result = eodCalculationService.Calc1002();
 			}
 			else if (kodeEod.equals("1003")) {
-				
+				result = eodCalculationService.Calc1003();
+			}
+			else if (kodeEod.equals("1004")) {
+				result = eodCalculationService.Calc1004();
+			}
+			else if (kodeEod.equals("1005")) {
+				result = eodCalculationService.Calc1005();
+			}
+			else if (kodeEod.equals("1006")) {
+				result = eodCalculationService.Calc1006();
 			}
 			
 		}

@@ -31,5 +31,21 @@ public interface FasilitasKreditRepository extends JpaRepository<FasilitasKredit
 			" and r.unit_id = :unitId " +
 			" and to_char(f.pembayaran_biaya_date, 'yyyy-MM-dd') = :strDate ", nativeQuery=true)
 	Integer customEodCalculation1001Count(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select f.* " + 
+			" from fasilitaskredit f " + 
+			" join rekeningkredit r on f.no_fasilitas = r.no_fasilitas " + 
+			" where r.status_rekening = '1' " + 
+			" and r.unit_id = :unitId " +
+			" and to_char(f.pembayaran_biaya_date, 'yyyy-MM-dd') = :strDate ", nativeQuery=true)
+	List<FasilitasKredit> customEodCalculation1003(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select count(1) " + 
+			" from fasilitaskredit f " + 
+			" join rekeningkredit r on f.no_fasilitas = r.no_fasilitas " + 
+			" where r.status_rekening = '1' " + 
+			" and r.unit_id = :unitId " +
+			" and to_char(f.pembayaran_biaya_date, 'yyyy-MM-dd') = :strDate ", nativeQuery=true)
+	Integer customEodCalculation1003Count(@Param("unitId") String unitId, @Param("strDate") String strDate);
 
 }

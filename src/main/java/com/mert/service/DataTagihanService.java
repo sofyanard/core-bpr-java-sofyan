@@ -37,5 +37,21 @@ public class DataTagihanService {
 	public DataTagihan findByNoRekeningAndDueDate(String noRekening, String strDate) {
 		return dataTagihanRepository.findByNoRekeningAndDueDate(noRekening, strDate);
 	}
+	
+	public List<DataTagihan> customEodCalculation1005(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1005(unitId, strDate);
+	}
+	
+	public Integer customEodCalculation1005Count(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1005Count(unitId, strDate);
+	}
+	
+	public List<DataTagihan> customEodCalculation1006(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1006(unitId, strDate);
+	}
+	
+	public Integer customEodCalculation1006Count(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1006Count(unitId, strDate);
+	}
 
 }

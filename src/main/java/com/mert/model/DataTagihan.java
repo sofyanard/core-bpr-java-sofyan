@@ -36,23 +36,18 @@ public class DataTagihan {
 	private Date DueDate;
 	
 	@Column(name = "pokok")
-    @Digits(integer=14, fraction=2)
 	private Double Pokok;
 	
 	@Column(name = "bunga")
-    @Digits(integer=14, fraction=2)
 	private Double Bunga;
 	
 	@Column(name = "denda_pokok")
-    @Digits(integer=14, fraction=2)
 	private Double DendaPokok;
 	
 	@Column(name = "denda_bunga")
-    @Digits(integer=14, fraction=2)
 	private Double DendaBunga;
 	
 	@Column(name = "lainnya")
-    @Digits(integer=14, fraction=2)
 	private Double Lainnya;
 	
 	@Column(name = "paid_status")
@@ -70,23 +65,18 @@ public class DataTagihan {
 	private Integer Dpd;
 	
 	@Column(name = "total_pokok")
-    @Digits(integer=14, fraction=2)
 	private Double TotalPokok;
 	
 	@Column(name = "total_bunga")
-    @Digits(integer=14, fraction=2)
 	private Double TotalBunga;
 	
 	@Column(name = "total_denda_pokok")
-    @Digits(integer=14, fraction=2)
 	private Double TotalDendaPokok;
 	
 	@Column(name = "total_denda_bunga")
-    @Digits(integer=14, fraction=2)
 	private Double TotalDendaBunga;
 	
 	@Column(name = "total_lainnya")
-    @Digits(integer=14, fraction=2)
 	private Double TotalLainnya;
 	
 	// Getter and Setter
