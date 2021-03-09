@@ -145,12 +145,6 @@ public class RekeningKredit {
 	@Column(name = "renew_count")
 	private Integer RenewCount;
 	
-	@Column(name = "totd_pokok")
-	private Double TotdPokok;
-	
-	@Column(name = "totd_bunga")
-	private Double TotdBunga;
-	
 	@Column(name = "nilai_pinalti")
 	private Double NilaiPinalti;
 	
@@ -252,6 +246,24 @@ public class RekeningKredit {
 	@Column(name = "tanggal_macet")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date TanggalMacet;
+	
+	@Column(name = "total_pokok")
+	private Double TotalPokok;
+	
+	@Column(name = "total_bunga")
+	private Double TotalBunga;
+	
+	@Column(name = "total_denda_pokok")
+	private Double TotalDendaPokok;
+	
+	@Column(name = "total_denda_bunga")
+	private Double TotalDendaBunga;
+	
+	@Column(name = "total_lainnya")
+	private Double TotalLainnya;
+	
+	@Column(name = "total_kewajiban")
+	private Double TotalKewajiban;
 	
 	
 	
@@ -479,22 +491,6 @@ public class RekeningKredit {
 
 	public void setRenewCount(Integer renewCount) {
 		RenewCount = renewCount;
-	}
-
-	public Double getTotdPokok() {
-		return TotdPokok;
-	}
-
-	public void setTotdPokok(Double totdPokok) {
-		TotdPokok = totdPokok;
-	}
-
-	public Double getTotdBunga() {
-		return TotdBunga;
-	}
-
-	public void setTotdBunga(Double totdBunga) {
-		TotdBunga = totdBunga;
 	}
 
 	public Double getNilaiPinalti() {
@@ -735,6 +731,54 @@ public class RekeningKredit {
 
 	public void setTanggalMacet(Date tanggalMacet) {
 		TanggalMacet = tanggalMacet;
+	}
+	
+	public Double getTotalPokok() {
+		return TotalPokok;
+	}
+
+	public void setTotalPokok(Double totalPokok) {
+		TotalPokok = totalPokok;
+	}
+
+	public Double getTotalBunga() {
+		return TotalBunga;
+	}
+
+	public void setTotalBunga(Double totalBunga) {
+		TotalBunga = totalBunga;
+	}
+
+	public Double getTotalDendaPokok() {
+		return TotalDendaPokok;
+	}
+
+	public void setTotalDendaPokok(Double totalDendaPokok) {
+		TotalDendaPokok = totalDendaPokok;
+	}
+
+	public Double getTotalDendaBunga() {
+		return TotalDendaBunga;
+	}
+
+	public void setTotalDendaBunga(Double totalDendaBunga) {
+		TotalDendaBunga = totalDendaBunga;
+	}
+
+	public Double getTotalLainnya() {
+		return TotalLainnya;
+	}
+
+	public void setTotalLainnya(Double totalLainnya) {
+		TotalLainnya = totalLainnya;
+	}
+
+	public Double getTotalKewajiban() {
+		return TotalKewajiban;
+	}
+
+	public void setTotalKewajiban(Double totalKewajiban) {
+		TotalKewajiban = totalKewajiban;
 	}
 	
 	

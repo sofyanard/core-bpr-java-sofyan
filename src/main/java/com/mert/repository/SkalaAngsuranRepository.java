@@ -29,7 +29,7 @@ public interface SkalaAngsuranRepository extends JpaRepository<SkalaAngsuran, In
 			"join rekeningkredit r on s.no_rekening = r.no_rekening " + 
 			"where coalesce(r.disburse, 0.0) > 0.0 " + 
 			"and r.unit_id = :unitId " + 
-			"and to_char(s.due_date, 'yyyy-MM-dd') = to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '3 day'), 'yyyy-MM-dd') " + 
+			"and to_char(s.due_date, 'yyyy-MM-dd') = to_char(to_date(:strDate, 'yyyy-MM-dd') + (interval '3 day'), 'yyyy-MM-dd') " + 
 			"and s.bulan_ke > 0 ", nativeQuery=true)
 	List<SkalaAngsuran> customEodCalculation1002(@Param("unitId") String unitId, @Param("strDate") String strDate);
 	
@@ -37,7 +37,7 @@ public interface SkalaAngsuranRepository extends JpaRepository<SkalaAngsuran, In
 			"join rekeningkredit r on s.no_rekening = r.no_rekening " + 
 			"where coalesce(r.disburse, 0.0) > 0.0 " + 
 			"and r.unit_id = :unitId " + 
-			"and to_char(s.due_date, 'yyyy-MM-dd') = to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '3 day'), 'yyyy-MM-dd') " + 
+			"and to_char(s.due_date, 'yyyy-MM-dd') = to_char(to_date(:strDate, 'yyyy-MM-dd') + (interval '3 day'), 'yyyy-MM-dd') " + 
 			"and s.bulan_ke > 0 ", nativeQuery=true)
 	Integer customEodCalculation1002Count(@Param("unitId") String unitId, @Param("strDate") String strDate);
 	

@@ -262,15 +262,29 @@ public class EodCalculationService {
 				
 				RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
 				
+				Double totalPokok = rekeningKredit.getTotalPokok() != null ? rekeningKredit.getTotalPokok() : 0.0;
+				Double totalBunga = rekeningKredit.getTotalBunga() != null ? rekeningKredit.getTotalBunga() : 0.0;
+				Double totalDendaPokok = rekeningKredit.getTotalDendaPokok() != null ? rekeningKredit.getTotalDendaPokok() : 0.0;
+				Double totalDendaBunga = rekeningKredit.getTotalDendaBunga() != null ? rekeningKredit.getTotalDendaBunga() : 0.0;
+				Double totalLainnya = rekeningKredit.getTotalLainnya() != null ? rekeningKredit.getTotalLainnya() : 0.0;
+				Double totalKewajiban = rekeningKredit.getTotalKewajiban() != null ? rekeningKredit.getTotalKewajiban() : 0.0;
+				
 				// insert new record DataTagihan
 				DataTagihan dataTagihan = new DataTagihan();
 				dataTagihan.setRekeningKredit(rekeningKredit);
 				dataTagihan.setDueDate(dueDate);
 				dataTagihan.setPokok(angsuranPokok);
 				dataTagihan.setBunga(angsuranBunga);
-				dataTagihan.setTotalPokok(angsuranPokok);
-				dataTagihan.setTotalBunga(angsuranBunga);
 				dataTagihanService.save(dataTagihan);
+				
+				// update total pokok, total bunga, & total kewajiban
+				totalPokok = totalPokok + angsuranPokok;
+				totalBunga = totalBunga + angsuranBunga;
+				rekeningKredit.setTotalPokok(totalPokok);
+				rekeningKredit.setTotalBunga(totalBunga);
+				totalKewajiban = totalPokok + totalBunga + totalDendaPokok + totalDendaBunga + totalLainnya;
+				rekeningKredit.setTotalKewajiban(totalKewajiban);
+				rekeningKreditService.save(rekeningKredit);
 				
 				// update Saldo BukuBesar
 				saldoBukuBesar = saldoBukuBesar + angsuranBunga;
@@ -526,20 +540,28 @@ public class EodCalculationService {
 					
 			// Loop for every DataTagihan
 			for (DataTagihan dataTagihan : listDataTagihan) {
+				Double dendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
 				RekeningKredit rekeningKredit = dataTagihan.getRekeningKredit();
 				String noRekening = rekeningKredit.getNoRekening();
-				Double pinaltiPokok = rekeningKredit.getPinaltiPokokPersen() != null ? rekeningKredit.getPinaltiPokokPersen() / 100.0 : 0.0;
-				Double totalPokok = dataTagihan.getTotalPokok() != null ? dataTagihan.getTotalPokok() : 0.0;
+				Double pinaltiPokok = rekeningKredit.getPinaltiPokokPersen() != null ? rekeningKredit.getPinaltiPokokPersen() : 0.0;
+				Double totalPokok = rekeningKredit.getTotalPokok() != null ? rekeningKredit.getTotalPokok() : 0.0;
+				Double totalDendaPokok = rekeningKredit.getTotalDendaPokok() != null ? rekeningKredit.getTotalDendaPokok() : 0.0;
+				Double totalKewajiban = rekeningKredit.getTotalKewajiban() != null ? rekeningKredit.getTotalKewajiban() : 0.0;
 				
 				// CALCULATION HERE
-				Double calcResult = pinaltiPokok * totalPokok;
-				
-				System.out.println("noRekening : ");
-				System.out.println(noRekening);
+				Double calcResult = ((pinaltiPokok / 100.0) / 366.0) * totalPokok;
+				dendaPokok = dendaPokok + calcResult;
+				totalDendaPokok = totalDendaPokok + calcResult;
+				totalKewajiban = totalKewajiban + calcResult;
 				
 				// update DataTagihan
-				dataTagihan.setDendaPokok(calcResult);
+				dataTagihan.setDendaPokok(dendaPokok);
 				dataTagihanService.save(dataTagihan);
+				
+				// update TotalDendaPokok, TotalKewajiban
+				rekeningKredit.setTotalDendaPokok(totalDendaPokok);
+				rekeningKredit.setTotalKewajiban(totalKewajiban);
+				rekeningKreditService.save(rekeningKredit);
 				
 				// update Saldo BukuBesar
 				saldoBukuBesar = saldoBukuBesar + calcResult;
@@ -618,17 +640,28 @@ public class EodCalculationService {
 			
 			// Loop for every DataTagihan
 			for (DataTagihan dataTagihan : listDataTagihan) {
+				Double dendaBunga = dataTagihan.getDendaBunga() != null ? dataTagihan.getDendaBunga() : 0.0;
 				RekeningKredit rekeningKredit = dataTagihan.getRekeningKredit();
 				String noRekening = rekeningKredit.getNoRekening();
-				Double pinaltiBunga = rekeningKredit.getPinaltiBungaPersen() != null ? rekeningKredit.getPinaltiBungaPersen() / 100.0 : 0.0;
-				Double totalBunga = dataTagihan.getTotalBunga() != null ? dataTagihan.getTotalBunga() : 0.0;
+				Double pinaltiBunga = rekeningKredit.getPinaltiBungaPersen() != null ? rekeningKredit.getPinaltiBungaPersen() : 0.0;
+				Double totalBunga = rekeningKredit.getTotalBunga() != null ? rekeningKredit.getTotalBunga() : 0.0;
+				Double totalDendaBunga = rekeningKredit.getTotalDendaBunga() != null ? rekeningKredit.getTotalDendaBunga() : 0.0;
+				Double totalKewajiban = rekeningKredit.getTotalKewajiban() != null ? rekeningKredit.getTotalKewajiban() : 0.0;
 				
 				// CALCULATION HERE
-				Double calcResult = pinaltiBunga * totalBunga;
+				Double calcResult = ((pinaltiBunga / 100.0) / 366.0) * totalBunga;
+				dendaBunga = dendaBunga + calcResult;
+				totalDendaBunga = totalDendaBunga + calcResult;
+				totalKewajiban = totalKewajiban + calcResult;
 				
 				// update DataTagihan
-				dataTagihan.setDendaPokok(calcResult);
+				dataTagihan.setDendaBunga(dendaBunga);
 				dataTagihanService.save(dataTagihan);
+				
+				// update TotalDendaBunga, TotalKewajiban
+				rekeningKredit.setTotalDendaBunga(totalDendaBunga);
+				rekeningKredit.setTotalKewajiban(totalKewajiban);
+				rekeningKreditService.save(rekeningKredit);
 				
 				// update Saldo BukuBesar
 				saldoBukuBesar = saldoBukuBesar + calcResult;

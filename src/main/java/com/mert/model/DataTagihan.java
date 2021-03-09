@@ -1,6 +1,7 @@
 package com.mert.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,6 +58,16 @@ public class DataTagihan {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date PaidDate;
 	
+	@Column(name = "paid_amount")
+	private Double PaidAmount;
+	
+	@Column(name = "paid_tranref")
+	private UUID PaidTranRef;
+	
+	
+
+
+
 	@Column(name = "hapus_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date HapusDate;
@@ -64,20 +75,7 @@ public class DataTagihan {
 	@Column(name = "dpd")
 	private Integer Dpd;
 	
-	@Column(name = "total_pokok")
-	private Double TotalPokok;
 	
-	@Column(name = "total_bunga")
-	private Double TotalBunga;
-	
-	@Column(name = "total_denda_pokok")
-	private Double TotalDendaPokok;
-	
-	@Column(name = "total_denda_bunga")
-	private Double TotalDendaBunga;
-	
-	@Column(name = "total_lainnya")
-	private Double TotalLainnya;
 	
 	// Getter and Setter
 
@@ -176,46 +174,24 @@ public class DataTagihan {
 	public void setDpd(Integer dpd) {
 		Dpd = dpd;
 	}
-
-	public Double getTotalPokok() {
-		return TotalPokok;
+	
+	public Double getPaidAmount() {
+		return PaidAmount;
 	}
 
-	public void setTotalPokok(Double totalPokok) {
-		TotalPokok = totalPokok;
+	public void setPaidAmount(Double paidAmount) {
+		PaidAmount = paidAmount;
 	}
 
-	public Double getTotalBunga() {
-		return TotalBunga;
+	public UUID getPaidTranRef() {
+		return PaidTranRef;
 	}
 
-	public void setTotalBunga(Double totalBunga) {
-		TotalBunga = totalBunga;
+	public void setPaidTranRef(UUID paidTranRef) {
+		PaidTranRef = paidTranRef;
 	}
 
-	public Double getTotalDendaPokok() {
-		return TotalDendaPokok;
-	}
 
-	public void setTotalDendaPokok(Double totalDendaPokok) {
-		TotalDendaPokok = totalDendaPokok;
-	}
-
-	public Double getTotalDendaBunga() {
-		return TotalDendaBunga;
-	}
-
-	public void setTotalDendaBunga(Double totalDendaBunga) {
-		TotalDendaBunga = totalDendaBunga;
-	}
-
-	public Double getTotalLainnya() {
-		return TotalLainnya;
-	}
-
-	public void setTotalLainnya(Double totalLainnya) {
-		TotalLainnya = totalLainnya;
-	}
 
 	// Constructor
 	
