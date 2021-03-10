@@ -38,20 +38,46 @@ public class DataTagihanService {
 		return dataTagihanRepository.findByNoRekeningAndDueDate(noRekening, strDate);
 	}
 	
-	public List<DataTagihan> customEodCalculation1005(String unitId, String strDate) {
-		return dataTagihanRepository.customEodCalculation1005(unitId, strDate);
+	
+	
+	public Integer customEodCalculation1005A(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1005A(unitId, strDate);
 	}
 	
-	public Integer customEodCalculation1005Count(String unitId, String strDate) {
-		return dataTagihanRepository.customEodCalculation1005Count(unitId, strDate);
+	public List<String> customEodCalculation1005B(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1005B(unitId, strDate);
 	}
 	
-	public List<DataTagihan> customEodCalculation1006(String unitId, String strDate) {
-		return dataTagihanRepository.customEodCalculation1006(unitId, strDate);
+	public List<DataTagihan> customEodCalculation1005C(String unitId, String strDate, String noRek) {
+		return dataTagihanRepository.customEodCalculation1005C(unitId, strDate, noRek);
 	}
 	
-	public Integer customEodCalculation1006Count(String unitId, String strDate) {
-		return dataTagihanRepository.customEodCalculation1006Count(unitId, strDate);
+
+	
+	public Integer customEodCalculation1006A(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1006A(unitId, strDate);
+	}
+	
+	public List<String> customEodCalculation1006B(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1006B(unitId, strDate);
+	}
+	
+	public List<DataTagihan> customEodCalculation1006C(String unitId, String strDate, String noRek) {
+		return dataTagihanRepository.customEodCalculation1006C(unitId, strDate, noRek);
+	}
+	
+	
+	
+	public Integer customEodCalculation1007A(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1007A(unitId, strDate);
+	}
+	
+	public List<String> customEodCalculation1007B(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1007B(unitId, strDate);
+	}
+	
+	public List<DataTagihan> customEodCalculation1007C(String unitId, String strDate, String noRek) {
+		return dataTagihanRepository.customEodCalculation1007C(unitId, strDate, noRek);
 	}
 
 }

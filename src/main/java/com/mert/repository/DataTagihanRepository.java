@@ -18,32 +18,76 @@ public interface DataTagihanRepository extends JpaRepository<DataTagihan, Intege
 	@Query(value = "select * from datatagihan n where n.no_rekening = :noRekening and to_char(n.due_date, 'YYYY-MM-DD') = :strDate ", nativeQuery=true)
 	DataTagihan findByNoRekeningAndDueDate(@Param("noRekening") String noRekening, @Param("strDate") String strDate);
 	
+	
+	
+	@Query(value = "select count(distinct d.no_rekening) from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where coalesce(d.pokok, 0.0) > 0.0 " + 
+			"and r.unit_id = :unitId " + 
+			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') ", nativeQuery=true)
+	Integer customEodCalculation1005A(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select distinct d.no_rekening from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where coalesce(d.pokok, 0.0) > 0.0 " + 
+			"and r.unit_id = :unitId " + 
+			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') ", nativeQuery=true)
+	List<String> customEodCalculation1005B(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
 	@Query(value = "select d.* from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
 			"where coalesce(d.pokok, 0.0) > 0.0 " + 
 			"and r.unit_id = :unitId " + 
-			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') ", nativeQuery=true)
-	List<DataTagihan> customEodCalculation1005(@Param("unitId") String unitId, @Param("strDate") String strDate);
+			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') " +
+			"and d.no_rekening = :noRek order by d.due_date ", nativeQuery=true)
+	List<DataTagihan> customEodCalculation1005C(@Param("unitId") String unitId, @Param("strDate") String strDate, @Param("noRek") String noRek);
 	
-	@Query(value = "select count(1) from datatagihan d " + 
+	
+	
+	@Query(value = "select count(distinct d.no_rekening) from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
-			"where coalesce(d.pokok, 0.0) > 0.0 " + 
+			"where coalesce(d.bunga, 0.0) > 0.0 " + 
 			"and r.unit_id = :unitId " + 
 			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') ", nativeQuery=true)
-	Integer customEodCalculation1005Count(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	Integer customEodCalculation1006A(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select distinct d.no_rekening from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where coalesce(d.bunga, 0.0) > 0.0 " + 
+			"and r.unit_id = :unitId " + 
+			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') ", nativeQuery=true)
+	List<String> customEodCalculation1006B(@Param("unitId") String unitId, @Param("strDate") String strDate);
 	
 	@Query(value = "select d.* from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
 			"where coalesce(d.bunga, 0.0) > 0.0 " + 
 			"and r.unit_id = :unitId " + 
-			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') ", nativeQuery=true)
-	List<DataTagihan> customEodCalculation1006(@Param("unitId") String unitId, @Param("strDate") String strDate);
+			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') " +
+			"and d.no_rekening = :noRek order by d.due_date ", nativeQuery=true)
+	List<DataTagihan> customEodCalculation1006C(@Param("unitId") String unitId, @Param("strDate") String strDate, @Param("noRek") String noRek);
 	
-	@Query(value = "select count(1) from datatagihan d " + 
+	
+	
+	@Query(value = "select count(distinct d.no_rekening) from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
-			"where coalesce(d.bunga, 0.0) > 0.0 " + 
+			"where (coalesce(d.paid_status, '') != 'Bayar' or coalesce(d.paid_status, '') != 'Hapus') " + 
 			"and r.unit_id = :unitId " + 
-			"and to_char(d.due_date, 'yyyy-MM-dd') < to_char(to_date(:strDate, 'yyyy-MM-dd') - (interval '1 month'), 'yyyy-MM-dd') ", nativeQuery=true)
-	Integer customEodCalculation1006Count(@Param("unitId") String unitId, @Param("strDate") String strDate);
+			"and to_char(d.due_date, 'yyyy-MM-dd') <= :strDate ", nativeQuery=true)
+	Integer customEodCalculation1007A(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select distinct d.no_rekening from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where (coalesce(d.paid_status, '') != 'Bayar' or coalesce(d.paid_status, '') != 'Hapus') " + 
+			"and r.unit_id = :unitId " + 
+			"and to_char(d.due_date, 'yyyy-MM-dd') <= :strDate ", nativeQuery=true)
+	List<String> customEodCalculation1007B(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select d.* from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where (coalesce(d.paid_status, '') != 'Bayar' or coalesce(d.paid_status, '') != 'Hapus') " + 
+			"and r.unit_id = :unitId " + 
+			"and to_char(d.due_date, 'yyyy-MM-dd') <= :strDate " +
+			"and d.no_rekening = :noRek order by d.due_date ", nativeQuery=true)
+	List<DataTagihan> customEodCalculation1007C(@Param("unitId") String unitId, @Param("strDate") String strDate, @Param("noRek") String noRek);
 
 }

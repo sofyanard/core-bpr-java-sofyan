@@ -84,6 +84,9 @@ public class TestEodController {
 			else if (kodeEod.equals("1006")) {
 				result = eodCalculationService.Calc1006();
 			}
+			else if (kodeEod.equals("1007")) {
+				result = eodCalculationService.Calc1007();
+			}
 			
 		}
 		catch (Exception e) {

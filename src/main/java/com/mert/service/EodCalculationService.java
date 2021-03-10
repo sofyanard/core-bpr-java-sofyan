@@ -1,15 +1,21 @@
 package com.mert.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.mert.model.KodeEodUnit;
+import com.mert.model.ParameterKolektibilitas;
 import com.mert.model.RekeningBukuBesar;
 import com.mert.model.BukuBesar;
 import com.mert.model.EodTanggal;
@@ -51,6 +57,9 @@ public class EodCalculationService {
 	@Autowired
 	private DataTagihanService dataTagihanService;
 	
+	@Autowired
+	private ParameterKolektibilitasService parameterKolektibilitasService;
+	
 	private String _eodTanggal;
 	
 	public void requestEodTanggal() throws Exception {
@@ -68,6 +77,22 @@ public class EodCalculationService {
 		String strToday = formatter.format(today);
 		this._eodTanggal = strToday;
 	}
+	
+	private String DateToString(Date date) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strToday = formatter.format(date);
+		return strToday;
+	}
+	
+	public static Date removeTime(Date date) {    
+        Calendar cal = Calendar.getInstance();  
+        cal.setTime(date);  
+        cal.set(Calendar.HOUR_OF_DAY, 0);  
+        cal.set(Calendar.MINUTE, 0);  
+        cal.set(Calendar.SECOND, 0);  
+        cal.set(Calendar.MILLISECOND, 0);  
+        return cal.getTime(); 
+    }
 	
 	// Get and Validate Rekening Buku Besar
 	private RekeningBukuBesar GetRekeningBukuBesar(String noBukuBesar) throws Exception {
@@ -506,17 +531,17 @@ public class EodCalculationService {
 			throw new Exception("Record EodProgress Calculation 1005 not found!");
 		}
 		
-		// Inquiry Units
+		// List Unit-Unit yang ada di Kode EOD
 		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1005");
 		
 		Integer countAllUnit = 0;
 		
-		// Loop for Units Count
+		// Loop per Unit (untuk counting)
 		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
 			String iUnitId = kodeEodUnit.getUnitId();
 			
 			// Count per Unit
-			Integer countUnit = dataTagihanService.customEodCalculation1005Count(iUnitId, _eodTanggal);
+			Integer countUnit = dataTagihanService.customEodCalculation1005A(iUnitId, _eodTanggal);
 			countAllUnit = countAllUnit + countUnit;
 		}
 		
@@ -525,7 +550,7 @@ public class EodCalculationService {
 				
 		Integer progressCount = 0;
 		
-		// Loop for Units Process
+		// Loop per Unit
 		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
 			String iUnitId = kodeEodUnit.getUnitId();
 			String noBukuBesar = kodeEodUnit.getRekBukuBesar();
@@ -535,48 +560,59 @@ public class EodCalculationService {
 			
 			Double saldoBukuBesar = rekeningBukuBesar.getSaldo() != null ? rekeningBukuBesar.getSaldo() : 0.0;
 			
-			// List DataTagihan in a Unit
-			List<DataTagihan> listDataTagihan = dataTagihanService.customEodCalculation1005(iUnitId, _eodTanggal);
-					
-			// Loop for every DataTagihan
-			for (DataTagihan dataTagihan : listDataTagihan) {
-				Double dendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
-				RekeningKredit rekeningKredit = dataTagihan.getRekeningKredit();
-				String noRekening = rekeningKredit.getNoRekening();
+			// List No Rekening per Unit
+			List<String> listRekening = dataTagihanService.customEodCalculation1005B(iUnitId, _eodTanggal);
+			
+			for(String noRekening : listRekening) {
+				
+				RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+				
 				Double pinaltiPokok = rekeningKredit.getPinaltiPokokPersen() != null ? rekeningKredit.getPinaltiPokokPersen() : 0.0;
 				Double totalPokok = rekeningKredit.getTotalPokok() != null ? rekeningKredit.getTotalPokok() : 0.0;
 				Double totalDendaPokok = rekeningKredit.getTotalDendaPokok() != null ? rekeningKredit.getTotalDendaPokok() : 0.0;
 				Double totalKewajiban = rekeningKredit.getTotalKewajiban() != null ? rekeningKredit.getTotalKewajiban() : 0.0;
 				
-				// CALCULATION HERE
-				Double calcResult = ((pinaltiPokok / 100.0) / 366.0) * totalPokok;
-				dendaPokok = dendaPokok + calcResult;
-				totalDendaPokok = totalDendaPokok + calcResult;
-				totalKewajiban = totalKewajiban + calcResult;
+				// List DataTagihan per Rekening
+				List<DataTagihan> listDataTagihan = dataTagihanService.customEodCalculation1005C(iUnitId, _eodTanggal, noRekening);
 				
-				// update DataTagihan
-				dataTagihan.setDendaPokok(dendaPokok);
-				dataTagihanService.save(dataTagihan);
+				// Loop for every DataTagihan
+				for (DataTagihan dataTagihan : listDataTagihan) {
+					Double dendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
+					Date dueDate = dataTagihan.getDueDate();
+					
+					// CALCULATION HERE
+					Double calcResult = ((pinaltiPokok / 100.0) / 366.0) * totalPokok;
+					dendaPokok = dendaPokok + calcResult;
+					totalDendaPokok = totalDendaPokok + calcResult;
+					totalKewajiban = totalKewajiban + calcResult;
+					
+					// update DataTagihan
+					dataTagihan.setDendaPokok(dendaPokok);
+					dataTagihanService.save(dataTagihan);
+					
+					// update TotalDendaPokok, TotalKewajiban
+					rekeningKredit.setTotalDendaPokok(totalDendaPokok);
+					rekeningKredit.setTotalKewajiban(totalKewajiban);
+					rekeningKreditService.save(rekeningKredit);
+					
+					// update Saldo BukuBesar
+					saldoBukuBesar = saldoBukuBesar + calcResult;
+					rekeningBukuBesar.setSaldo(saldoBukuBesar);
+					rekeningBukuBesarService.save(rekeningBukuBesar);
+					
+					// Insert EodKalkulasi Log
+					eodKalkulasiService.newEntry("1005", noRekening + "/" + this.DateToString(dueDate), calcResult, noBukuBesar, null);
+					
+				}
 				
-				// update TotalDendaPokok, TotalKewajiban
-				rekeningKredit.setTotalDendaPokok(totalDendaPokok);
-				rekeningKredit.setTotalKewajiban(totalKewajiban);
-				rekeningKreditService.save(rekeningKredit);
-				
-				// update Saldo BukuBesar
-				saldoBukuBesar = saldoBukuBesar + calcResult;
-				rekeningBukuBesar.setSaldo(saldoBukuBesar);
-				rekeningBukuBesarService.save(rekeningBukuBesar);
-				
-				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1005", noRekening, calcResult, noBukuBesar, null);
-				
-				// Count Up Progress
+				// Count Up Progress per Rekening
 				progressCount++;
 				eodProgressService.SetNow("1005", progressCount);
 				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
 				eodProgressService.SetNote("1005", strNote);
+				
 			}
+			
 		}
 		
 		// Set Progress Finish
@@ -606,17 +642,17 @@ public class EodCalculationService {
 			throw new Exception("Record EodProgress Calculation 1006 not found!");
 		}
 		
-		// Inquiry Units
+		// List Unit-Unit yang ada di Kode EOD
 		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1006");
 		
 		Integer countAllUnit = 0;
 		
-		// Loop for Units Count
+		// Loop per Unit (untuk counting)
 		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
 			String iUnitId = kodeEodUnit.getUnitId();
 			
 			// Count per Unit
-			Integer countUnit = dataTagihanService.customEodCalculation1006Count(iUnitId, _eodTanggal);
+			Integer countUnit = dataTagihanService.customEodCalculation1006A(iUnitId, _eodTanggal);
 			countAllUnit = countAllUnit + countUnit;
 		}
 		
@@ -625,7 +661,7 @@ public class EodCalculationService {
 				
 		Integer progressCount = 0;
 		
-		// Loop for Units Process
+		// Loop per Unit
 		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
 			String iUnitId = kodeEodUnit.getUnitId();
 			String noBukuBesar = kodeEodUnit.getRekBukuBesar();
@@ -635,48 +671,59 @@ public class EodCalculationService {
 			
 			Double saldoBukuBesar = rekeningBukuBesar.getSaldo() != null ? rekeningBukuBesar.getSaldo() : 0.0;
 			
-			// List DataTagihan in a Unit
-			List<DataTagihan> listDataTagihan = dataTagihanService.customEodCalculation1006(iUnitId, _eodTanggal);
+			// List No Rekening per Unit
+			List<String> listRekening = dataTagihanService.customEodCalculation1006B(iUnitId, _eodTanggal);
 			
-			// Loop for every DataTagihan
-			for (DataTagihan dataTagihan : listDataTagihan) {
-				Double dendaBunga = dataTagihan.getDendaBunga() != null ? dataTagihan.getDendaBunga() : 0.0;
-				RekeningKredit rekeningKredit = dataTagihan.getRekeningKredit();
-				String noRekening = rekeningKredit.getNoRekening();
+			for(String noRekening : listRekening) {
+				
+				RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+				
 				Double pinaltiBunga = rekeningKredit.getPinaltiBungaPersen() != null ? rekeningKredit.getPinaltiBungaPersen() : 0.0;
 				Double totalBunga = rekeningKredit.getTotalBunga() != null ? rekeningKredit.getTotalBunga() : 0.0;
 				Double totalDendaBunga = rekeningKredit.getTotalDendaBunga() != null ? rekeningKredit.getTotalDendaBunga() : 0.0;
 				Double totalKewajiban = rekeningKredit.getTotalKewajiban() != null ? rekeningKredit.getTotalKewajiban() : 0.0;
 				
-				// CALCULATION HERE
-				Double calcResult = ((pinaltiBunga / 100.0) / 366.0) * totalBunga;
-				dendaBunga = dendaBunga + calcResult;
-				totalDendaBunga = totalDendaBunga + calcResult;
-				totalKewajiban = totalKewajiban + calcResult;
+				// List DataTagihan per Rekening
+				List<DataTagihan> listDataTagihan = dataTagihanService.customEodCalculation1006C(iUnitId, _eodTanggal, noRekening);
 				
-				// update DataTagihan
-				dataTagihan.setDendaBunga(dendaBunga);
-				dataTagihanService.save(dataTagihan);
+				// Loop for every DataTagihan
+				for (DataTagihan dataTagihan : listDataTagihan) {
+					Double dendaBunga = dataTagihan.getDendaBunga() != null ? dataTagihan.getDendaBunga() : 0.0;
+					Date dueDate = dataTagihan.getDueDate();
+					
+					// CALCULATION HERE
+					Double calcResult = ((pinaltiBunga / 100.0) / 366.0) * totalBunga;
+					dendaBunga = dendaBunga + calcResult;
+					totalDendaBunga = totalDendaBunga + calcResult;
+					totalKewajiban = totalKewajiban + calcResult;
+					
+					// update DataTagihan
+					dataTagihan.setDendaBunga(dendaBunga);
+					dataTagihanService.save(dataTagihan);
+					
+					// update TotalDendaBunga, TotalKewajiban
+					rekeningKredit.setTotalDendaBunga(totalDendaBunga);
+					rekeningKredit.setTotalKewajiban(totalKewajiban);
+					rekeningKreditService.save(rekeningKredit);
+					
+					// update Saldo BukuBesar
+					saldoBukuBesar = saldoBukuBesar + calcResult;
+					rekeningBukuBesar.setSaldo(saldoBukuBesar);
+					rekeningBukuBesarService.save(rekeningBukuBesar);
+					
+					// Insert EodKalkulasi Log
+					eodKalkulasiService.newEntry("1006", noRekening + "/" + this.DateToString(dueDate), calcResult, noBukuBesar, null);
+					
+				}
 				
-				// update TotalDendaBunga, TotalKewajiban
-				rekeningKredit.setTotalDendaBunga(totalDendaBunga);
-				rekeningKredit.setTotalKewajiban(totalKewajiban);
-				rekeningKreditService.save(rekeningKredit);
-				
-				// update Saldo BukuBesar
-				saldoBukuBesar = saldoBukuBesar + calcResult;
-				rekeningBukuBesar.setSaldo(saldoBukuBesar);
-				rekeningBukuBesarService.save(rekeningBukuBesar);
-				
-				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1006", noRekening, calcResult, noBukuBesar, null);
-				
-				// Count Up Progress
+				// Count Up Progress per Rekening
 				progressCount++;
 				eodProgressService.SetNow("1006", progressCount);
 				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
 				eodProgressService.SetNote("1006", strNote);
+				
 			}
+			
 		}
 		
 		// Set Progress Finish
@@ -690,6 +737,136 @@ public class EodCalculationService {
 		}
 		
 		String strResult = "Calculation 1006 Finish";
+		return strResult;
+				
+	}
+	
+	public String Calc1007() throws Exception {
+		
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		// Initiate Progress Status
+		if (eodProgressService.Validate("1007")) {
+			eodProgressService.Start("1007");
+		} else {
+			throw new Exception("Record EodProgress Calculation 1007 not found!");
+		}
+		
+		// List Unit-Unit yang ada di Kode EOD
+		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1007");
+		
+		Integer countAllUnit = 0;
+		
+		// Loop per Unit (untuk counting)
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// Count per Unit
+			Integer countUnit = dataTagihanService.customEodCalculation1007A(iUnitId, _eodTanggal);
+			countAllUnit = countAllUnit + countUnit;
+		}
+		
+		// Set Progress Status Max Value
+		eodProgressService.SetMax("1007", countAllUnit);
+				
+		Integer progressCount = 0;
+		
+		// Loop per Unit
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// List No Rekening per Unit
+			List<String> listRekening = dataTagihanService.customEodCalculation1007B(iUnitId, _eodTanggal);
+			
+			for(String noRekening : listRekening) {
+				
+				RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+				Double totalKewajiban = rekeningKredit.getTotalKewajiban() != null ? rekeningKredit.getTotalKewajiban() : 0.0;
+				
+				Integer maxDpd = 0;
+				Integer iDpd = null;
+				
+				// List DataTagihan per Rekening
+				List<DataTagihan> listDataTagihan = dataTagihanService.customEodCalculation1007C(iUnitId, _eodTanggal, noRekening);
+				
+				// Loop for every DataTagihan
+				for (DataTagihan dataTagihan : listDataTagihan) {
+					Date dueDate = dataTagihan.getDueDate();
+					Date dDueDate = this.removeTime(dueDate);
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String sDueDate = sdf.format(dDueDate);
+					
+					// CALCULATION HERE
+					LocalDate dEodDate = LocalDate.parse(_eodTanggal);
+					LocalDate dDDueDate = LocalDate.parse(sDueDate);
+					long dpd = ChronoUnit.DAYS.between(dDDueDate, dEodDate);
+					iDpd = (int)dpd;
+					if (totalKewajiban <= 0.001) {
+						iDpd = 0;
+					}
+					
+					// update DataTagihan
+					dataTagihan.setDpd(iDpd);
+					dataTagihanService.save(dataTagihan);
+					
+					if (iDpd > maxDpd) {
+						maxDpd = iDpd;
+					}
+					
+					// Insert EodKalkulasi Log
+					Double dDpd = new Double(iDpd);
+					eodKalkulasiService.newEntry("1007", noRekening + "/" + this.DateToString(dueDate), dDpd, null, "DPD");
+					
+				}
+				
+				// Calculate Kolektibilitas
+				ParameterKolektibilitas kolektibilitas;
+				if (totalKewajiban <= 0.001) {
+					kolektibilitas = parameterKolektibilitasService.findOne("1");
+				} else {
+					if ((iDpd >= 1) && (iDpd <= 90)) {
+						kolektibilitas = parameterKolektibilitasService.findOne("2");
+					} else if ((iDpd >= 91) && (iDpd <= 120)) {
+						kolektibilitas = parameterKolektibilitasService.findOne("3");
+					} else if ((iDpd >= 121) && (iDpd <= 180)) {
+						kolektibilitas = parameterKolektibilitasService.findOne("4");
+					} else if (iDpd > 180) {
+						kolektibilitas = parameterKolektibilitasService.findOne("5");
+					} else {
+						kolektibilitas = parameterKolektibilitasService.findOne("5");
+					}
+				}
+				
+				// Update RekeningKredit
+				rekeningKredit.setStatusKolektibilitas(kolektibilitas);
+				rekeningKreditService.save(rekeningKredit);
+				
+				// Insert EodKalkulasi Log
+				Double dKolektibilitas = new Double(kolektibilitas.getKolektibilitasId());
+				eodKalkulasiService.newEntry("1007", noRekening, dKolektibilitas, null, "Kolektibilitas");
+				
+				// Count Up Progress per Rekening
+				progressCount++;
+				eodProgressService.SetNow("1007", progressCount);
+				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
+				eodProgressService.SetNote("1007", strNote);
+				
+			}
+			
+		}
+		
+		// Set Progress Finish
+		if (countAllUnit == 0) {
+			String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
+			eodProgressService.SetNote("1007", strNote);
+			eodProgressService.FinishZero("1007");
+		}
+		else {
+			eodProgressService.Finish("1007");
+		}
+		
+		String strResult = "Calculation 1007 Finish";
 		return strResult;
 				
 	}
