@@ -117,6 +117,8 @@ public class EodCalculationService {
 		return rekeningBukuBesar;
 	}
 	
+	
+	
 	// @Async
 	public String Test1001() throws Exception {
 		
@@ -144,6 +146,8 @@ public class EodCalculationService {
 		String strResult = "Success1001";
 		return strResult;
 	}
+	
+	
 	
 	// @Async
 	public String Calc1001() throws Exception {
@@ -233,6 +237,8 @@ public class EodCalculationService {
 		String strResult = "Calculation 1001 Finish";
 		return strResult;
 	}
+	
+	
 	
 	public String Calc1002() throws Exception {
 		
@@ -342,6 +348,8 @@ public class EodCalculationService {
 				
 	}
 	
+	
+	
 	public String Calc1003() throws Exception {
 		
 		// Request EodTanggal
@@ -427,6 +435,8 @@ public class EodCalculationService {
 		String strResult = "Calculation 1003 Finish";
 		return strResult;
 	}
+	
+	
 	
 	public String Calc1004() throws Exception {
 		
@@ -518,6 +528,8 @@ public class EodCalculationService {
 		String strResult = "Calculation 1004 Finish";
 		return strResult;
 	}
+	
+	
 	
 	public String Calc1005() throws Exception {
 		
@@ -630,6 +642,8 @@ public class EodCalculationService {
 				
 	}
 	
+	
+	
 	public String Calc1006() throws Exception {
 		
 		// Request EodTanggal
@@ -740,6 +754,8 @@ public class EodCalculationService {
 		return strResult;
 				
 	}
+	
+	
 	
 	public String Calc1007() throws Exception {
 		
@@ -869,6 +885,373 @@ public class EodCalculationService {
 		String strResult = "Calculation 1007 Finish";
 		return strResult;
 				
+	}
+	
+	
+	
+	public String Calc1008() throws Exception {
+		
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		// Initiate Progress Status
+		if (eodProgressService.Validate("1008")) {
+			eodProgressService.Start("1008");
+		} else {
+			throw new Exception("Record EodProgress Calculation 1008 not found!");
+		}
+		
+		// List Unit-Unit yang ada di Kode EOD
+		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1008");
+		
+		Integer countAllUnit = 0;
+		
+		// Loop per Unit (untuk counting)
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// Count per Unit
+			Integer countUnit = dataTagihanService.customEodCalculation1008A(iUnitId, _eodTanggal);
+			countAllUnit = countAllUnit + countUnit;
+		}
+		
+		// Set Progress Status Max Value
+		eodProgressService.SetMax("1008", countAllUnit);
+				
+		Integer progressCount = 0;
+		
+		// Loop per Unit
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			String noBukuBesar = kodeEodUnit.getRekBukuBesar();
+			
+			// Validate and Get RekeningBukuBesar
+			RekeningBukuBesar rekeningBukuBesar = this.GetRekeningBukuBesar(noBukuBesar);
+			
+			Double saldoBukuBesar = rekeningBukuBesar.getSaldo() != null ? rekeningBukuBesar.getSaldo() : 0.0;
+			
+			// List No Rekening per Unit
+			List<String> listRekening = dataTagihanService.customEodCalculation1008B(iUnitId, _eodTanggal);
+			
+			for(String noRekening : listRekening) {
+				
+				// List DataTagihan per Rekening
+				List<DataTagihan> listDataTagihan = dataTagihanService.customEodCalculation1008C(iUnitId, _eodTanggal, noRekening);
+				
+				// Loop for every DataTagihan
+				for (DataTagihan dataTagihan : listDataTagihan) {
+					Double bunga = dataTagihan.getBunga() != null ? dataTagihan.getBunga() : 0.0;
+					Date dueDate = dataTagihan.getDueDate();
+					
+					// update Saldo BukuBesar
+					saldoBukuBesar = saldoBukuBesar + bunga;
+					rekeningBukuBesar.setSaldo(saldoBukuBesar);
+					rekeningBukuBesarService.save(rekeningBukuBesar);
+					
+					// Insert EodKalkulasi Log
+					eodKalkulasiService.newEntry("1008", noRekening + "/" + this.DateToString(dueDate), bunga, noBukuBesar, null);
+					
+				}
+				
+				// Count Up Progress per Rekening
+				progressCount++;
+				eodProgressService.SetNow("1008", progressCount);
+				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
+				eodProgressService.SetNote("1008", strNote);
+				
+			}
+			
+		}
+		
+		// Set Progress Finish
+		if (countAllUnit == 0) {
+			String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
+			eodProgressService.SetNote("1008", strNote);
+			eodProgressService.FinishZero("1008");
+		}
+		else {
+			eodProgressService.Finish("1008");
+		}
+		
+		String strResult = "Calculation 1008 Finish";
+		return strResult;
+				
+	}
+	
+	
+	
+	public String Calc1009() throws Exception {
+		
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		// Initiate Progress Status
+		if (eodProgressService.Validate("1009")) {
+			eodProgressService.Start("1009");
+		} else {
+			throw new Exception("Record EodProgress Calculation 1009 not found!");
+		}
+		
+		// Inquiry Units
+		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1009");
+		
+		Integer countAllUnit = 0;
+		
+		// Loop for Units Count
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// Count per Unit
+			Integer countUnit = fasilitasKreditService.customEodCalculation1009Count(iUnitId, _eodTanggal);
+			countAllUnit = countAllUnit + countUnit;
+		}
+		
+		// Set Progress Status Max Value
+		eodProgressService.SetMax("1009", countAllUnit);
+		
+		Integer progressCount = 0;
+		
+		// Loop for Units Process
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// List FasilitasKredit in a Unit
+			List<FasilitasKredit> listFasilitasKredit = fasilitasKreditService.customEodCalculation1009(iUnitId, _eodTanggal);
+			
+			// Loop for every FasilitasKredit
+			for (FasilitasKredit fasilitasKredit : listFasilitasKredit) {
+				String noFasilitas = fasilitasKredit.getNoFasilitas();
+				Double accrualProvisi = fasilitasKredit.getAccrualProvisi() != null ? fasilitasKredit.getAccrualProvisi() : 0.0;
+				
+				// Insert EodKalkulasi Log
+				eodKalkulasiService.newEntry("1009", noFasilitas, accrualProvisi, null, null);
+				
+				// Count Up Progress
+				progressCount++;
+				eodProgressService.SetNow("1009", progressCount);
+				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Fasilitas Kredit proceed";
+				eodProgressService.SetNote("1009", strNote);
+			}
+			
+		}
+		
+		// Set Progress Finish
+		if (countAllUnit == 0) {
+			String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Fasilitas Kredit proceed";
+			eodProgressService.SetNote("1009", strNote);
+			eodProgressService.FinishZero("1009");
+		}
+		else {
+			eodProgressService.Finish("1009");
+		}
+		
+		String strResult = "Calculation 1009 Finish";
+		return strResult;
+	}
+	
+	
+	
+	public String Calc1010() throws Exception {
+		
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		// Initiate Progress Status
+		if (eodProgressService.Validate("1010")) {
+			eodProgressService.Start("1010");
+		} else {
+			throw new Exception("Record EodProgress Calculation 1010 not found!");
+		}
+		
+		// Inquiry Units
+		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1010");
+		
+		Integer countAllUnit = 0;
+		
+		// Loop for Units Count
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// Count per Unit
+			Integer countUnit = fasilitasKreditService.customEodCalculation1009Count(iUnitId, _eodTanggal);
+			countAllUnit = countAllUnit + countUnit;
+		}
+		
+		// Set Progress Status Max Value
+		eodProgressService.SetMax("1010", countAllUnit);
+		
+		Integer progressCount = 0;
+		
+		// Loop for Units Process
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// List FasilitasKredit in a Unit
+			List<FasilitasKredit> listFasilitasKredit = fasilitasKreditService.customEodCalculation1009(iUnitId, _eodTanggal);
+			
+			// Loop for every FasilitasKredit
+			for (FasilitasKredit fasilitasKredit : listFasilitasKredit) {
+				String noFasilitas = fasilitasKredit.getNoFasilitas();
+				Double accrualAdmin = fasilitasKredit.getAccrualAdmin() != null ? fasilitasKredit.getAccrualAdmin() : 0.0;
+				
+				// Insert EodKalkulasi Log
+				eodKalkulasiService.newEntry("1010", noFasilitas, accrualAdmin, null, null);
+				
+				// Count Up Progress
+				progressCount++;
+				eodProgressService.SetNow("1010", progressCount);
+				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Fasilitas Kredit proceed";
+				eodProgressService.SetNote("1010", strNote);
+			}
+			
+		}
+		
+		// Set Progress Finish
+		if (countAllUnit == 0) {
+			String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Fasilitas Kredit proceed";
+			eodProgressService.SetNote("1010", strNote);
+			eodProgressService.FinishZero("1010");
+		}
+		else {
+			eodProgressService.Finish("1010");
+		}
+		
+		String strResult = "Calculation 1010 Finish";
+		return strResult;
+	}
+	
+	
+	
+	public String Calc1011() throws Exception {
+		
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		// Initiate Progress Status
+		if (eodProgressService.Validate("1011")) {
+			eodProgressService.Start("1011");
+		} else {
+			throw new Exception("Record EodProgress Calculation 1011 not found!");
+		}
+		
+		// Inquiry Units
+		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1011");
+		
+		Integer countAllUnit = 0;
+		
+		// Loop for Units Count
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// Count per Unit
+			Integer countUnit = rekeningKreditService.customEodCalculation1011Count(iUnitId);
+			countAllUnit = countAllUnit + countUnit;
+		}
+		
+		// Set Progress Status Max Value
+		eodProgressService.SetMax("1011", countAllUnit);
+		
+		Integer progressCount = 0;
+		
+		// Loop for Units Process
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// List FasilitasKredit in a Unit
+			List<RekeningKredit> listRekeningKredit = rekeningKreditService.customEodCalculation1011(iUnitId);
+			
+			// Loop for every FasilitasKredit
+			for (RekeningKredit rekeningKredit : listRekeningKredit) {
+				String noRekening = rekeningKredit.getNoRekening();
+				Double bakiDebet = rekeningKredit.getBakiDebet() != null ? rekeningKredit.getBakiDebet() : 0.0;
+				Double pinaltiLunasPersen = rekeningKredit.getPinaltiLunasPersen() != null ? rekeningKredit.getPinaltiLunasPersen() : 0.0;
+				pinaltiLunasPersen = pinaltiLunasPersen / 100.0;
+				String pinaltiFlag = rekeningKredit.getPinaltiFlag().getPinaltiId();
+				Double sisaAngsuran = 0.0;
+				Double nilaiPinalti = 0.0;
+				
+				// CALCULATION HERE
+				if (pinaltiFlag.equals("A")) { /* Berdasarkan Sisa Angsuran */
+					
+					sisaAngsuran = rekeningKreditService.customEodCalculation1011SisaAngsuran(noRekening, _eodTanggal);
+					nilaiPinalti = pinaltiLunasPersen * sisaAngsuran;
+					
+				} else if (pinaltiFlag.equals("B")) { /* Berdasarkan Baki Debet */
+					
+					nilaiPinalti = pinaltiLunasPersen * bakiDebet;
+					
+				} else {
+					throw new Exception("Pinalti Flag kosong! No Rekening : " + noRekening);
+				}
+				
+				// Update Nilai Pinalti to table Rekening Kredit
+				rekeningKredit.setNilaiPinalti(nilaiPinalti);
+				rekeningKreditService.save(rekeningKredit);
+				
+				// Insert EodKalkulasi Log
+				eodKalkulasiService.newEntry("1011", noRekening, nilaiPinalti, null, null);
+				
+				// Count Up Progress
+				progressCount++;
+				eodProgressService.SetNow("1011", progressCount);
+				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
+				eodProgressService.SetNote("1011", strNote);
+			}
+			
+		}
+		
+		// Set Progress Finish
+		if (countAllUnit == 0) {
+			String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Rekening Kredit proceed";
+			eodProgressService.SetNote("1011", strNote);
+			eodProgressService.FinishZero("1011");
+		}
+		else {
+			eodProgressService.Finish("1011");
+		}
+		
+		String strResult = "Calculation 1011 Finish";
+		return strResult;
+	}
+	
+	
+	
+	public String Calc1012() throws Exception{
+		
+		
+		return "";
+	}
+	
+	
+	
+	public String Calc1013() throws Exception{
+		
+		
+		return "";
+	}
+	
+	
+	
+	public String Calc1014() throws Exception{
+		
+		
+		return "";
+	}
+	
+	
+	
+	public String Calc1015() throws Exception{
+		
+		
+		return "";
+	}
+	
+	
+	
+	public String Calc1016() throws Exception{
+		
+		
+		return "";
 	}
 
 }

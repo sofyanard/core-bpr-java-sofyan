@@ -90,4 +90,18 @@ public class RekeningKreditService {
 		return leadedInput;
 	}
 	
+	
+	
+	public List<RekeningKredit> customEodCalculation1011(String unitId) {
+		return rekeningKreditRepository.customEodCalculation1011(unitId);
+	}
+	
+	public Integer customEodCalculation1011Count(String unitId) {
+		return rekeningKreditRepository.customEodCalculation1011Count(unitId);
+	}
+	
+	public Double customEodCalculation1011SisaAngsuran(String noRek, String strDate) {
+		return rekeningKreditRepository.customEodCalculation1011SisaAngsuran(noRek, strDate);
+	}
+	
 }

@@ -18,5 +18,20 @@ public interface RekeningKreditRepository extends JpaRepository<RekeningKredit, 
 	
 	@Query(value = "select * from rekeningkredit n where lower(n.nama_nasabah) like %:namanasabah% ", nativeQuery=true)
 	List<RekeningKredit> findByNamaNasabah(@Param("namanasabah") String namanasabah);
+	
+	
+	
+	@Query(value = "select n.* from rekeningkredit n " +
+			"where n.status_rekening = '1' and n.unit_id = :unitId ", nativeQuery=true)
+	List<RekeningKredit> customEodCalculation1011(@Param("unitId") String unitId);
+	
+	@Query(value = "select count(1) from rekeningkredit n " +
+			"where n.status_rekening = '1' and n.unit_id = :unitId ", nativeQuery=true)
+	Integer customEodCalculation1011Count(@Param("unitId") String unitId);
+	
+	@Query(value = "select sum(total_angsuran) from skalaangsuran " + 
+			"where no_rekening = :noRek " + 
+			"and to_char(due_date, 'yyyy-MM-dd') >= :strDate ", nativeQuery=true)
+	Double customEodCalculation1011SisaAngsuran(@Param("noRek") String noRek, @Param("strDate") String strDate);
 
 }

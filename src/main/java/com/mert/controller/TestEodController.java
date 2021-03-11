@@ -87,6 +87,33 @@ public class TestEodController {
 			else if (kodeEod.equals("1007")) {
 				result = eodCalculationService.Calc1007();
 			}
+			else if (kodeEod.equals("1008")) {
+				result = eodCalculationService.Calc1008();
+			}
+			else if (kodeEod.equals("1009")) {
+				result = eodCalculationService.Calc1009();
+			}
+			else if (kodeEod.equals("1010")) {
+				result = eodCalculationService.Calc1010();
+			}
+			else if (kodeEod.equals("1011")) {
+				result = eodCalculationService.Calc1011();
+			}
+			else if (kodeEod.equals("1012")) {
+				result = eodCalculationService.Calc1012();
+			}
+			else if (kodeEod.equals("1013")) {
+				result = eodCalculationService.Calc1013();
+			}
+			else if (kodeEod.equals("1014")) {
+				result = eodCalculationService.Calc1014();
+			}
+			else if (kodeEod.equals("1015")) {
+				result = eodCalculationService.Calc1015();
+			}
+			else if (kodeEod.equals("1016")) {
+				result = eodCalculationService.Calc1016();
+			}
 			
 		}
 		catch (Exception e) {

@@ -79,5 +79,19 @@ public class DataTagihanService {
 	public List<DataTagihan> customEodCalculation1007C(String unitId, String strDate, String noRek) {
 		return dataTagihanRepository.customEodCalculation1007C(unitId, strDate, noRek);
 	}
+	
+	
+	
+	public Integer customEodCalculation1008A(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1008A(unitId, strDate);
+	}
+	
+	public List<String> customEodCalculation1008B(String unitId, String strDate) {
+		return dataTagihanRepository.customEodCalculation1008B(unitId, strDate);
+	}
+	
+	public List<DataTagihan> customEodCalculation1008C(String unitId, String strDate, String noRek) {
+		return dataTagihanRepository.customEodCalculation1008C(unitId, strDate, noRek);
+	}
 
 }

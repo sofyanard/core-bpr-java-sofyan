@@ -71,6 +71,7 @@ public interface DataTagihanRepository extends JpaRepository<DataTagihan, Intege
 	@Query(value = "select count(distinct d.no_rekening) from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
 			"where (coalesce(d.paid_status, '') != 'Bayar' or coalesce(d.paid_status, '') != 'Hapus') " + 
+			"and r.status_rekening in ('1','2','3','4','5','7','8') " + 
 			"and r.unit_id = :unitId " + 
 			"and to_char(d.due_date, 'yyyy-MM-dd') <= :strDate ", nativeQuery=true)
 	Integer customEodCalculation1007A(@Param("unitId") String unitId, @Param("strDate") String strDate);
@@ -78,6 +79,7 @@ public interface DataTagihanRepository extends JpaRepository<DataTagihan, Intege
 	@Query(value = "select distinct d.no_rekening from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
 			"where (coalesce(d.paid_status, '') != 'Bayar' or coalesce(d.paid_status, '') != 'Hapus') " + 
+			"and r.status_rekening in ('1','2','3','4','5','7','8') " + 
 			"and r.unit_id = :unitId " + 
 			"and to_char(d.due_date, 'yyyy-MM-dd') <= :strDate ", nativeQuery=true)
 	List<String> customEodCalculation1007B(@Param("unitId") String unitId, @Param("strDate") String strDate);
@@ -85,9 +87,31 @@ public interface DataTagihanRepository extends JpaRepository<DataTagihan, Intege
 	@Query(value = "select d.* from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
 			"where (coalesce(d.paid_status, '') != 'Bayar' or coalesce(d.paid_status, '') != 'Hapus') " + 
+			"and r.status_rekening in ('1','2','3','4','5','7','8') " + 
 			"and r.unit_id = :unitId " + 
 			"and to_char(d.due_date, 'yyyy-MM-dd') <= :strDate " +
 			"and d.no_rekening = :noRek order by d.due_date ", nativeQuery=true)
 	List<DataTagihan> customEodCalculation1007C(@Param("unitId") String unitId, @Param("strDate") String strDate, @Param("noRek") String noRek);
+	
+	
+	
+	@Query(value = "select count(distinct d.no_rekening) from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where r.unit_id = :unitId " + 
+			"and to_char(d.paid_date, 'yyyy-MM-dd') = :strDate ", nativeQuery=true)
+	Integer customEodCalculation1008A(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select distinct d.no_rekening from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where r.unit_id = :unitId " + 
+			"and to_char(d.paid_date, 'yyyy-MM-dd') = :strDate ", nativeQuery=true)
+	List<String> customEodCalculation1008B(@Param("unitId") String unitId, @Param("strDate") String strDate);
+	
+	@Query(value = "select d.* from datatagihan d " + 
+			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
+			"where r.unit_id = :unitId " + 
+			"and to_char(d.paid_date, 'yyyy-MM-dd') = :strDate " + 
+			"and d.no_rekening = :noRek order by d.due_date ", nativeQuery=true)
+	List<DataTagihan> customEodCalculation1008C(@Param("unitId") String unitId, @Param("strDate") String strDate, @Param("noRek") String noRek);
 
 }
