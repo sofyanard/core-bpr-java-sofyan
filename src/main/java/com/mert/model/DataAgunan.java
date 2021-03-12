@@ -133,6 +133,9 @@ public class DataAgunan {
 	@Column(name = "note")
 	private String Note;
 	
+	@Column(name = "nilai_ppap")
+	private Double NilaiPpap;
+	
 	
 
 	public String getNoAgunan() {
@@ -359,5 +362,12 @@ public class DataAgunan {
 		Note = note;
 	}
 	
+	public Double getNilaiPpap() {
+		return NilaiPpap;
+	}
+
+	public void setNilaiPpap(Double nilaiPpap) {
+		NilaiPpap = nilaiPpap;
+	}
 	
 }

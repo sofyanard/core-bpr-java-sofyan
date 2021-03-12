@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -18,11 +17,13 @@ import com.mert.model.KodeEodUnit;
 import com.mert.model.ParameterKolektibilitas;
 import com.mert.model.RekeningBukuBesar;
 import com.mert.model.BukuBesar;
-import com.mert.model.EodTanggal;
 import com.mert.model.FasilitasKredit;
 import com.mert.model.RekeningKredit;
 import com.mert.model.SkalaAngsuran;
 import com.mert.model.DataTagihan;
+import com.mert.model.DataAgunan;
+import com.mert.model.ParameterJenisAgunan;
+import com.mert.model.ParameterJenisAgunanBase;
 
 @Service
 public class EodCalculationService {
@@ -56,6 +57,9 @@ public class EodCalculationService {
 	
 	@Autowired
 	private DataTagihanService dataTagihanService;
+	
+	@Autowired
+	private DataAgunanService dataAgunanService;
 	
 	@Autowired
 	private ParameterKolektibilitasService parameterKolektibilitasService;
@@ -93,6 +97,27 @@ public class EodCalculationService {
         cal.set(Calendar.MILLISECOND, 0);  
         return cal.getTime(); 
     }
+	
+	private boolean IsLastDayInMonth(String strEodDate) {
+		boolean result = false;
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date eodDate = formatter.parse(strEodDate);
+			
+			Calendar cal = Calendar.getInstance();
+	        cal.setTime(eodDate);
+	        Integer today = cal.get(Calendar.DAY_OF_MONTH);
+	        Integer maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	        
+	        if (today == maxDay) {
+	        	result = true;
+	        }
+		} catch(Exception e) {
+			
+		} 
+        
+        return result;
+	}
 	
 	// Get and Validate Rekening Buku Besar
 	private RekeningBukuBesar GetRekeningBukuBesar(String noBukuBesar) throws Exception {
@@ -1216,18 +1241,198 @@ public class EodCalculationService {
 	
 	
 	
-	public String Calc1012() throws Exception{
+	public String Calc1012() throws Exception {
 		
+		// Request EodTanggal
+		this.requestEodTanggal();
 		
-		return "";
+		// Initiate Progress Status
+		if (eodProgressService.Validate("1012")) {
+			eodProgressService.Start("1012");
+		} else {
+			throw new Exception("Record EodProgress Calculation 1012 not found!");
+		}
+		
+		// Inquiry Units
+		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1012");
+		
+		Integer countAllUnit = 0;
+		
+		// Loop for Units Count
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// Count per Unit
+			Integer countUnit = dataAgunanService.customEodCalculation1012Count(iUnitId, _eodTanggal);
+			countAllUnit = countAllUnit + countUnit;
+		}
+		
+		// Set Progress Status Max Value
+		eodProgressService.SetMax("1012", countAllUnit);
+				
+		Integer progressCount = 0;
+		
+		// Loop for Units Process
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// List DataAgunan in a Unit
+			List<DataAgunan> listDataAgunan = dataAgunanService.customEodCalculation1012(iUnitId, _eodTanggal);
+					
+			// Loop for every DataAgunan
+			for (DataAgunan dataAgunan : listDataAgunan) {
+				String noFasilitas = dataAgunan.getNoFasilitas();
+				FasilitasKredit fasilitasKredit = fasilitasKreditService.findOne(noFasilitas);
+				Double nilaiBank = fasilitasKredit.getNilaiBank() != null ? fasilitasKredit.getNilaiBank() : 0.0;
+				Double nilaiAppraisal = dataAgunan.getNilaiAppraisal() != null ? dataAgunan.getNilaiAppraisal() : 0.0;
+				Double nilaiNjop = dataAgunan.getNilaiNjop() != null ? dataAgunan.getNilaiNjop() : 0.0;
+				ParameterJenisAgunan  jenisAgunan = dataAgunan.getJenisAgunan();
+				Double ppapPersen = jenisAgunan.getPpapPersen() != null ? jenisAgunan.getPpapPersen() : 0.0;
+				ppapPersen = ppapPersen / 100.0;
+				ParameterJenisAgunanBase jenisAgunanBase = jenisAgunan.getPpapBase();
+				String ppapBase = jenisAgunanBase.getBaseName();
+				Double nilaiPpap = 0.0;
+				
+				// CALCULATION HERE
+				if (ppapBase.equals("Nilai Bank")) {
+					nilaiPpap = ppapPersen * nilaiBank;
+				} else if (ppapBase.equals("Nilai Appraisal")) {
+					nilaiPpap = ppapPersen * nilaiAppraisal;
+				} else if (ppapBase.equals("Nilai NJOP")) {
+					nilaiPpap = ppapPersen * nilaiNjop;
+				}
+				
+				// update NilaiPPAP to DataAgunan
+				dataAgunan.setNilaiPpap(nilaiPpap);
+				dataAgunanService.save(dataAgunan);
+				
+				// Insert EodKalkulasi Log
+				eodKalkulasiService.newEntry("1012", noFasilitas, nilaiPpap, null, null);
+				
+				// Count Up Progress
+				progressCount++;
+				eodProgressService.SetNow("1012", progressCount);
+				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Agunan Fasilitas proceed";
+				eodProgressService.SetNote("1012", strNote);
+			}
+		}
+		
+		// Set Progress Finish
+		if (countAllUnit == 0) {
+			String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Agunan Fasilitas proceed";
+			eodProgressService.SetNote("1012", strNote);
+			eodProgressService.FinishZero("1012");
+		}
+		else {
+			eodProgressService.Finish("1012");
+		}
+		
+		String strResult = "Calculation 1012 Finish";
+		return strResult;
+				
 	}
 	
 	
 	
-	public String Calc1013() throws Exception{
+	public String Calc1013() throws Exception {
 		
+		// Request EodTanggal
+		this.requestEodTanggal();
 		
-		return "";
+		// Initiate Progress Status
+		if (eodProgressService.Validate("1013")) {
+			eodProgressService.Start("1013");
+		} else {
+			throw new Exception("Record EodProgress Calculation 1013 not found!");
+		}
+		
+		// Inquiry Units
+		List<KodeEodUnit> listKodeEodUnit = kodeEodUnitService.findByKodeEod("1013");
+		
+		Integer countAllUnit = 0;
+		
+		// Loop for Units Count
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			
+			// Count per Unit
+			Integer countUnit = dataAgunanService.customEodCalculation1012Count(iUnitId, _eodTanggal);
+			countAllUnit = countAllUnit + countUnit;
+		}
+		
+		// Set Progress Status Max Value
+		eodProgressService.SetMax("1013", countAllUnit);
+				
+		Integer progressCount = 0;
+		
+		// Loop for Units Process
+		for(KodeEodUnit kodeEodUnit : listKodeEodUnit) {
+			String iUnitId = kodeEodUnit.getUnitId();
+			String noBukuBesar = kodeEodUnit.getRekBukuBesar();
+			
+			// Validate and Get RekeningBukuBesar
+			RekeningBukuBesar rekeningBukuBesar = this.GetRekeningBukuBesar(noBukuBesar);
+			
+			Double saldoBukuBesar = rekeningBukuBesar.getSaldo() != null ? rekeningBukuBesar.getSaldo() : 0.0;
+			
+			// List DataAgunan in a Unit
+			List<DataAgunan> listDataAgunan = dataAgunanService.customEodCalculation1012(iUnitId, _eodTanggal);
+					
+			// Loop for every DataAgunan
+			for (DataAgunan dataAgunan : listDataAgunan) {
+				Double nilaiPpap = dataAgunan.getNilaiPpap() != null ? dataAgunan.getNilaiPpap() : 0.0;
+				String noFasilitas = dataAgunan.getNoFasilitas();
+				FasilitasKredit fasilitasKredit = fasilitasKreditService.findOne(noFasilitas);
+				String noRekening = fasilitasKredit.getNoRekening();
+				RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+				String kolektibilitas = rekeningKredit.getStatusKolektibilitas() != null ? rekeningKredit.getStatusKolektibilitas().getKolektibilitasId() : "5";
+				Double bakiDebet = rekeningKredit.getBakiDebet() != null ? rekeningKredit.getBakiDebet() : 0.0;
+				
+				// CALCULATION HERE
+				Double calcResult = 0.0;
+				if (kolektibilitas.equals("1")) {
+					calcResult = (0.005 * nilaiPpap) - bakiDebet;
+				} else if (kolektibilitas.equals("2")) {
+					calcResult = (0.1 * nilaiPpap) - bakiDebet;
+				} else if (kolektibilitas.equals("3")) {
+					calcResult = (0.5 * nilaiPpap) - bakiDebet;
+				} else if (kolektibilitas.equals("5")) {
+					calcResult = (1 * nilaiPpap) - bakiDebet;
+				} else if (kolektibilitas.equals("5")) {
+					calcResult = (1 * nilaiPpap) - bakiDebet;
+				} else {
+					calcResult = (1 * nilaiPpap) - bakiDebet;
+				}
+				
+				// update Saldo BukuBesar
+				saldoBukuBesar = saldoBukuBesar + calcResult;
+				rekeningBukuBesar.setSaldo(saldoBukuBesar);
+				rekeningBukuBesarService.save(rekeningBukuBesar);
+				
+				// Insert EodKalkulasi Log
+				eodKalkulasiService.newEntry("1013", noRekening, calcResult, noBukuBesar, null);
+				
+				// Count Up Progress
+				progressCount++;
+				eodProgressService.SetNow("1013", progressCount);
+				String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Agunan Rekening proceed";
+				eodProgressService.SetNote("1013", strNote);
+			}
+		}
+		
+		// Set Progress Finish
+		if (countAllUnit == 0) {
+			String strNote = progressCount.toString() + "/" + countAllUnit.toString() + " Agunan Rekening proceed";
+			eodProgressService.SetNote("1013", strNote);
+			eodProgressService.FinishZero("1013");
+		}
+		else {
+			eodProgressService.Finish("1013");
+		}
+		
+		String strResult = "Calculation 1013 Finish";
+		return strResult;
+				
 	}
 	
 	

@@ -84,5 +84,15 @@ public class DataAgunanService {
 		
 		return leadedInput;
 	}
+	
+	
+	
+	public List<DataAgunan> customEodCalculation1012(String unitId, String strDate) {
+		return dataAgunanRepository.customEodCalculation1012(unitId, strDate);
+	}
+	
+	public Integer customEodCalculation1012Count(String unitId, String strDate) {
+		return dataAgunanRepository.customEodCalculation1012Count(unitId, strDate);
+	}
 
 }
