@@ -217,7 +217,7 @@ public class EodCalculationService {
 				rekeningBukuBesarService.save(rekeningBukuBesar);
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1001", noFasilitas, calcResult, noBukuBesar, null);
+				eodKalkulasiService.newEntry("1001", iUnitId, noFasilitas, null, calcResult, noBukuBesar, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -327,7 +327,7 @@ public class EodCalculationService {
 				rekeningBukuBesarService.save(rekeningBukuBesar);
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1002", noRekening, angsuranBunga, noBukuBesar, null);
+				eodKalkulasiService.newEntry("1002", iUnitId, noRekening, null, angsuranBunga, noBukuBesar, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -415,7 +415,7 @@ public class EodCalculationService {
 				rekeningBukuBesarService.save(rekeningBukuBesar);
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1003", noFasilitas, calcResult, noBukuBesar, null);
+				eodKalkulasiService.newEntry("1003", iUnitId, noFasilitas, null, calcResult, noBukuBesar, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -508,7 +508,7 @@ public class EodCalculationService {
 				rekeningBukuBesarService.save(rekeningBukuBesar);
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1004", noFasilitas, calcResult, noBukuBesar, null);
+				eodKalkulasiService.newEntry("1004", iUnitId, noFasilitas, null, calcResult, noBukuBesar, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -617,7 +617,7 @@ public class EodCalculationService {
 					rekeningBukuBesarService.save(rekeningBukuBesar);
 					
 					// Insert EodKalkulasi Log
-					eodKalkulasiService.newEntry("1005", noRekening + "/" + this.DateToString(dueDate), calcResult, noBukuBesar, null);
+					eodKalkulasiService.newEntry("1005", iUnitId, noRekening, this.DateToString(dueDate), calcResult, noBukuBesar, null);
 					
 				}
 				
@@ -730,7 +730,7 @@ public class EodCalculationService {
 					rekeningBukuBesarService.save(rekeningBukuBesar);
 					
 					// Insert EodKalkulasi Log
-					eodKalkulasiService.newEntry("1006", noRekening + "/" + this.DateToString(dueDate), calcResult, noBukuBesar, null);
+					eodKalkulasiService.newEntry("1006", iUnitId, noRekening, this.DateToString(dueDate), calcResult, noBukuBesar, null);
 					
 				}
 				
@@ -836,7 +836,7 @@ public class EodCalculationService {
 					
 					// Insert EodKalkulasi Log
 					Double dDpd = new Double(iDpd);
-					eodKalkulasiService.newEntry("1007", noRekening + "/" + this.DateToString(dueDate), dDpd, null, "DPD");
+					eodKalkulasiService.newEntry("1007", iUnitId, noRekening, this.DateToString(dueDate), dDpd, null, "DPD");
 					
 				}
 				
@@ -864,7 +864,7 @@ public class EodCalculationService {
 				
 				// Insert EodKalkulasi Log
 				Double dKolektibilitas = new Double(kolektibilitas.getKolektibilitasId());
-				eodKalkulasiService.newEntry("1007", noRekening, dKolektibilitas, null, "Kolektibilitas");
+				eodKalkulasiService.newEntry("1007", iUnitId, noRekening, null, dKolektibilitas, null, "Kolektibilitas");
 				
 				// Count Up Progress per Rekening
 				progressCount++;
@@ -953,7 +953,7 @@ public class EodCalculationService {
 					rekeningBukuBesarService.save(rekeningBukuBesar);
 					
 					// Insert EodKalkulasi Log
-					eodKalkulasiService.newEntry("1008", noRekening + "/" + this.DateToString(dueDate), bunga, noBukuBesar, null);
+					eodKalkulasiService.newEntry("1008", iUnitId, noRekening, this.DateToString(dueDate), bunga, noBukuBesar, null);
 					
 				}
 				
@@ -1028,7 +1028,7 @@ public class EodCalculationService {
 				Double accrualProvisi = fasilitasKredit.getAccrualProvisi() != null ? fasilitasKredit.getAccrualProvisi() : 0.0;
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1009", noFasilitas, accrualProvisi, null, null);
+				eodKalkulasiService.newEntry("1009", iUnitId, noFasilitas, null, accrualProvisi, null, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -1099,7 +1099,7 @@ public class EodCalculationService {
 				Double accrualAdmin = fasilitasKredit.getAccrualAdmin() != null ? fasilitasKredit.getAccrualAdmin() : 0.0;
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1010", noFasilitas, accrualAdmin, null, null);
+				eodKalkulasiService.newEntry("1010", iUnitId, noFasilitas, null, accrualAdmin, null, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -1193,7 +1193,7 @@ public class EodCalculationService {
 				rekeningKreditService.save(rekeningKredit);
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1011", noRekening, nilaiPinalti, null, null);
+				eodKalkulasiService.newEntry("1011", iUnitId, noRekening, null, nilaiPinalti, null, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -1286,7 +1286,7 @@ public class EodCalculationService {
 				dataAgunanService.save(dataAgunan);
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1012", noFasilitas, nilaiPpap, null, null);
+				eodKalkulasiService.newEntry("1012", iUnitId, noFasilitas, null, nilaiPpap, null, null);
 				
 				// Count Up Progress
 				progressCount++;
@@ -1389,7 +1389,7 @@ public class EodCalculationService {
 				rekeningBukuBesarService.save(rekeningBukuBesar);
 				
 				// Insert EodKalkulasi Log
-				eodKalkulasiService.newEntry("1013", noRekening, calcResult, noBukuBesar, null);
+				eodKalkulasiService.newEntry("1013", iUnitId, noRekening, null, calcResult, noBukuBesar, null);
 				
 				// Count Up Progress
 				progressCount++;

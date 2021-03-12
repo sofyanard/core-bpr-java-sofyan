@@ -184,5 +184,35 @@ public class TestEodController {
 		modelAndView.setViewName("redirect:/testeod/calculation?sccMsg=" + sccMsg + "&postBack=true");
 		return modelAndView;
 	}
+	
+	
+	
+	@RequestMapping(value="/posting", method = RequestMethod.GET)
+	public ModelAndView Posting(String errMsg, String sccMsg, String postBack) throws Exception {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		if (this.IsLastDayInMonth(_eodTanggal)) {
+			_listKodeEod = kodeEodService.findAllEom();
+		} else {
+			_listKodeEod = kodeEodService.findAllEod();
+		}
+		
+		if ((postBack != null) && (postBack.equals("true"))) {
+			
+		}
+		else {
+			InitiateCalculationProgress();
+		}
+		
+		modelAndView.addObject("listKodeEod", _listKodeEod);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("postBack", postBack);
+		modelAndView.setViewName("testeod/calculation");
+		return modelAndView;
+	}
 
 }

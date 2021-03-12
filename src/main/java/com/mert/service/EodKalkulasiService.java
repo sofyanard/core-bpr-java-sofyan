@@ -36,14 +36,18 @@ public class EodKalkulasiService {
 	
 	public void newEntry(
 			String kodeEod,
+			String unitId,
 			String calcObject,
+			String subObject,
 			Double calcValue,
 			String rekBukuBesar,
 			String note) {
 		EodKalkulasi eodKalkulasi = new EodKalkulasi();
 		eodKalkulasi.setEodTanggal(eodTanggalService.getDate());
 		eodKalkulasi.setKodeEod(kodeEod);
+		eodKalkulasi.setUnitId(unitId);
 		eodKalkulasi.setCalcObject(calcObject);
+		eodKalkulasi.setSubObject(subObject);
 		eodKalkulasi.setCalcValue(calcValue);
 		eodKalkulasi.setRekBukuBesar(rekBukuBesar);
 		eodKalkulasi.setCalcDate(new Date());
@@ -51,5 +55,13 @@ public class EodKalkulasiService {
 		
 		eodKalkulasiRepository.save(eodKalkulasi);
 	}
-
+	
+	public List<EodKalkulasi> ListOnTanggalKodeEodUnit(String strDate, String kodeEod, String unitId) {
+		return eodKalkulasiRepository.ListOnTanggalKodeEodUnit(strDate, kodeEod, unitId);
+	}
+	
+	public List<EodKalkulasi> ListOnTanggalKodeEod(String strDate, String kodeEod) {
+		return eodKalkulasiRepository.ListOnTanggalKodeEod(strDate, kodeEod);
+	}
+	
 }

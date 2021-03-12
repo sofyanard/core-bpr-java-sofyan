@@ -27,8 +27,14 @@ public class EodKalkulasi {
 	@Column(name = "kode_eod")
 	private String KodeEod;
 	
+	@Column(name = "unit_id")
+	private String UnitId;
+	
 	@Column(name = "calc_object")
 	private String CalcObject;
+	
+	@Column(name = "sub_object")
+	private String SubObject;
 	
 	@Column(name = "calc_value")
 	private Double CalcValue;
@@ -67,6 +73,14 @@ public class EodKalkulasi {
 	public void setKodeEod(String kodeEod) {
 		KodeEod = kodeEod;
 	}
+	
+	public String getUnitId() {
+		return UnitId;
+	}
+
+	public void setUnitId(String unitId) {
+		UnitId = unitId;
+	}
 
 	public String getCalcObject() {
 		return CalcObject;
@@ -74,6 +88,14 @@ public class EodKalkulasi {
 
 	public void setCalcObject(String calcObject) {
 		CalcObject = calcObject;
+	}
+	
+	public String getSubObject() {
+		return SubObject;
+	}
+
+	public void setSubObject(String subObject) {
+		SubObject = subObject;
 	}
 
 	public Double getCalcValue() {
@@ -107,6 +129,8 @@ public class EodKalkulasi {
 	public void setNote(String note) {
 		Note = note;
 	}
+	
+	
 	
 	// Constructor
 	
