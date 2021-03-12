@@ -19,6 +19,9 @@ public class KodeEod {
 	@Column(name = "seq")
 	private Integer Seq;
 	
+	@Column(name = "eom_only")
+	private String EomOnly;
+	
 	@Column(name = "status")
 	private String Status;
 	
@@ -54,6 +57,14 @@ public class KodeEod {
 
 	public void setStatus(String status) {
 		Status = status;
+	}
+	
+	public String getEomOnly() {
+		return EomOnly;
+	}
+
+	public void setEomOnly(String eomOnly) {
+		EomOnly = eomOnly;
 	}
 	
 	// Constructor

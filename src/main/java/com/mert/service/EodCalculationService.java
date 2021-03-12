@@ -98,27 +98,6 @@ public class EodCalculationService {
         return cal.getTime(); 
     }
 	
-	private boolean IsLastDayInMonth(String strEodDate) {
-		boolean result = false;
-		try {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			Date eodDate = formatter.parse(strEodDate);
-			
-			Calendar cal = Calendar.getInstance();
-	        cal.setTime(eodDate);
-	        Integer today = cal.get(Calendar.DAY_OF_MONTH);
-	        Integer maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-	        
-	        if (today == maxDay) {
-	        	result = true;
-	        }
-		} catch(Exception e) {
-			
-		} 
-        
-        return result;
-	}
-	
 	// Get and Validate Rekening Buku Besar
 	private RekeningBukuBesar GetRekeningBukuBesar(String noBukuBesar) throws Exception {
 			

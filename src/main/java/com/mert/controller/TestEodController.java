@@ -1,5 +1,8 @@
 package com.mert.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mert.model.KodeEod;
+import com.mert.service.EodTanggalService;
 import com.mert.service.KodeEodService;
 import com.mert.service.EodProgressService;
 import com.mert.service.EodCalculationService;
@@ -18,6 +22,9 @@ import com.mert.service.EodCalculationService;
 @Controller
 @RequestMapping("/testeod")
 public class TestEodController {
+	
+	@Autowired
+	private EodTanggalService eodTanggalService;
 	
 	@Autowired
 	private KodeEodService kodeEodService;
@@ -28,7 +35,50 @@ public class TestEodController {
 	@Autowired
 	private EodCalculationService eodCalculationService;
 	
+	
+	
+	private String _eodTanggal;
+	
 	private List<KodeEod> _listKodeEod;
+	
+	
+	
+	private void requestEodTanggal() throws Exception {
+		Date today;
+		today = new Date();
+		
+		try {
+			today = eodTanggalService.getDate();
+		}
+		catch (Exception ex) {
+			throw new Exception(ex.getMessage());
+		}
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strToday = formatter.format(today);
+		this._eodTanggal = strToday;
+	}
+	
+	private boolean IsLastDayInMonth(String strEodDate) {
+		boolean result = false;
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date eodDate = formatter.parse(strEodDate);
+			
+			Calendar cal = Calendar.getInstance();
+	        cal.setTime(eodDate);
+	        Integer today = cal.get(Calendar.DAY_OF_MONTH);
+	        Integer maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	        
+	        if (today == maxDay) {
+	        	result = true;
+	        }
+		} catch(Exception e) {
+			
+		} 
+        
+        return result;
+	}
 	
 	private void InitiateCalculationProgress() {
 		eodProgressService.deleteAll();
@@ -38,11 +88,20 @@ public class TestEodController {
 		}
 	}
 	
+	
+	
 	@RequestMapping(value="/calculation", method = RequestMethod.GET)
-	public ModelAndView Calculation(String errMsg, String sccMsg, String postBack) {
+	public ModelAndView Calculation(String errMsg, String sccMsg, String postBack) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		_listKodeEod = kodeEodService.findAll();
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		if (this.IsLastDayInMonth(_eodTanggal)) {
+			_listKodeEod = kodeEodService.findAllEom();
+		} else {
+			_listKodeEod = kodeEodService.findAllEod();
+		}
 		
 		if ((postBack != null) && (postBack.equals("true"))) {
 			

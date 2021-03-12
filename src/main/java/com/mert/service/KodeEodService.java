@@ -29,5 +29,13 @@ public class KodeEodService {
 	public void delete(String id) {
 		kodeEodRepository.delete(id);
 	}
+	
+	public List<KodeEod> findAllEom() {
+		return kodeEodRepository.findAllEom();
+	}
+	
+	public List<KodeEod> findAllEod() {
+		return kodeEodRepository.findAllEod();
+	}
 
 }
