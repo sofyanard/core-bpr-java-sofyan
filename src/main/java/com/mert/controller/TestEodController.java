@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mert.model.KodeEod;
+import com.mert.model.KodeTran;
 import com.mert.service.EodTanggalService;
 import com.mert.service.KodeEodService;
 import com.mert.service.EodProgressService;
 import com.mert.service.EodCalculationService;
+import com.mert.service.EodPostingService;
+import com.mert.service.KodeTranService;
 
 @Controller
 @RequestMapping("/testeod")
@@ -35,11 +38,19 @@ public class TestEodController {
 	@Autowired
 	private EodCalculationService eodCalculationService;
 	
+	@Autowired
+	private EodPostingService eodPostingService;
+	
+	@Autowired
+	private KodeTranService kodeTranService;
+	
 	
 	
 	private String _eodTanggal;
 	
 	private List<KodeEod> _listKodeEod;
+	
+	private List<KodeTran> _listKodeEodPosting;
 	
 	
 	
@@ -85,6 +96,14 @@ public class TestEodController {
 		
 		for (KodeEod processEod : _listKodeEod) {
 			eodProgressService.New(processEod.getKodeEod());
+		}
+	}
+	
+	private void InitiatePostingProgress() {
+		eodProgressService.deleteAll();
+		
+		for (KodeTran processEod : _listKodeEodPosting) {
+			eodProgressService.New(processEod.getKoTran());
 		}
 	}
 	
@@ -194,24 +213,54 @@ public class TestEodController {
 		// Request EodTanggal
 		this.requestEodTanggal();
 		
-		if (this.IsLastDayInMonth(_eodTanggal)) {
-			_listKodeEod = kodeEodService.findAllEom();
-		} else {
-			_listKodeEod = kodeEodService.findAllEod();
-		}
+		_listKodeEodPosting = kodeTranService.ListEodPosting();
 		
 		if ((postBack != null) && (postBack.equals("true"))) {
 			
 		}
 		else {
-			InitiateCalculationProgress();
+			InitiatePostingProgress();
 		}
 		
-		modelAndView.addObject("listKodeEod", _listKodeEod);
+		modelAndView.addObject("listKodeEodPosting", _listKodeEodPosting);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("postBack", postBack);
-		modelAndView.setViewName("testeod/calculation");
+		modelAndView.setViewName("testeod/posting");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/postingrun/{kodeTran}", method = RequestMethod.POST)
+	public ModelAndView PostingRun(@PathVariable String kodeTran) throws Exception {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		String result = "";
+		try {
+			
+			if (kodeTran.equals("4004")) {
+				result = eodPostingService.Post4004();
+			} else if (kodeTran.equals("4005")) {
+				result = eodPostingService.Post4005();
+			} else if (kodeTran.equals("4006")) {
+				result = eodPostingService.Post4006();
+			} else if (kodeTran.equals("4007")) {
+				result = eodPostingService.Post4007();
+			} else if (kodeTran.equals("4008")) {
+				result = eodPostingService.Post4008();
+			} else if (kodeTran.equals("4009")) {
+				
+			} else if (kodeTran.equals("4010")) {
+				
+			}
+			
+		}
+		catch (Exception e) {
+			modelAndView.setViewName("redirect:/testeod/posting?errMsg=" + e.getMessage() + "&postBack=true");
+			return modelAndView;
+		}
+		
+		String sccMsg = result;
+		modelAndView.setViewName("redirect:/testeod/posting?sccMsg=" + sccMsg + "&postBack=true");
 		return modelAndView;
 	}
 

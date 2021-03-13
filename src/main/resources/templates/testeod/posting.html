@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4>EOD Posting</h4>
+		
+		<!-- Success Alert -->
+		<div class="alert alert-success alert-dismissible" th:if="${(sccMsg != null) && (sccMsg != '')}">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4><i class="icon fa fa-check"></i> Success!</h4>
+			<h5 th:text="${sccMsg}"></h5>
+		</div>
+				
+		<!-- Error Alert -->
+		<div class="alert alert-danger alert-dismissible" th:if="${(errMsg != null) && (errMsg != '')}">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4><i class="icon fa fa-ban"></i> Error!</h4>
+			<h5 th:text="${errMsg}"></h5>
+		</div>
+		
+	    <table class="table">
+	    	<thead>
+	    		<tr>
+		    		<th scope="col">Kode Transaksi</th>
+		    		<th scope="col">Deskripsi</th>
+		    		<th scope="col"></th>
+		    		<th scope="col"></th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+		    	<tr scope="row" th:each="kodeTran : ${listKodeEodPosting}">
+		    		<td th:text="${kodeTran.KoTran}"></td>
+		    		<td th:text="${kodeTran.Deskripsi}"></td>
+		    		<td>
+		    			<form action="#" method="POST" th:action="@{'/testeod/postingrun/' + ${kodeTran.KoTran}}">
+		    				<input type="hidden" th:id="kodeEod + ${kodeTran.KoTran}" th:name="kodeEod" th:value="${kodeTran.KoTran}" />
+		    				<button type="submit" class="btn btn-primary">Execute</button>
+		    			</form>
+		    		</td>
+		    		<td width="40%">
+		    			<div class="progress">
+							<div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+								<span class="sr-only">40% Complete (success)</span>
+							</div>
+						</div>
+		    		</td>
+		    	</tr>
+	    	</tbody>
+	    </table>
+	</div>
+</body>
+</html>

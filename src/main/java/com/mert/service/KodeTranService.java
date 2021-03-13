@@ -29,5 +29,11 @@ public class KodeTranService {
 	public void delete(String id) {
 		kodeTranRepository.delete(id);
 	}
+	
+	
+	
+	public List<KodeTran> ListEodPosting() {
+		return kodeTranRepository.ListEodPosting();
+	}
 
 }

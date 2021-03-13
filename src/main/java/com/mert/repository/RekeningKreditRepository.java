@@ -33,5 +33,17 @@ public interface RekeningKreditRepository extends JpaRepository<RekeningKredit, 
 			"where no_rekening = :noRek " + 
 			"and to_char(due_date, 'yyyy-MM-dd') >= :strDate ", nativeQuery=true)
 	Double customEodCalculation1011SisaAngsuran(@Param("noRek") String noRek, @Param("strDate") String strDate);
+	
+	
+	
+	@Query(value = "select * from rekeningkredit " +
+			"where unit_id = :unitId " +
+			"and coalesce(disburse, 0.0) > 0.0 ", nativeQuery=true)
+	List<RekeningKredit> customEodPosting4004(@Param("unitId") String unitId);
+	
+	@Query(value = "select count(1) from rekeningkredit " +
+			"where unit_id = :unitId " +
+			"and coalesce(disburse, 0.0) > 0.0 ", nativeQuery=true)
+	Integer customEodPosting4004Count(@Param("unitId") String unitId);
 
 }

@@ -104,4 +104,14 @@ public class RekeningKreditService {
 		return rekeningKreditRepository.customEodCalculation1011SisaAngsuran(noRek, strDate);
 	}
 	
+	
+	
+	public List<RekeningKredit> customEodPosting4004(String unitId) {
+		return rekeningKreditRepository.customEodPosting4004(unitId);
+	}
+	
+	public Integer customEodPosting4004Count(String unitId) {
+		return rekeningKreditRepository.customEodPosting4004Count(unitId);
+	}
+	
 }

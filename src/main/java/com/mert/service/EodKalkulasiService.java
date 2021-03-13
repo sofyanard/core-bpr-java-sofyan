@@ -60,8 +60,16 @@ public class EodKalkulasiService {
 		return eodKalkulasiRepository.ListOnTanggalKodeEodUnit(strDate, kodeEod, unitId);
 	}
 	
+	public Integer CountOnTanggalKodeEodUnit(String strDate, String kodeEod, String unitId) {
+		return eodKalkulasiRepository.CountOnTanggalKodeEodUnit(strDate, kodeEod, unitId);
+	}
+	
 	public List<EodKalkulasi> ListOnTanggalKodeEod(String strDate, String kodeEod) {
 		return eodKalkulasiRepository.ListOnTanggalKodeEod(strDate, kodeEod);
+	}
+	
+	public Integer CountOnTanggalKodeEod(String strDate, String kodeEod) {
+		return eodKalkulasiRepository.CountOnTanggalKodeEod(strDate, kodeEod);
 	}
 	
 }
