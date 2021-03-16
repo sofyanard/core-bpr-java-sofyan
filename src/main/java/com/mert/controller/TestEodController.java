@@ -7,18 +7,22 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mert.model.EodLapKeu;
 import com.mert.model.KodeEod;
 import com.mert.model.KodeTran;
 import com.mert.service.EodTanggalService;
 import com.mert.service.KodeEodService;
 import com.mert.service.EodProgressService;
 import com.mert.service.EodCalculationService;
+import com.mert.service.EodLapKeuService;
+import com.mert.service.EodLaporanKeuanganService;
 import com.mert.service.EodPostingService;
 import com.mert.service.KodeTranService;
 
@@ -42,7 +46,13 @@ public class TestEodController {
 	private EodPostingService eodPostingService;
 	
 	@Autowired
+	private EodLaporanKeuanganService eodLaporanKeuanganService;
+	
+	@Autowired
 	private KodeTranService kodeTranService;
+	
+	@Autowired
+	private EodLapKeuService eodLapKeuService;
 	
 	
 	
@@ -51,6 +61,8 @@ public class TestEodController {
 	private List<KodeEod> _listKodeEod;
 	
 	private List<KodeTran> _listKodeEodPosting;
+	
+	private List<EodLapKeu> _listEodLapKeu;
 	
 	
 	
@@ -104,6 +116,14 @@ public class TestEodController {
 		
 		for (KodeTran processEod : _listKodeEodPosting) {
 			eodProgressService.New(processEod.getKoTran());
+		}
+	}
+	
+	private void InitiateLapKeuProgress() {
+		eodProgressService.deleteAll();
+		
+		for (EodLapKeu processEod : _listEodLapKeu) {
+			eodProgressService.New(processEod.getLapKeuId());
 		}
 	}
 	
@@ -261,6 +281,65 @@ public class TestEodController {
 		
 		String sccMsg = result;
 		modelAndView.setViewName("redirect:/testeod/posting?sccMsg=" + sccMsg + "&postBack=true");
+		return modelAndView;
+	}
+	
+	
+	
+	@RequestMapping(value="/lapkeu", method = RequestMethod.GET)
+	public ModelAndView LapKeu(String errMsg, String sccMsg, String postBack) throws Exception {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		// Request EodTanggal
+		this.requestEodTanggal();
+		
+		if (this.IsLastDayInMonth(_eodTanggal)) {
+			_listEodLapKeu = eodLapKeuService.findAllEom();
+		} else {
+			_listEodLapKeu = eodLapKeuService.findAllEod();
+		}
+		
+		if ((postBack != null) && (postBack.equals("true"))) {
+			
+		}
+		else {
+			InitiateLapKeuProgress();
+		}
+		
+		modelAndView.addObject("listEodLapKeu", _listEodLapKeu);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("postBack", postBack);
+		modelAndView.setViewName("testeod/lapkeu");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/lapkeurun/{lapKeuId}", method = RequestMethod.POST)
+	public ModelAndView LapKeuRun(@PathVariable String lapKeuId) throws Exception {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		String result = "";
+		try {
+			
+			if (lapKeuId.equals("LKDaily")) {
+				CompletableFuture<String> cFResult;
+				cFResult = eodLaporanKeuanganService.LaporanKeuanganDaily();
+				result = cFResult.get();
+			}
+			else if (lapKeuId.equals("LKMonthly")) {
+				CompletableFuture<String> cFResult;
+				cFResult = eodLaporanKeuanganService.LaporanKeuanganMonthly();
+				result = cFResult.get();
+			}
+			
+		}
+		catch (Exception e) {
+			modelAndView.setViewName("redirect:/testeod/lapkeu?errMsg=" + e.getMessage() + "&postBack=true");
+			return modelAndView;
+		}
+		
+		String sccMsg = result;
+		modelAndView.setViewName("redirect:/testeod/lapkeu?sccMsg=" + sccMsg + "&postBack=true");
 		return modelAndView;
 	}
 
