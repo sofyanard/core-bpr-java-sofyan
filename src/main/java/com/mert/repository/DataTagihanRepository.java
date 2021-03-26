@@ -20,6 +20,15 @@ public interface DataTagihanRepository extends JpaRepository<DataTagihan, Intege
 	
 	
 	
+	// mencari 1 record tagihan paling terdahulu yang belum dibayar berdasarkan no rekening
+	@Query(value = "select * from datatagihan " + 
+			"where no_rekening = :noRekening " + 
+			"and coalesce(paid_status,'') not in ('Bayar', 'Hapus') " + 
+			"order by due_date limit 1 ", nativeQuery=true)
+	DataTagihan findFirstNotPaid(@Param("noRekening") String noRekening);
+	
+	
+	
 	@Query(value = "select count(distinct d.no_rekening) from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
 			"where coalesce(d.pokok, 0.0) > 0.0 " + 

@@ -24,7 +24,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<legend>Transaksi Pinjaman - Pencairan Kredit Setor Rekening</legend>
+						<legend>Transaksi Pinjaman - Pembayaran Angsuran Tunai</legend>
 					</div>
 					<div class="col-md-6">
 						<div class="collapse navbar-collapse" id="navbar-collapse">
@@ -36,8 +36,8 @@
 										<li><a href="biayaadminkredittunaisearch">1001 - Pembayaran Biaya Admin Kredit Tunai</a></li>
 										<li><a href="biayaadminkreditrekeningsearch">1002 - Pembayaran Biaya Admin Kredit Beban Rekening</a></li>
 										<li><a href="pencairankredittunaisearch">1003 - Pencairan Kredit Tunai</a></li>
-										<li><a href="#">1004 - Pencairan Kredit Ke Rekening</a></li>
-										<li><a href="angsurankredittunaisearch">1005 - Pembayaran Angsuran Kredit Tunai</a></li>
+										<li><a href="pencairankreditrekeningsearch">1004 - Pencairan Kredit Ke Rekening</a></li>
+										<li><a href="#">1005 - Pembayaran Angsuran Kredit Tunai</a></li>
 										<li><a href="angsurankreditrekeningsearch">1006 - Pembayaran Angsuran Kredit Beban Rekening</a></li>
 										<li><a href="pelunasankredittunaisearch">1007 - Pelunasan Kredit Tunai</a></li>
 										<li><a href="pelunasankreditrekeningsearch">1008 - Pelunasan Kredit Beban Rekening</a></li>
@@ -68,28 +68,12 @@
 				
 					<div class="row">
 						<div class="col-md-9">
-							<form id="form1" action="#" method="POST" th:action="@{/kasir/pinjaman/pencairankreditrekeningsearch}" class="form-horizontal" role="form">
+							<form id="form1" action="#" method="POST" th:action="@{/kasir/pinjaman/angsurankredittunaisearch}" class="form-horizontal" role="form">
 								
 								<div class="form-group row">
 									<label class="col-md-3 control-label" for="noRekKredit">No Rek Kredit</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" id="noRekKredit" name="noRekKredit" required />
-									</div>
-								</div>
-								
-								<div class="form-group row">
-									<label class="col-md-3 control-label" for="noRekPenerima">No Rek Penerima</label>
-									<div class="col-md-9">
-										<input type="text" class="form-control" id="noRekPenerima" name="noRekPenerima" required />
-									</div>
-								</div>
-								
-								<div class="form-group row">
-									<label class="col-md-3 control-label" for="jenisRekPenerima">Jenis Rekening Penerima</label>
-									<div class="col-md-9">
-										<select class="selectpicker" data-live-search="true" name="jenisRekPenerima" id="jenisRekPenerima" required>
-											<option th:each="productType: ${listProductType}" th:value="${productType.ProductTypeId}" th:text="${productType.ProductTypeName}"></option>
-										</select>
 									</div>
 								</div>
 								
@@ -110,7 +94,7 @@
 				
 					<div class="row">
 						<div class="col-md-9">
-							<form id="form1" action="#" method="POST" th:action="@{'/kasir/pinjaman/pencairankreditrekening/' + ${noRekKredit} + '/' + ${noRekPenerima} + '/' + ${jenisRekPenerima}}" th:object="${transaksi1004Input}" class="form-horizontal" role="form">
+							<form id="form1" action="#" method="POST" th:action="@{'/kasir/pinjaman/angsurankredittunai/' + ${noRekKredit}}" th:object="${transaksi1005Input}" class="form-horizontal" role="form">
 								
 								<input type="hidden" class="form-control" name="userIdPost" th:field=*{userIdPost} />
 								
@@ -130,40 +114,65 @@
 								</div>
 								
 								<div class="form-group row">
-									<label class="col-md-3 control-label">Nilai Pencairan (IDR)</label>
+									<label class="col-md-3 control-label">Due Date</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:value="${(rekeningKredit.EqvPlafond != null) ? #numbers.formatDecimal(rekeningKredit.EqvPlafond, 1, 'DEFAULT', 2, 'DEFAULT') : 0.00}" readonly />
-										<input type="hidden" id="ProvisiAmount" th:value="${(rekeningKredit.EqvPlafond != null) ? #numbers.formatDecimal(rekeningKredit.EqvPlafond, 1, 2) : 0.00}">
+										<input type="text" class="form-control" th:value="${dueDate != null ? #dates.format(dueDate, 'yyyy-MM-dd') : ''}" readonly />
 									</div>
 								</div>
 								
 								<div class="form-group row">
-									<label class="col-md-3 control-label" for="noRekPenerima">No Rek Penerima</label>
+									<label class="col-md-3 control-label">Angsuran Pokok (IDR)</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" id="noRekPenerima" name="noRekPenerima" th:field=*{noRekPenerima} required readonly />
-										<span class="text-danger" th:if="${#fields.hasErrors('noRekPenerima')}" th:errors="*{noRekPenerima}">noRekPenerima Error</span>
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(angsuranPokok, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
 									</div>
 								</div>
 								
-								<div class="form-group row" th:if="${jenisRekPenerima == '2'}">
-									<label class="col-md-3 control-label">Nama Penerima</label>
+								<div class="form-group row">
+									<label class="col-md-3 control-label">Angsuran Bunga (IDR)</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:value="${rekeningTabungan.nama_nasabah}" readonly />
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(angsuranBunga, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
 									</div>
 								</div>
 								
-								<div class="form-group row" th:if="${jenisRekPenerima == '4'}">
-									<label class="col-md-3 control-label">Nama Penerima</label>
+								<div class="form-group row">
+									<label class="col-md-3 control-label">Jumlah Angsuran (IDR)</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:value="${rekeningBukuBesar.NamaRekening}" readonly />
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(jumlahAngsuran, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
 									</div>
 								</div>
 								
-								<div class="form-group">
-									<label class="col-md-3 control-label" for="note">Keterangan</label>
+								<div class="form-group row">
+									<label class="col-md-3 control-label">Denda Pokok (IDR)</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" id="note" name="note" th:field=*{note} />
-										<span class="text-danger" th:if="${#fields.hasErrors('note')}" th:errors="*{note}">note Error</span>
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(dendaPokok, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-3 control-label">Denda Bunga (IDR)</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(dendaBunga, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-3 control-label">Jumlah Denda (IDR)</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(jumlahDenda, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-3 control-label">Lainnya (IDR)</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(lainnya, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-3 control-label">Total Tagihan (IDR)</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:value="${#numbers.formatDecimal(totalTagihan, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
 									</div>
 								</div>
 								
@@ -171,7 +180,7 @@
 									<label class="col-md-3 control-label" for="submitButton"></label>
 									<div class="col-md-9">
 										<button type="submit" id="submitButton" name="submitButton" class="btn btn-primary">Posting</button>
-										<a th:href="@{/kasir/pinjaman/pencairankreditrekeningsearch}" class="btn btn-inverse">Cancel</a>
+										<a th:href="@{/kasir/pinjaman/angsurankredittunaisearch}" class="btn btn-inverse">Cancel</a>
 									</div>
 								</div>
 								

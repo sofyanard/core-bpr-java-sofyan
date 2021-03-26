@@ -38,6 +38,10 @@ public class DataTagihanService {
 		return dataTagihanRepository.findByNoRekeningAndDueDate(noRekening, strDate);
 	}
 	
+	public DataTagihan findFirstNotPaid(String noRekening) {
+		return dataTagihanRepository.findFirstNotPaid(noRekening);
+	}
+	
 	
 	
 	public Integer customEodCalculation1005A(String unitId, String strDate) {

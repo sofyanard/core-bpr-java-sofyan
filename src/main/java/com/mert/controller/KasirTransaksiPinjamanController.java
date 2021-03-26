@@ -2,6 +2,7 @@ package com.mert.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -23,10 +24,15 @@ import com.mert.model.ParameterKodeBiaya;
 import com.mert.model.TabunganPembentukanRekening;
 import com.mert.model.RekeningBukuBesar;
 import com.mert.model.RekeningKredit;
+import com.mert.model.DataTagihan;
 import com.mert.model.Transaksi1001Input;
 import com.mert.model.Transaksi1002Input;
 import com.mert.model.Transaksi1003Input;
 import com.mert.model.Transaksi1004Input;
+import com.mert.model.Transaksi1005Input;
+import com.mert.model.Transaksi1006Input;
+import com.mert.model.Transaksi1007Input;
+import com.mert.model.Transaksi1008Input;
 import com.mert.service.AppUserService;
 import com.mert.service.FasilitasKreditOverrideModelService;
 import com.mert.service.FasilitasKreditPembayaranModelService;
@@ -36,6 +42,7 @@ import com.mert.service.TransaksiService;
 import com.mert.service.ParameterProductTypeService;
 import com.mert.service.RekeningBukuBesarService;
 import com.mert.service.RekeningKreditService;
+import com.mert.service.DataTagihanService;
 
 @Controller
 @RequestMapping("/kasir/pinjaman")
@@ -67,6 +74,9 @@ public class KasirTransaksiPinjamanController {
 	
 	@Autowired
 	private RekeningKreditService rekeningKreditService;
+	
+	@Autowired
+	private DataTagihanService dataTagihanService;
 
 	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -564,6 +574,506 @@ public class KasirTransaksiPinjamanController {
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
 		modelAndView.setViewName("redirect:/kasir/pinjaman/pencairankreditrekening/" + noRekKredit + "/" + noRekPenerima + "/" + jenisRekPenerima + "?sccMsg=" + sccMsg);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankredittunaisearch", method = RequestMethod.GET)
+	public ModelAndView AngsuranKreditTunaiSearch(String errMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("mode", "MODE_SEARCH");
+		modelAndView.setViewName("kasir/pinjaman/angsurankredittunai");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankredittunaisearch", method = RequestMethod.POST)
+	public ModelAndView AngsuranKreditTunaiSearchPost(String noRekKredit) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		// Mencari Rekening Kredit
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		
+		// Jika RekeningKredit tidak ditemukan
+		if (rekeningKredit == null) {
+			String errMsg = "Rekening Kredit dengan No " + noRekKredit + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunaisearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		// Mencari Data Tagihan, 1 record paling terdahulu yang belum dibayar
+		DataTagihan dataTagihan = dataTagihanService.findFirstNotPaid(noRekKredit);
+		
+		// Jika Tagihan tidak ditemukan
+		if (dataTagihan == null) {
+			String errMsg = "Tagihan atas Rekening No " + noRekKredit + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunaisearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunai/" + noRekKredit);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankredittunai/{noRekKredit}", method = RequestMethod.GET)
+	public ModelAndView AngsuranKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		Transaksi1005Input transaksi1005Input = new Transaksi1005Input();
+		transaksi1005Input.setUserIdPost(getUser().getUserId());
+		transaksi1005Input.setNoRekKredit(noRekKredit);
+		modelAndView.addObject("transaksi1005Input", transaksi1005Input);
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		DataTagihan dataTagihan = dataTagihanService.findFirstNotPaid(noRekKredit);
+		if (dataTagihan == null)
+			dataTagihan = new DataTagihan();
+		
+		Date dueDate = dataTagihan.getDueDate();
+		Double angsuranPokok = dataTagihan.getPokok() != null ? dataTagihan.getPokok() : 0.0;
+		Double angsuranBunga = dataTagihan.getBunga() != null ? dataTagihan.getBunga() : 0.0;
+		Double jumlahAngsuran = angsuranPokok + angsuranBunga;
+		Double dendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
+		Double dendaBunga = dataTagihan.getDendaBunga() != null ? dataTagihan.getDendaBunga() : 0.0;
+		Double jumlahDenda = dendaPokok + dendaBunga;
+		Double lainnya = dataTagihan.getLainnya() != null ? dataTagihan.getLainnya() : 0.0;
+		Double totalTagihan = angsuranPokok + angsuranBunga + dendaPokok + dendaBunga + lainnya;
+		
+		modelAndView.addObject("dueDate", dueDate);
+		modelAndView.addObject("angsuranPokok", angsuranPokok);
+		modelAndView.addObject("angsuranBunga", angsuranBunga);
+		modelAndView.addObject("jumlahAngsuran", jumlahAngsuran);
+		modelAndView.addObject("dendaPokok", dendaPokok);
+		modelAndView.addObject("dendaBunga", dendaBunga);
+		modelAndView.addObject("jumlahDenda", jumlahDenda);
+		modelAndView.addObject("lainnya", lainnya);
+		modelAndView.addObject("totalTagihan", totalTagihan);
+		
+		modelAndView.addObject("noRekKredit", noRekKredit);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("mode", "MODE_POSTING");
+		modelAndView.setViewName("/kasir/pinjaman/angsurankredittunai");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankredittunai/{noRekKredit}", method = RequestMethod.POST)
+	public ModelAndView AngsuranKreditTunaiPost(@PathVariable String noRekKredit, @Valid Transaksi1005Input transaksi1005Input, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunai/" + noRekKredit + "?errMsg=Invalid Input!");
+			return modelAndView;
+		}
+		
+		String trxRefNo;
+		try {
+			trxRefNo = transaksiService.Transaksi1005(transaksi1005Input);
+		}
+		catch (Exception e) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunai/" + noRekKredit + "?errMsg=" + e.getMessage());
+			return modelAndView;
+		}
+		
+		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankreditrekeningsearch", method = RequestMethod.GET)
+	public ModelAndView AngsuranKreditRekeningSearch(String errMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		modelAndView.addObject("listProductType", parameterProductTypeService.findAll());
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("mode", "MODE_SEARCH");
+		modelAndView.setViewName("kasir/pinjaman/angsurankreditrekening");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankreditrekeningsearch", method = RequestMethod.POST)
+	public ModelAndView AngsuranKreditRekeningSearchPost(String noRekKredit, String noRekBeban, String jenisRekBeban) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		// Mencari Rekening Kredit
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		
+		// Jika RekeningKredit tidak ditemukan
+		if (rekeningKredit == null) {
+			String errMsg = "Rekening Kredit dengan No " + noRekKredit + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekeningsearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		// Mencari Data Tagihan, 1 record paling terdahulu yang belum dibayar
+		DataTagihan dataTagihan = dataTagihanService.findFirstNotPaid(noRekKredit);
+		
+		// Jika Tagihan tidak ditemukan
+		if (dataTagihan == null) {
+			String errMsg = "Tagihan atas Rekening No " + noRekKredit + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekeningsearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		if (jenisRekBeban.equals("2")) {
+			
+			// Beban Rekening Tabungan
+			
+			TabunganPembentukanRekening rektabungan = tabunganPembentukanRekeningService.findById(noRekBeban);
+			
+			if (rektabungan == null) {
+				String errMsg = "Tabungan dengan No Rekening " + noRekBeban + " tidak ditemukan!";
+				modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekeningsearch?errMsg=" + errMsg);
+				return modelAndView;
+			}
+			
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekening/" + noRekKredit + "/" + rektabungan.getNo_rekg() + "/" + jenisRekBeban);
+			return modelAndView;
+			
+		} else if (jenisRekBeban.equals("4")) {
+			
+			// Beban Rekening Buku Besar
+			
+			RekeningBukuBesar rekbukubesar = rekeningBukuBesarService.findOne(noRekBeban);
+			
+			if (rekbukubesar == null) {
+				String errMsg = "Buku Besar dengan No Rekening " + noRekBeban + " tidak ditemukan!";
+				modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekeningsearch?errMsg=" + errMsg);
+				return modelAndView;
+			}
+			
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekening/" + noRekKredit + "/" + rekbukubesar.getNoRekening() + "/" + jenisRekBeban);
+			return modelAndView;
+			
+		}
+		
+		// Beban Lainnya
+		
+		String errMsg = "Jenis Rekening Beban tidak valid!";
+		
+		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekeningsearch?errMsg=" + errMsg);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankreditrekening/{noRekKredit}/{noRekBeban}/{jenisRekBeban}", method = RequestMethod.GET)
+	public ModelAndView AngsuranKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		Transaksi1006Input transaksi1006Input = new Transaksi1006Input();
+		transaksi1006Input.setUserIdPost(getUser().getUserId());
+		transaksi1006Input.setNoRekKredit(noRekKredit);
+		transaksi1006Input.setNoRekBeban(noRekBeban);
+		transaksi1006Input.setJenisRekBeban(jenisRekBeban);
+		modelAndView.addObject("transaksi1006Input", transaksi1006Input);
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		DataTagihan dataTagihan = dataTagihanService.findFirstNotPaid(noRekKredit);
+		if (dataTagihan == null)
+			dataTagihan = new DataTagihan();
+		
+		Date dueDate = dataTagihan.getDueDate();
+		Double angsuranPokok = dataTagihan.getPokok() != null ? dataTagihan.getPokok() : 0.0;
+		Double angsuranBunga = dataTagihan.getBunga() != null ? dataTagihan.getBunga() : 0.0;
+		Double jumlahAngsuran = angsuranPokok + angsuranBunga;
+		Double dendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
+		Double dendaBunga = dataTagihan.getDendaBunga() != null ? dataTagihan.getDendaBunga() : 0.0;
+		Double jumlahDenda = dendaPokok + dendaBunga;
+		Double lainnya = dataTagihan.getLainnya() != null ? dataTagihan.getLainnya() : 0.0;
+		Double totalTagihan = angsuranPokok + angsuranBunga + dendaPokok + dendaBunga + lainnya;
+		
+		modelAndView.addObject("dueDate", dueDate);
+		modelAndView.addObject("angsuranPokok", angsuranPokok);
+		modelAndView.addObject("angsuranBunga", angsuranBunga);
+		modelAndView.addObject("jumlahAngsuran", jumlahAngsuran);
+		modelAndView.addObject("dendaPokok", dendaPokok);
+		modelAndView.addObject("dendaBunga", dendaBunga);
+		modelAndView.addObject("jumlahDenda", jumlahDenda);
+		modelAndView.addObject("lainnya", lainnya);
+		modelAndView.addObject("totalTagihan", totalTagihan);
+		
+		if (jenisRekBeban.equals("2")) {
+			// Beban Rekening Tabungan
+			TabunganPembentukanRekening rektabungan = tabunganPembentukanRekeningService.findById(noRekBeban);
+			modelAndView.addObject("rektabungan", rektabungan);
+		} else if (jenisRekBeban.equals("4")) {
+			// Beban Rekening Buku Besar
+			RekeningBukuBesar rekbukubesar = rekeningBukuBesarService.findOne(noRekBeban);
+			modelAndView.addObject("rekbukubesar", rekbukubesar);
+		} else {
+			// Bukan Tabungan & Bukan Buku Besar --> throws error
+			String errMsg2 = "Jenis Rekening Beban tidak valid!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekeningsearch?errMsg=" + errMsg2);
+			return modelAndView;
+		}
+		
+		modelAndView.addObject("noRekKredit", noRekKredit);
+		modelAndView.addObject("noRekBeban", noRekBeban);
+		modelAndView.addObject("jenisRekBeban", jenisRekBeban);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("mode", "MODE_POSTING");
+		modelAndView.setViewName("/kasir/pinjaman/angsurankreditrekening");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/angsurankreditrekening/{noRekKredit}/{noRekBeban}/{jenisRekBeban}", method = RequestMethod.POST)
+	public ModelAndView AngsuranKreditRekeningPost(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, @Valid Transaksi1006Input transaksi1006Input, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?errMsg=Invalid Input!");
+			return modelAndView;
+		}
+		
+		String trxRefNo;
+		try {
+			trxRefNo = transaksiService.Transaksi1006(transaksi1006Input);
+		}
+		catch (Exception e) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?errMsg=" + e.getMessage());
+			return modelAndView;
+		}
+		
+		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankredittunaisearch", method = RequestMethod.GET)
+	public ModelAndView PelunasanKreditTunaiSearch(String errMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("mode", "MODE_SEARCH");
+		modelAndView.setViewName("kasir/pinjaman/pelunasankredittunai");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankredittunaisearch", method = RequestMethod.POST)
+	public ModelAndView PelunasanKreditTunaiSearchPost(String noRekKredit) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		// Mencari Rekening Kredit
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		
+		// Jika RekeningKredit tidak ditemukan
+		if (rekeningKredit == null) {
+			String errMsg = "Rekening Kredit dengan No " + noRekKredit + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankredittunaisearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankredittunai/" + noRekKredit);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankredittunai/{noRekKredit}", method = RequestMethod.GET)
+	public ModelAndView PelunasanKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		Transaksi1007Input transaksi1007Input = new Transaksi1007Input();
+		transaksi1007Input.setUserIdPost(getUser().getUserId());
+		transaksi1007Input.setNoRekKredit(noRekKredit);
+		modelAndView.addObject("transaksi1007Input", transaksi1007Input);
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		Double bakiDebet = rekeningKredit.getBakiDebet() != null ? rekeningKredit.getBakiDebet() * -1 : 0.0;
+		Double nilaiPinalti = rekeningKredit.getNilaiPinalti() != null ? rekeningKredit.getNilaiPinalti() * -1 : 0.0;
+		Double totalPelunasan = bakiDebet + nilaiPinalti;
+		
+		modelAndView.addObject("bakiDebet", bakiDebet);
+		modelAndView.addObject("nilaiPinalti", nilaiPinalti);
+		modelAndView.addObject("totalPelunasan", totalPelunasan);
+		
+		modelAndView.addObject("noRekKredit", noRekKredit);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("mode", "MODE_POSTING");
+		modelAndView.setViewName("/kasir/pinjaman/pelunasankredittunai");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankredittunai/{noRekKredit}", method = RequestMethod.POST)
+	public ModelAndView PelunasanKreditTunaiPost(@PathVariable String noRekKredit, @Valid Transaksi1007Input transaksi1007Input, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankredittunai/" + noRekKredit + "?errMsg=Invalid Input!");
+			return modelAndView;
+		}
+		
+		String trxRefNo;
+		try {
+			trxRefNo = transaksiService.Transaksi1007(transaksi1007Input);
+		}
+		catch (Exception e) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankredittunai/" + noRekKredit + "?errMsg=" + e.getMessage());
+			return modelAndView;
+		}
+		
+		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankreditrekeningsearch", method = RequestMethod.GET)
+	public ModelAndView PelunasanKreditRekeningSearch(String errMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		modelAndView.addObject("listProductType", parameterProductTypeService.findAll());
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("mode", "MODE_SEARCH");
+		modelAndView.setViewName("kasir/pinjaman/pelunasankreditrekening");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankreditrekeningsearch", method = RequestMethod.POST)
+	public ModelAndView PelunasanKreditRekeningSearchPost(String noRekKredit, String noRekBeban, String jenisRekBeban) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		// Mencari Rekening Kredit
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		
+		// Jika RekeningKredit tidak ditemukan
+		if (rekeningKredit == null) {
+			String errMsg = "Rekening Kredit dengan No " + noRekKredit + " tidak ditemukan!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekeningsearch?errMsg=" + errMsg);
+			return modelAndView;
+		}
+		
+		if (jenisRekBeban.equals("2")) {
+			
+			// Beban Rekening Tabungan
+			
+			TabunganPembentukanRekening rektabungan = tabunganPembentukanRekeningService.findById(noRekBeban);
+			
+			if (rektabungan == null) {
+				String errMsg = "Tabungan dengan No Rekening " + noRekBeban + " tidak ditemukan!";
+				modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekeningsearch?errMsg=" + errMsg);
+				return modelAndView;
+			}
+			
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekening/" + noRekKredit + "/" + rektabungan.getNo_rekg() + "/" + jenisRekBeban);
+			return modelAndView;
+			
+		} else if (jenisRekBeban.equals("4")) {
+			
+			// Beban Rekening Buku Besar
+			
+			RekeningBukuBesar rekbukubesar = rekeningBukuBesarService.findOne(noRekBeban);
+			
+			if (rekbukubesar == null) {
+				String errMsg = "Buku Besar dengan No Rekening " + noRekBeban + " tidak ditemukan!";
+				modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekeningsearch?errMsg=" + errMsg);
+				return modelAndView;
+			}
+			
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekening/" + noRekKredit + "/" + rekbukubesar.getNoRekening() + "/" + jenisRekBeban);
+			return modelAndView;
+			
+		}
+		
+		// Beban Lainnya
+		
+		String errMsg = "Jenis Rekening Beban tidak valid!";
+		
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekeningsearch?errMsg=" + errMsg);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankreditrekening/{noRekKredit}/{noRekBeban}/{jenisRekBeban}", method = RequestMethod.GET)
+	public ModelAndView PelunasanKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		Transaksi1008Input transaksi1008Input = new Transaksi1008Input();
+		transaksi1008Input.setUserIdPost(getUser().getUserId());
+		transaksi1008Input.setNoRekKredit(noRekKredit);
+		transaksi1008Input.setNoRekBeban(noRekBeban);
+		transaksi1008Input.setJenisRekBeban(jenisRekBeban);
+		modelAndView.addObject("transaksi1008Input", transaksi1008Input);
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekKredit);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		Double bakiDebet = rekeningKredit.getBakiDebet() != null ? rekeningKredit.getBakiDebet() * -1 : 0.0;
+		Double nilaiPinalti = rekeningKredit.getNilaiPinalti() != null ? rekeningKredit.getNilaiPinalti() * -1 : 0.0;
+		Double totalPelunasan = bakiDebet + nilaiPinalti;
+		
+		modelAndView.addObject("bakiDebet", bakiDebet);
+		modelAndView.addObject("nilaiPinalti", nilaiPinalti);
+		modelAndView.addObject("totalPelunasan", totalPelunasan);
+		
+		if (jenisRekBeban.equals("2")) {
+			// Beban Rekening Tabungan
+			TabunganPembentukanRekening rektabungan = tabunganPembentukanRekeningService.findById(noRekBeban);
+			modelAndView.addObject("rektabungan", rektabungan);
+		} else if (jenisRekBeban.equals("4")) {
+			// Beban Rekening Buku Besar
+			RekeningBukuBesar rekbukubesar = rekeningBukuBesarService.findOne(noRekBeban);
+			modelAndView.addObject("rekbukubesar", rekbukubesar);
+		} else {
+			// Bukan Tabungan & Bukan Buku Besar --> throws error
+			String errMsg2 = "Jenis Rekening Beban tidak valid!";
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekeningsearch?errMsg=" + errMsg2);
+			return modelAndView;
+		}
+		
+		modelAndView.addObject("noRekKredit", noRekKredit);
+		modelAndView.addObject("noRekBeban", noRekBeban);
+		modelAndView.addObject("jenisRekBeban", jenisRekBeban);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("mode", "MODE_POSTING");
+		modelAndView.setViewName("/kasir/pinjaman/pelunasankreditrekening");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/pelunasankreditrekening/{noRekKredit}/{noRekBeban}/{jenisRekBeban}", method = RequestMethod.POST)
+	public ModelAndView PelunasanKreditRekeningPost(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, @Valid Transaksi1008Input transaksi1008Input, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?errMsg=Invalid Input!");
+			return modelAndView;
+		}
+		
+		String trxRefNo;
+		try {
+			trxRefNo = transaksiService.Transaksi1008(transaksi1008Input);
+		}
+		catch (Exception e) {
+			modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?errMsg=" + e.getMessage());
+			return modelAndView;
+		}
+		
+		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg);
 		return modelAndView;
 	}
 	
