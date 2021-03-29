@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,6 +25,10 @@ public interface SkalaAngsuranRepository extends JpaRepository<SkalaAngsuran, In
 	
 	@Query(value = "select * from skalaangsuran n where to_char(n.due_date, 'YYYY-MM-DD') = :strDate ", nativeQuery=true)
 	List<SkalaAngsuran> findByDueDate(@Param("strDate") String strDate);
+	
+	@Modifying
+	@Query(value = "delete from skalaangsuran n where n.no_rekening = :noRekening ", nativeQuery=true)
+	void deleteByNoRekening(@Param("noRekening") String noRekening);
 	
 	@Query(value = "select s.* from skalaangsuran s " + 
 			"join rekeningkredit r on s.no_rekening = r.no_rekening " + 

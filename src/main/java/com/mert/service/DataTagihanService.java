@@ -42,6 +42,26 @@ public class DataTagihanService {
 		return dataTagihanRepository.findFirstNotPaid(noRekening);
 	}
 	
+	public Double sumPokokByNoRekening(String noRekening) {
+		return dataTagihanRepository.sumPokokByNoRekening(noRekening);
+	}
+	
+	public Double sumBungaByNoRekening(String noRekening) {
+		return dataTagihanRepository.sumBungaByNoRekening(noRekening);
+	}
+	
+	public Double sumDendaPokokByNoRekening(String noRekening) {
+		return dataTagihanRepository.sumDendaPokokByNoRekening(noRekening);
+	}
+	
+	public Double sumDendaBungaByNoRekening(String noRekening) {
+		return dataTagihanRepository.sumDendaBungaByNoRekening(noRekening);
+	}
+	
+	public Double sumLainnyaByNoRekening(String noRekening) {
+		return dataTagihanRepository.sumLainnyaByNoRekening(noRekening);
+	}
+	
 	
 	
 	public Integer customEodCalculation1005A(String unitId, String strDate) {

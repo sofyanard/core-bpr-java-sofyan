@@ -11,6 +11,7 @@ import com.mert.model.RekeningKredit;
 import com.mert.repository.RekeningKreditRepository;
 import com.mert.model.CurrentRekeningKredit;
 import com.mert.repository.CurrentRekeningKreditRepository;
+import com.mert.service.DataTagihanService;
 
 @Service
 public class RekeningKreditService {
@@ -20,6 +21,9 @@ public class RekeningKreditService {
 	
 	@Autowired
 	private CurrentRekeningKreditRepository currentRekeningKreditRepository;
+	
+	@Autowired
+	private DataTagihanService dataTagihanService;
 	
 	public List<RekeningKredit> findAll() {
 		return rekeningKreditRepository.findAll();
@@ -88,6 +92,38 @@ public class RekeningKreditService {
 		}
 		
 		return leadedInput;
+	}
+	
+	public void updateTotalKewajiban(String noRekening) {
+		Double sumPokok = dataTagihanService.sumPokokByNoRekening(noRekening);
+		Double sumBunga = dataTagihanService.sumBungaByNoRekening(noRekening);
+		Double sumDendaPokok = dataTagihanService.sumDendaPokokByNoRekening(noRekening);
+		Double sumDendaBunga = dataTagihanService.sumDendaBungaByNoRekening(noRekening);
+		Double sumLainnya = dataTagihanService.sumLainnyaByNoRekening(noRekening);
+		
+		if (sumPokok == null)
+			sumPokok = 0.0;
+		if (sumBunga == null)
+			sumBunga = 0.0;
+		if (sumDendaPokok == null)
+			sumDendaPokok = 0.0;
+		if (sumDendaBunga == null)
+			sumDendaBunga = 0.0;
+		if (sumLainnya == null)
+			sumLainnya = 0.0;
+		
+		Double sumKewajiban = sumPokok + sumBunga + sumDendaPokok + sumDendaBunga + sumLainnya;
+		
+		RekeningKredit rekeningKredit = rekeningKreditRepository.findOne(noRekening);
+		
+		rekeningKredit.setTotalPokok(sumPokok);
+		rekeningKredit.setTotalBunga(sumBunga);
+		rekeningKredit.setTotalDendaPokok(sumDendaPokok);
+		rekeningKredit.setTotalDendaBunga(sumDendaBunga);
+		rekeningKredit.setTotalLainnya(sumLainnya);
+		rekeningKredit.setTotalKewajiban(sumKewajiban);
+		
+		rekeningKreditRepository.save(rekeningKredit);
 	}
 	
 	

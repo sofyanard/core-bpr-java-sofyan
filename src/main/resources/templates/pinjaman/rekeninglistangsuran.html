@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pemeliharaan Rekening Pinjaman</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editfasilitas/' + ${noRekening}}">Data Fasilitas</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editpelaporan/' + ${noRekening}}">Data Pelaporan</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/tagihanindex/' + ${noRekening}}">Data Tagihan</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editrestru/' + ${noRekening}}">Data Restrukturisasi</a></li>
+					<li role="presentation" class="active"><a href="#">Skala Angsuran</a></li>
+				</ul>
+				<br/>
+				
+				<table id="table1" class="table table-bordered table-striped" width="80%">
+				<thead>
+					<tr class="table-active">
+						<th>Bulan Ke</th>
+						<th>Due Date</th>
+						<th>Angsuran Pokok</th>
+						<th>Angsuran Bunga</th>
+						<th>Total Angsuran</th>
+						<th>Sisa Pinjaman</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="row : ${listSkalaAngsuran}">
+						<td th:text="${row.BulanKe}"></td>
+						<td th:text="${row.DueDate != null ? #dates.format(row.DueDate, 'yyyy-MM-dd') : ''}"></td>
+						<td th:text="${row.AngsuranPokok != null ? #numbers.formatDecimal(row.AngsuranPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+						<td th:text="${row.AngsuranBunga != null ? #numbers.formatDecimal(row.AngsuranBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+						<td th:text="${row.TotalAngsuran != null ? #numbers.formatDecimal(row.TotalAngsuran, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+						<td th:text="${row.SisaPinjaman != null ? #numbers.formatDecimal(row.SisaPinjaman, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+					</tr>
+				</tbody>
+				</table>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+		
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pemeliharaan Rekening Pinjaman</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editfasilitas/' + ${noRekening}}">Data Fasilitas</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editpelaporan/' + ${noRekening}}">Data Pelaporan</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/tagihanindex/' + ${noRekening}}">Data Tagihan</a></li>
+					<li role="presentation" class="active"><a href="#">Data Restrukturisasi</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/listangsuran/' + ${noRekening}}">Skala Angsuran</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form id="form1" action="#" method="POST" th:action="@{'/pinjaman/rekening/updaterestru/' + ${noRekening}}" th:object="${rekeningKreditRestru}" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+						
+							<input type="hidden" class="form-control" name="NoRekening" th:field=*{NoRekening} />
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="RestruFlag">Restrukturisasi</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="RestruFlag" id="RestruFlag" th:field=*{RestruFlag}>
+										<option th:each="yesNo: ${listYesNo}" th:value="${yesNo.YesNoId}" th:text="${yesNo.YesNoName}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="TanggalRestruAwal">Tanggal Restru Awal</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="TanggalRestruAwal" name="TanggalRestruAwal" th:field=*{TanggalRestruAwal} />
+									<span class="text-danger" th:if="${#fields.hasErrors('TanggalRestruAwal')}" th:errors="*{TanggalRestruAwal}">TanggalRestruAwal Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="TanggalRestruAkhir">Tanggal Restru Akhir</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="TanggalRestruAkhir" name="TanggalRestruAkhir" th:field=*{TanggalRestruAkhir} />
+									<span class="text-danger" th:if="${#fields.hasErrors('TanggalRestruAkhir')}" th:errors="*{TanggalRestruAkhir}">TanggalRestruAkhir Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="TanggalReview">Tanggal Review</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="TanggalReview" name="TanggalReview" th:field=*{TanggalReview} />
+									<span class="text-danger" th:if="${#fields.hasErrors('TanggalReview')}" th:errors="*{TanggalReview}">TanggalReview Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="RestruKe">Restru Ke</label>
+								<div class="col-md-9">
+									<input type="number" class="form-control" id="RestruKe" name="RestruKe" th:field=*{RestruKe} />
+									<span class="text-danger" th:if="${#fields.hasErrors('RestruKe')}" th:errors="*{RestruKe}">RestruKe Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="KetRestru">Keterangan Restru</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="KetRestru" id="KetRestru" th:field=*{KetRestru}>
+										<option th:each="ketRestru: ${listKetRestru}" th:value="${ketRestru.sandicode}" th:text="${ketRestru.sandidesc}"></option>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="StatusKolektibilitas">Status Kolektibilitas</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="StatusKolektibilitas" id="StatusKolektibilitas" th:field=*{StatusKolektibilitas}>
+										<option th:each="kolektibilitas: ${listKolektibilitas}" th:value="${kolektibilitas.KolektibilitasId}" th:text="${kolektibilitas.KolektibilitasName}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="Kondisi">Kondisi</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="Kondisi" id="Kondisi" th:field=*{Kondisi}>
+										<option th:each="kondisi: ${listKondisi}" th:value="${kondisi.sandicode}" th:text="${kondisi.sandidesc}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="TanggalKondisi">Tanggal Kondisi</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="TanggalKondisi" name="TanggalKondisi" th:field=*{TanggalKondisi} />
+									<span class="text-danger" th:if="${#fields.hasErrors('TanggalKondisi')}" th:errors="*{TanggalKondisi}">TanggalKondisi Error</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="SebabMacet">Sebab Macet</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="SebabMacet" id="SebabMacet" th:field=*{SebabMacet}>
+										<option th:each="sebabMacet: ${listSebabMacet}" th:value="${sebabMacet.sandicode}" th:text="${sebabMacet.sandidesc}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="TanggalMacet">Tanggal Macet</label>
+								<div class="col-md-9">
+									<input type="date" class="form-control" id="TanggalMacet" name="TanggalMacet" th:field=*{TanggalMacet} />
+									<span class="text-danger" th:if="${#fields.hasErrors('TanggalMacet')}" th:errors="*{TanggalMacet}">TanggalMacet Error</span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="row">
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="submitButton"></label>
+							<div class="col-md-9">
+								<button type="submit" id="submitButton" name="submitButton" class="btn btn-success">Save</button>
+								<a href="#" class="btn btn-inverse">Cancel</a>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+		
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

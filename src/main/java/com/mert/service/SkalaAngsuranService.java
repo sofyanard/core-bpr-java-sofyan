@@ -7,8 +7,10 @@ import com.mert.repository.SkalaAngsuranRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class SkalaAngsuranService {
 	
 	@Autowired
@@ -44,6 +46,10 @@ public class SkalaAngsuranService {
 	
 	public List<SkalaAngsuran> findByDueDate(String strDate) {
 		return skalaAngsuranRepository.findByDueDate(strDate);
+	}
+	
+	public void deleteByNoRekening(String noRekening) {
+		skalaAngsuranRepository.deleteByNoRekening(noRekening);
 	}
 	
 	public List<SkalaAngsuran> customEodCalculation1002(String unitId, String strDate) {

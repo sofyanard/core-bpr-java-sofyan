@@ -29,6 +29,23 @@ public interface DataTagihanRepository extends JpaRepository<DataTagihan, Intege
 	
 	
 	
+	@Query(value = "select sum(pokok) from datatagihan where no_rekening = :noRekening ", nativeQuery=true)
+	Double sumPokokByNoRekening(@Param("noRekening") String noRekening);
+	
+	@Query(value = "select sum(bunga) from datatagihan where no_rekening = :noRekening ", nativeQuery=true)
+	Double sumBungaByNoRekening(@Param("noRekening") String noRekening);
+	
+	@Query(value = "select sum(denda_pokok) from datatagihan where no_rekening = :noRekening ", nativeQuery=true)
+	Double sumDendaPokokByNoRekening(@Param("noRekening") String noRekening);
+	
+	@Query(value = "select sum(denda_bunga) from datatagihan where no_rekening = :noRekening ", nativeQuery=true)
+	Double sumDendaBungaByNoRekening(@Param("noRekening") String noRekening);
+	
+	@Query(value = "select sum(lainnya) from datatagihan where no_rekening = :noRekening ", nativeQuery=true)
+	Double sumLainnyaByNoRekening(@Param("noRekening") String noRekening);
+	
+	
+	
 	@Query(value = "select count(distinct d.no_rekening) from datatagihan d " + 
 			"join rekeningkredit r on d.no_rekening = r.no_rekening " + 
 			"where coalesce(d.pokok, 0.0) > 0.0 " + 

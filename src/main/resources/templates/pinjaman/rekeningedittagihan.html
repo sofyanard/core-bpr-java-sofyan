@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pemeliharaan Rekening Pinjaman</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editfasilitas/' + ${noRekening}}">Data Fasilitas</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editpelaporan/' + ${noRekening}}">Data Pelaporan</a></li>
+					<li role="presentation" class="active"><a href="#">Data Tagihan</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/editrestru/' + ${noRekening}}">Data Restrukturisasi</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/listangsuran/' + ${noRekening}}">Skala Angsuran</a></li>
+				</ul>
+				<br/>
+				
+				<div th:if="${mode == 'MODE_INDEX'}">
+				
+					<table id="table1" class="table table-bordered table-striped" width="80%">
+						<thead>
+							<tr class="table-active">
+								<th>Due Date</th>
+								<th>Pokok</th>
+								<th>Bunga</th>
+								<th>Denda Pokok</th>
+								<th>Denda Bunga</th>
+								<th>Lainnya</th>
+								<th>DPD</th>
+								<th>Paid Status</th>
+								<th>Paid Date</th>
+								<th>Hapus Date</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="row : ${listDataTagihan}">
+								<td th:text="${row.DueDate != null ? #dates.format(row.DueDate, 'yyyy-MM-dd') : ''}"></td>
+								<td th:text="${row.Pokok != null ? #numbers.formatDecimal(row.Pokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${row.Bunga != null ? #numbers.formatDecimal(row.Bunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${row.DendaPokok != null ? #numbers.formatDecimal(row.DendaPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${row.DendaBunga != null ? #numbers.formatDecimal(row.DendaBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${row.Lainnya != null ? #numbers.formatDecimal(row.Lainnya, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${row.Dpd}"></td>
+								<td th:text="${row.PaidStatus}"></td>
+								<td th:text="${row.PaidDate != null ? #dates.format(row.PaidDate, 'yyyy-MM-dd') : ''}"></td>
+								<td th:text="${row.HapusDate != null ? #dates.format(row.HapusDate, 'yyyy-MM-dd') : ''}"></td>
+								<td><a th:href="@{'/pinjaman/rekening/tagihanedit/' + ${row.RekeningKredit.NoRekening} + '/' + ${row.Id}}">Edit</a></td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr class="table-active">
+								<td><b>TOTAL</b></th>
+								<td th:text="${sumPokok != null ? #numbers.formatDecimal(sumPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${sumBunga != null ? #numbers.formatDecimal(sumBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${sumDendaPokok != null ? #numbers.formatDecimal(sumDendaPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${sumDendaBunga != null ? #numbers.formatDecimal(sumDendaBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td th:text="${sumLainnya != null ? #numbers.formatDecimal(sumLainnya, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td colspan="2"><b>Total Kewajiban</b></td>
+								<td colspan="2" th:text="${totalKewajiban != null ? #numbers.formatDecimal(totalKewajiban, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" align="right"></td>
+								<td></td>
+							</tr>
+						</tfoot>
+					</table>
+				
+				</div>
+				
+				<div th:if="${mode == 'MODE_EDIT'}">
+				
+					<!-- Form Name -->
+					<form id="form1" action="#" method="POST" th:action="@{'/pinjaman/rekening/tagihanupdate/' + ${noRekening} + '/' + ${tagihanId}}" th:object="${dataTagihanEdit}" class="form-horizontal" role="form">
+					<fieldset>
+						<div class="row">
+							<div class="col-md-9">
+							
+								<input type="hidden" class="form-control" name="NoRekening" th:field=*{NoRekening} />
+								<input type="hidden" class="form-control" name="Id" th:field=*{Id} />
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="DueDate">Due Date</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="DueDateDisplay" th:value="${dataTagihan.DueDate != null ? #dates.format(dataTagihan.DueDate, 'yyyy-MM-dd') : ''}" readonly />
+										<input type="hidden" class="form-control" id="DueDate" name="DueDate" th:field=*{DueDate} readonly />
+										<span class="text-danger" th:if="${#fields.hasErrors('DueDate')}" th:errors="*{DueDate}">DueDate Error</span>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="Pokok">Pokok</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="PokokDisplay" th:value="${dataTagihan.Pokok != null ? #numbers.formatDecimal(dataTagihan.Pokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+										<input type="hidden" class="form-control" id="Pokok" name="Pokok" th:field=*{Pokok} />
+										<span class="text-danger" th:if="${#fields.hasErrors('Pokok')}" th:errors="*{Pokok}">Pokok Error</span>
+									</div>
+									<div class="col-md-1">
+										<button type="button" id="hapusPokok" class="btn btn-danger">Hapus</button>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="Bunga">Bunga</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="BungaDisplay" th:value="${dataTagihan.Bunga != null ? #numbers.formatDecimal(dataTagihan.Bunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+										<input type="hidden" class="form-control" id="Bunga" name="Bunga" th:field=*{Bunga} />
+										<span class="text-danger" th:if="${#fields.hasErrors('Bunga')}" th:errors="*{Bunga}">Bunga Error</span>
+									</div>
+									<div class="col-md-1">
+										<button type="button" id="hapusBunga" class="btn btn-danger">Hapus</button>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="DendaPokok">Denda Pokok</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="DendaPokokDisplay" th:value="${dataTagihan.DendaPokok != null ? #numbers.formatDecimal(dataTagihan.DendaPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+										<input type="hidden" class="form-control" id="DendaPokok" name="DendaPokok" th:field=*{DendaPokok} />
+										<span class="text-danger" th:if="${#fields.hasErrors('DendaPokok')}" th:errors="*{DendaPokok}">DendaPokok Error</span>
+									</div>
+									<div class="col-md-1">
+										<button type="button" id="hapusDendaPokok" class="btn btn-danger">Hapus</button>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="DendaBunga">Denda Bunga</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="DendaBungaDisplay" th:value="${dataTagihan.DendaBunga != null ? #numbers.formatDecimal(dataTagihan.DendaBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+										<input type="hidden" class="form-control" id="DendaBunga" name="DendaBunga" th:field=*{DendaBunga} />
+										<span class="text-danger" th:if="${#fields.hasErrors('DendaBunga')}" th:errors="*{DendaBunga}">DendaBunga Error</span>
+									</div>
+									<div class="col-md-1">
+										<button type="button" id="hapusDendaBunga" class="btn btn-danger">Hapus</button>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="Lainnya">Lainnya</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="LainnyaDisplay" th:value="${dataTagihan.Lainnya != null ? #numbers.formatDecimal(dataTagihan.Lainnya, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+										<input type="hidden" class="form-control" id="Lainnya" name="Lainnya" th:field=*{Lainnya} />
+										<span class="text-danger" th:if="${#fields.hasErrors('Lainnya')}" th:errors="*{Lainnya}">Lainnya Error</span>
+									</div>
+									<div class="col-md-1">
+										<button type="button" id="hapusLainnya" class="btn btn-danger">Hapus</button>
+									</div>
+								</div>
+								
+							</div>
+							<div class="col-md-3">
+							
+								
+	
+							</div>
+						</div>
+						<div class="row">
+							<!-- Button (Double) -->
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="submitButton"></label>
+								<div class="col-md-9">
+									<button type="submit" id="submitButton" name="submitButton" class="btn btn-success">Save</button>
+									<a th:href="@{'/pinjaman/rekening/tagihanedit/' + ${noRekening} + '/' + ${tagihanId}}" class="btn btn-inverse">Cancel</a>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					</form>
+				
+				</div>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+
+		$('#hapusPokok').click(function () {
+			$('#Pokok').val('0.00');
+			$('#PokokDisplay').val('0.00');
+		});
+		
+		$('#hapusBunga').click(function () {
+			$('#Bunga').val('0.00');
+			$('#BungaDisplay').val('0.00');
+		});
+		
+		$('#hapusDendaPokok').click(function () {
+			$('#DendaPokok').val('0.00');
+			$('#DendaPokokDisplay').val('0.00');
+		});
+		
+		$('#hapusDendaBunga').click(function () {
+			$('#DendaBunga').val('0.00');
+			$('#DendaBungaDisplay').val('0.00');
+		});
+		
+		$('#hapusLainnya').click(function () {
+			$('#Lainnya').val('0.00');
+			$('#LainnyaDisplay').val('0.00');
+		});
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>
