@@ -1,5 +1,6 @@
 package com.mert.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1194,6 +1195,8 @@ public class TransaksiService {
 		DataTagihan dataTagihan = dataTagihanService.findFirstNotPaid(noRekKredit);
 		
 		Date dueDate = dataTagihan.getDueDate();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strDueDate = formatter.format(dueDate);
 		Double pokok = dataTagihan.getPokok() != null ? dataTagihan.getPokok() : 0.0;
 		Double bunga = dataTagihan.getBunga() != null ? dataTagihan.getBunga() : 0.0;
 		Double dendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
@@ -1228,7 +1231,7 @@ public class TransaksiService {
 			rekeningKreditService.save(rekeningKredit);
 			
 			// Insert Transaction History
-			this.HistoryKredit("1", trxRef, "1005", userPost, rekeningKredit.getNoRekening(), pokok, "Angsuran Pokok");
+			this.HistoryKredit("1", trxRef, "1005", userPost, rekeningKredit.getNoRekening(), pokok, "Angsuran Pokok", strDueDate);
 			
 			// Field  POST KREDIT : penambahan (+) pada field Saldo pada rekening buku besar yang terdaftar pada kode transaksi sebesar field  Bunga,  Mark as ‘K’
 			saldoRekBBTransaksi = saldoRekBBTransaksi + bunga;
@@ -1236,7 +1239,7 @@ public class TransaksiService {
 			rekeningBukuBesarService.save(rekBBTransaksi);
 			
 			// Insert Transaction History
-			this.HistoryKredit("4", trxRef, "1005", userPost, rekBBTransaksi.getNoRekening(), bunga, "Angsuran Bunga");
+			this.HistoryKredit("4", trxRef, "1005", userPost, rekBBTransaksi.getNoRekening(), bunga, "Angsuran Bunga", strDueDate);
 			
 			// Field  POST KREDIT : penambahan (+) pada field Saldo pada rekening buku besar yang terdaftar pada kode transaksi sebesar field  Denda - Pokok,  Mark as ‘K’
 			saldoRekBBTransaksi = saldoRekBBTransaksi + dendaPokok;
@@ -1244,7 +1247,7 @@ public class TransaksiService {
 			rekeningBukuBesarService.save(rekBBTransaksi);
 			
 			// Insert Transaction History
-			this.HistoryKredit("4", trxRef, "1005", userPost, rekBBTransaksi.getNoRekening(), dendaPokok, "Denda Pokok");
+			this.HistoryKredit("4", trxRef, "1005", userPost, rekBBTransaksi.getNoRekening(), dendaPokok, "Denda Pokok", strDueDate);
 			
 			// Field  POST KREDIT : penambahan (+) pada field Saldo pada rekening buku besar yang terdaftar pada kode transaksi sebesar field  Denda - Bunga,  Mark as ‘K’
 			saldoRekBBTransaksi = saldoRekBBTransaksi + dendaBunga;
@@ -1252,7 +1255,7 @@ public class TransaksiService {
 			rekeningBukuBesarService.save(rekBBTransaksi);
 			
 			// Insert Transaction History
-			this.HistoryKredit("4", trxRef, "1005", userPost, rekBBTransaksi.getNoRekening(), dendaBunga, "Denda Bunga");
+			this.HistoryKredit("4", trxRef, "1005", userPost, rekBBTransaksi.getNoRekening(), dendaBunga, "Denda Bunga", strDueDate);
 			
 			// Update Summary Data Tagihan
 			dataTagihan.setPokok(0.0);
@@ -1360,6 +1363,8 @@ public class TransaksiService {
 		DataTagihan dataTagihan = dataTagihanService.findFirstNotPaid(noRekKredit);
 		
 		Date dueDate = dataTagihan.getDueDate();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strDueDate = formatter.format(dueDate);
 		Double pokok = dataTagihan.getPokok() != null ? dataTagihan.getPokok() : 0.0;
 		Double bunga = dataTagihan.getBunga() != null ? dataTagihan.getBunga() : 0.0;
 		Double dendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
@@ -1451,7 +1456,7 @@ public class TransaksiService {
 			rekeningKreditService.save(rekeningKredit);
 			
 			// Insert Transaction History
-			this.HistoryKredit("1", trxRef, "1006", userPost, rekeningKredit.getNoRekening(), pokok, "Angsuran Pokok");
+			this.HistoryKredit("1", trxRef, "1006", userPost, rekeningKredit.getNoRekening(), pokok, "Angsuran Pokok", strDueDate);
 			
 			// Field  POST KREDIT : penambahan (+) pada field Saldo pada rekening buku besar yang terdaftar pada kode transaksi sebesar field  Bunga,  Mark as ‘K’
 			saldoRekBBTransaksi = saldoRekBBTransaksi + bunga;
@@ -1459,7 +1464,7 @@ public class TransaksiService {
 			rekeningBukuBesarService.save(rekBBTransaksi);
 			
 			// Insert Transaction History
-			this.HistoryKredit("4", trxRef, "1006", userPost, rekBBTransaksi.getNoRekening(), bunga, "Angsuran Bunga");
+			this.HistoryKredit("4", trxRef, "1006", userPost, rekBBTransaksi.getNoRekening(), bunga, "Angsuran Bunga", strDueDate);
 			
 			// Field  POST KREDIT : penambahan (+) pada field Saldo pada rekening buku besar yang terdaftar pada kode transaksi sebesar field  Denda - Pokok,  Mark as ‘K’
 			saldoRekBBTransaksi = saldoRekBBTransaksi + dendaPokok;
@@ -1467,7 +1472,7 @@ public class TransaksiService {
 			rekeningBukuBesarService.save(rekBBTransaksi);
 			
 			// Insert Transaction History
-			this.HistoryKredit("4", trxRef, "1006", userPost, rekBBTransaksi.getNoRekening(), dendaPokok, "Denda Pokok");
+			this.HistoryKredit("4", trxRef, "1006", userPost, rekBBTransaksi.getNoRekening(), dendaPokok, "Denda Pokok", strDueDate);
 			
 			// Field  POST KREDIT : penambahan (+) pada field Saldo pada rekening buku besar yang terdaftar pada kode transaksi sebesar field  Denda - Bunga,  Mark as ‘K’
 			saldoRekBBTransaksi = saldoRekBBTransaksi + dendaBunga;
@@ -1475,7 +1480,7 @@ public class TransaksiService {
 			rekeningBukuBesarService.save(rekBBTransaksi);
 			
 			// Insert Transaction History
-			this.HistoryKredit("4", trxRef, "1006", userPost, rekBBTransaksi.getNoRekening(), dendaBunga, "Denda Bunga");
+			this.HistoryKredit("4", trxRef, "1006", userPost, rekBBTransaksi.getNoRekening(), dendaBunga, "Denda Bunga", strDueDate);
 			
 			// Update Summary Data Tagihan
 			dataTagihan.setPokok(0.0);
@@ -1774,6 +1779,234 @@ public class TransaksiService {
 		catch (Exception e) {
 			throw e;
 		}
+		
+	}
+	
+	
+	
+	public String Koreksi(UUID tranRef, String userId) throws Exception {
+		
+		AppUser appUser = appUserService.findOne(userId);
+		if (appUser == null) {
+			throw new Exception("User " + userId + " tidak terdaftar!");
+		}
+		String unitId = appUser.getUnitId().getUnitId();
+		
+		String sTranRef = tranRef.toString();
+		List<TranHistory> listTranHistory = tranHistoryService.findByTranRef(sTranRef);
+		
+		// Loop per Item dalam Satu TranRef
+		for (TranHistory tranHistory : listTranHistory) {
+			
+			String koTran = tranHistory.getKoTran();
+			String note = tranHistory.getNote();
+			
+			// Cek Transaksinya Debit atau Kredit
+			if ((tranHistory.getValueDebit() != null) && (tranHistory.getValueDebit() > 0.0)) {
+				
+				// Transaksinya Debit, Jadi Koreksinya Kredit
+				Double value = tranHistory.getValueDebit();
+				String noRek = tranHistory.getNoRekDebit();
+				String accType = tranHistory.getAccountType();
+				
+				// KOREKSI KREDIT
+				try {
+					
+					if (accType.trim().equals("4")) { // Rekening Buku Besar
+						
+						RekeningBukuBesar rekeningBukuBesar = rekeningBukuBesarService.findOne(noRek);
+						
+						if (rekeningBukuBesar == null) {
+							throw new Exception("Rekening Buku Besar " + noRek + " tidak ditemukan!");
+						}
+						
+						Double saldo = rekeningBukuBesar.getSaldo() != null ? rekeningBukuBesar.getSaldo() : 0.0;
+						saldo = saldo + value;
+						rekeningBukuBesar.setSaldo(saldo);
+						rekeningBukuBesarService.save(rekeningBukuBesar);
+						
+						// Insert Transaction History
+						this.HistoryKredit("4", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						
+					} else if (accType.trim().equals("2")) { // Rekening Tabungan
+						
+						TabunganPembentukanRekening tabunganPembentukanRekening = tabunganPembentukanRekeningService.findById(noRek);
+						
+						if (tabunganPembentukanRekening == null) {
+							throw new Exception("Rekening Tabungan " + noRek + " tidak ditemukan!");
+						}
+						
+						Double saldo = tabunganPembentukanRekening.getCurrent_saldo() != null ? tabunganPembentukanRekening.getCurrent_saldo() : 0.0;
+						saldo = saldo + value;
+						tabunganPembentukanRekening.setCurrent_saldo(saldo);
+						tabunganPembentukanRekeningService.save(tabunganPembentukanRekening);
+						
+						// Insert Transaction History
+						this.HistoryKredit("2", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						
+					} else if (accType.trim().equals("1")) { // Rekening Pinjaman
+						
+						RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRek);
+						
+						if (rekeningKredit == null) {
+							throw new Exception("Rekening Kredit " + noRek + " tidak ditemukan!");
+						}
+						
+						if ((koTran.trim().equals("1003")) || (koTran.trim().equals("1004"))) {
+							// 1003 & 1004, Pencairan Kredit, transaksinya Debit field BakiDebet di tabel RekeningKredit
+							Double bakiDebet = rekeningKredit.getBakiDebet() != null ? rekeningKredit.getBakiDebet() : 0.0;
+							bakiDebet = bakiDebet + value;
+							rekeningKredit.setBakiDebet(bakiDebet);
+							rekeningKreditService.save(rekeningKredit);
+							
+							// Insert Transaction History
+							this.HistoryKredit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						}
+						
+					}
+					
+				}
+				catch (Exception e) {
+					throw new Exception(e.getMessage());
+				}
+				
+				
+			} else if ((tranHistory.getValueKredit() != null) && (tranHistory.getValueKredit() > 0.0)) {
+				
+				// Transaksinya Kredit, Jadi Koreksinya Debit
+				Double value = tranHistory.getValueKredit();
+				String noRek = tranHistory.getNoRekKredit();
+				String accType = tranHistory.getAccountType();
+				
+				// KOREKSI DEBIT
+				try {
+					
+					if (accType.trim().equals("4")) { // Rekening Buku Besar
+						
+						RekeningBukuBesar rekeningBukuBesar = rekeningBukuBesarService.findOne(noRek);
+						
+						if (rekeningBukuBesar == null) {
+							throw new Exception("Rekening Buku Besar " + noRek + " tidak ditemukan!");
+						}
+						
+						Double saldo = rekeningBukuBesar.getSaldo() != null ? rekeningBukuBesar.getSaldo() : 0.0;
+						saldo = saldo - value;
+						rekeningBukuBesar.setSaldo(saldo);
+						rekeningBukuBesarService.save(rekeningBukuBesar);
+						
+						// Insert Transaction History
+						this.HistoryDebit("4", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						
+						// Tambahan utk Pinjaman : 
+						try {
+							
+							if ((koTran.trim().equals("1005")) || (koTran.trim().equals("1006"))) {
+								
+								// Mengembalikan DataTagihan
+								String strDueDate = tranHistory.getOtherNote().trim();
+								DataTagihan dataTagihan = dataTagihanService.findByNoRekeningAndDueDate(noRek, strDueDate);
+								
+								if (dataTagihan != null) {
+									if (note.trim().equals("Angsuran Bunga")) {
+										dataTagihan.setPokok(value);
+									} else if (note.trim().equals("Denda Pokok")) {
+										dataTagihan.setDendaPokok(value);
+									} else if (note.trim().equals("Denda Bunga")) {
+										dataTagihan.setDendaBunga(value);
+									}
+									
+									dataTagihan.setPaidStatus(null);
+									dataTagihan.setPaidDate(null);
+									dataTagihan.setPaidAmount(null);
+									dataTagihan.setPaidTranRef(null);
+									dataTagihanService.save(dataTagihan);
+									
+									rekeningKreditService.updateTotalKewajiban(noRek);
+								}
+								
+							}
+							
+						}
+						catch (Exception e) {
+							throw new Exception("Error Tambahan Pinjaman : " + e.getMessage());
+						}
+						
+					} else if (accType.trim().equals("2")) { // Rekening Tabungan
+						
+						TabunganPembentukanRekening tabunganPembentukanRekening = tabunganPembentukanRekeningService.findById(noRek);
+						
+						if (tabunganPembentukanRekening == null) {
+							throw new Exception("Rekening Tabungan " + noRek + " tidak ditemukan!");
+						}
+						
+						Double saldo = tabunganPembentukanRekening.getCurrent_saldo() != null ? tabunganPembentukanRekening.getCurrent_saldo() : 0.0;
+						saldo = saldo - value;
+						tabunganPembentukanRekening.setCurrent_saldo(saldo);
+						tabunganPembentukanRekeningService.save(tabunganPembentukanRekening);
+						
+						// Insert Transaction History
+						this.HistoryDebit("2", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						
+					} else if (accType.trim().equals("1")) { // Rekening Pinjaman
+						
+						RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRek);
+						
+						if (rekeningKredit == null) {
+							throw new Exception("Rekening Kredit " + noRek + " tidak ditemukan!");
+						}
+						
+						if ((koTran.trim().equals("1005")) || (koTran.trim().equals("1006"))) {
+							// 1005 & 1006, Bayar Angsuran Kredit, utk Angsuran Pokok, transaksinya Kredit field BakiDebet di tabel RekeningKredit
+							Double bakiDebet = rekeningKredit.getBakiDebet() != null ? rekeningKredit.getBakiDebet() : 0.0;
+							bakiDebet = bakiDebet - value;
+							rekeningKredit.setBakiDebet(bakiDebet);
+							rekeningKreditService.save(rekeningKredit);
+							
+							// Insert Transaction History
+							this.HistoryDebit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+							
+							// Mengembalikan DataTagihan
+							String strDueDate = tranHistory.getOtherNote().trim();
+							DataTagihan dataTagihan = dataTagihanService.findByNoRekeningAndDueDate(noRek, strDueDate);
+							
+							if (dataTagihan != null) {
+								if (note.trim().equals("Angsuran Pokok")) {
+									dataTagihan.setPokok(value);
+									dataTagihan.setPaidStatus(null);
+									dataTagihan.setPaidDate(null);
+									dataTagihan.setPaidAmount(null);
+									dataTagihan.setPaidTranRef(null);
+									dataTagihanService.save(dataTagihan);
+									
+									rekeningKreditService.updateTotalKewajiban(noRek);
+								}
+							}
+						}
+						
+						if ((koTran.trim().equals("1007")) || (koTran.trim().equals("1008"))) {
+							// 1007 & 1008, Pelunasan, transaksinya Kredit field BakiDebet di tabel RekeningKredit
+							Double bakiDebet = rekeningKredit.getBakiDebet() != null ? rekeningKredit.getBakiDebet() : 0.0;
+							bakiDebet = bakiDebet - value;
+							rekeningKredit.setBakiDebet(bakiDebet);
+							rekeningKreditService.save(rekeningKredit);
+							
+							// Insert Transaction History
+							this.HistoryDebit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						}
+						
+					}
+					
+				}
+				catch (Exception e) {
+					throw new Exception(e.getMessage());
+				}
+				
+			}
+			
+		}
+		
+		String result = "Sukses";
+		return result;
 		
 	}
 	

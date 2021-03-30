@@ -30,5 +30,17 @@ public class TranHistoryService {
 	public void delete(UUID id) {
 		tranHistoryRepository.delete(id);
 	}
+	
+	public List<TranHistory> findByUnitToday(String unitId) {
+		return tranHistoryRepository.findByUnitToday(unitId);
+	}
+	
+	public List<TranHistory> findByUnitAndKoTranToday(String unitId, String koTran) {
+		return tranHistoryRepository.findByUnitAndKoTranToday(unitId, koTran);
+	}
+	
+	public List<TranHistory> findByTranRef(String tranRef) {
+		return tranHistoryRepository.findByTranRef(tranRef);
+	}
 
 }
