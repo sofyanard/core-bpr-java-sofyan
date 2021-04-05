@@ -39,7 +39,7 @@ public class TranHistoryService {
 		return tranHistoryRepository.findByUnitAndKoTranToday(unitId, koTran);
 	}
 	
-	public List<TranHistory> findByTranRef(String tranRef) {
+	public List<TranHistory> findByTranRef(UUID tranRef) {
 		return tranHistoryRepository.findByTranRef(tranRef);
 	}
 

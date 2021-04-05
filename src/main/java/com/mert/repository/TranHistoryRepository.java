@@ -27,6 +27,6 @@ public interface TranHistoryRepository extends JpaRepository<TranHistory, UUID> 
 	@Query(value = "select * from tranhistory " + 
 			"where tran_ref = :tranRef " + 
 			"order by tran_date ", nativeQuery=true)
-	List<TranHistory> findByTranRef(@Param("tranRef") String tranRef);
+	List<TranHistory> findByTranRef(@Param("tranRef") UUID tranRef);
 
 }

@@ -1793,7 +1793,7 @@ public class TransaksiService {
 		String unitId = appUser.getUnitId().getUnitId();
 		
 		String sTranRef = tranRef.toString();
-		List<TranHistory> listTranHistory = tranHistoryService.findByTranRef(sTranRef);
+		List<TranHistory> listTranHistory = tranHistoryService.findByTranRef(tranRef);
 		
 		// Loop per Item dalam Satu TranRef
 		for (TranHistory tranHistory : listTranHistory) {
