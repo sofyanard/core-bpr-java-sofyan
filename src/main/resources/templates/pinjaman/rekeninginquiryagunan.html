@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pemantauan Data Pinjaman</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/inquirysaldo/' + ${noRekening}}">Informasi Saldo</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/inquirypelaporan/' + ${noRekening}}">Informasi Sandi Pelaporan</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/inquirytagihan/' + ${noRekening}}">Informasi Tagihan</a></li>
+					<li role="presentation" class="active"><a href="#">Informasi Agunan</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form id="form1" action="#" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+						
+							<input type="hidden" class="form-control" name="noRekening" />
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >No Agunan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.NoAgunan != null ? dataAgunan.NoAgunan : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Jenis Agunan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.JenisAgunan != null ? dataAgunan.JenisAgunan.JenisAgunanName : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Status Agunan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.StatusAgunan != null ? dataAgunan.StatusAgunan.StatusAgunanName : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Nama Pemilik</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.NamaPemilik != null ? dataAgunan.NamaPemilik : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Jenis Dokumen</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.DokPemilikan != null ? dataAgunan.DokPemilikan.dokdesc : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >No Dokumen</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.NoDok != null ? dataAgunan.NoDok : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Nilai Bank</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${fasilitasKredit.NilaiBank != null ? #numbers.formatDecimal(fasilitasKredit.NilaiBank, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Nilai NJOP</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.NilaiNjop != null ? #numbers.formatDecimal(dataAgunan.NilaiNjop, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Nilai Appraisal</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.NilaiAppraisal != null ? #numbers.formatDecimal(dataAgunan.NilaiAppraisal, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tanggal Appraisal</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.AppraisalDate != null ? #dates.format(dataAgunan.AppraisalDate, 'yyyy-MM-dd') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Alamat Agunan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.Alamat != null ? dataAgunan.Alamat : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Kabupaten / Kota</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.KotaKabupaten != null ? dataAgunan.KotaKabupaten.kotadesc : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Jenis Pengikatan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.Pengikatan != null ? dataAgunan.Pengikatan.PengikatanName : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tanggal Pengikatan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${dataAgunan.DatePengikatan != null ? #dates.format(dataAgunan.DatePengikatan, 'yyyy-MM-dd') : ''}" readonly />
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6">
+						
+							<div th:if="${asuransiPenjaminan != null}">
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Gol Penjamin</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.GolPenjamin != null ? asuransiPenjaminan.GolPenjamin.GolPenjaminName : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >No Identitas</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.NoId != null ? asuransiPenjaminan.NoId : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Nama</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.NamaPenjamin != null ? asuransiPenjaminan.NamaPenjamin : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Alamat</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.AlamatPenjamin != null ? asuransiPenjaminan.AlamatPenjamin : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Kabupaten / Kota</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.KotaKabupaten != null ? asuransiPenjaminan.KotaKabupaten.kotadesc : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Jenis Asuransi</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.JenisAsuransi != null ? asuransiPenjaminan.JenisAsuransi : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Nilai Premi</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.AmtPremi != null ? #numbers.formatDecimal(asuransiPenjaminan.AmtPremi, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >% Penjaminan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.PersenJamin != null ? asuransiPenjaminan.PersenJamin : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" >Penutupan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${asuransiPenjaminan.Penutupan != null ? asuransiPenjaminan.Penutupan : ''}" readonly />
+								</div>
+							</div>
+							
+							</div>
+							
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

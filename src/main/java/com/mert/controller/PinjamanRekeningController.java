@@ -38,6 +38,10 @@ import com.mert.service.ParameterService;
 import com.mert.service.StatusRekgService;
 import com.mert.service.ParameterKolektibilitasService;
 import com.mert.service.ParameterYesNoService;
+import com.mert.model.DataAgunan;
+import com.mert.model.AsuransiPenjaminan;
+import com.mert.service.DataAgunanService;
+import com.mert.service.AsuransiPenjaminanService;
 
 @Controller
 @RequestMapping("/pinjaman/rekening")
@@ -73,6 +77,12 @@ public class PinjamanRekeningController {
 	@Autowired
 	private DataTagihanService dataTagihanService;
 	
+	@Autowired
+	private DataAgunanService dataAgunanService;
+	
+	@Autowired
+	private AsuransiPenjaminanService asuransiPenjaminanService;
+	
 	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		AppUser user = appUserService.findOne(auth.getName());
@@ -93,6 +103,23 @@ public class PinjamanRekeningController {
 		modelAndView.addObject("nama", nama);
 		
 		modelAndView.setViewName("/pinjaman/rekeningsearchedit");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/search", method = RequestMethod.GET)
+	public ModelAndView SearchRead(String norek, Long nonasabah, String nama) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		List<RekeningKredit> listRekeningKredit = rekeningKreditService.searchByProp(norek, nonasabah, nama);
+		modelAndView.addObject("listRekeningKredit", listRekeningKredit);
+		
+		modelAndView.addObject("norek", norek);
+		modelAndView.addObject("nonasabah", nonasabah);
+		modelAndView.addObject("nama", nama);
+		
+		modelAndView.setViewName("/pinjaman/rekeningsearchread");
 		return modelAndView;
 	}
 	
@@ -476,6 +503,130 @@ public class PinjamanRekeningController {
 		}
 		
 		modelAndView.setViewName("redirect:/pinjaman/rekening/tagihanindex/" + noRekening);
+		return modelAndView;
+	}
+	
+	
+	
+	@RequestMapping(value="/inquirysaldo/{noRekening}", method = RequestMethod.GET)
+	public ModelAndView InquirySaldo(@PathVariable String noRekening) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		modelAndView.addObject("noRekening", noRekening);
+		modelAndView.setViewName("pinjaman/rekeninginquirysaldo");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/inquirypelaporan/{noRekening}", method = RequestMethod.GET)
+	public ModelAndView InquiryPelaporan(@PathVariable String noRekening) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		modelAndView.addObject("listSifatKredit", parameterService.listSandiBIOJKSifatKredit());
+		modelAndView.addObject("listPurpose", parameterService.listSandiBIOJKPurpose());
+		modelAndView.addObject("listOrientasi", parameterService.listSandiBIOJKOrientasi());
+		modelAndView.addObject("listJenisKredit", parameterService.listSandiBIOJKJenisKredit());
+		modelAndView.addObject("listJenisFasilitas", parameterService.listSandiBIOJKJenisFasilitas());
+		modelAndView.addObject("listLokasi", parameterService.listSandiBIOJKLokasi());
+		modelAndView.addObject("listGolJamin", parameterService.listSandiBIOJKGolJamin());
+		modelAndView.addObject("listSektor", parameterService.listSandiBIOJKSektor());
+		modelAndView.addObject("listPKAkad", parameterService.listSandiBIOJKPKAkad());
+		
+		RekeningKreditPelaporan rekeningKreditPelaporan = new RekeningKreditPelaporan();
+		rekeningKreditPelaporan.setNoRekening(rekeningKredit.getNoRekening());
+		rekeningKreditPelaporan.setSifatKredit(rekeningKredit.getSifatKredit());
+		rekeningKreditPelaporan.setJenisPenggunaan(rekeningKredit.getJenisPenggunaan());
+		rekeningKreditPelaporan.setOrientasi(rekeningKredit.getOrientasi());
+		rekeningKreditPelaporan.setJenisKredit(rekeningKredit.getJenisKredit());
+		rekeningKreditPelaporan.setKodeFasKhusus(rekeningKredit.getKodeFasKhusus());
+		rekeningKreditPelaporan.setNote(rekeningKredit.getNote());
+		rekeningKreditPelaporan.setLokasiProyek(rekeningKredit.getLokasiProyek());
+		rekeningKreditPelaporan.setNilaiProyek(rekeningKredit.getNilaiProyek());
+		rekeningKreditPelaporan.setGolonganPenjamin(rekeningKredit.getGolonganPenjamin());
+		rekeningKreditPelaporan.setKodeSektor(rekeningKredit.getKodeSektor());
+		rekeningKreditPelaporan.setKodePk(rekeningKredit.getKodePk());
+		rekeningKreditPelaporan.setTanggalPkPertama(rekeningKredit.getTanggalPkPertama());
+		rekeningKreditPelaporan.setNoPkPertama(rekeningKredit.getNoPkPertama());
+		rekeningKreditPelaporan.setTanggalPkAkhir(rekeningKredit.getTanggalPkAkhir());
+		rekeningKreditPelaporan.setNoPkAkhir(rekeningKredit.getNoPkAkhir());
+		rekeningKreditPelaporan.setTanggalAwalKredit(rekeningKredit.getTanggalAwalKredit());
+		rekeningKreditPelaporan.setTanggalMulai(rekeningKredit.getTanggalMulai());
+		modelAndView.addObject("rekeningKreditPelaporan", rekeningKreditPelaporan);
+		
+		modelAndView.addObject("noRekening", noRekening);
+		modelAndView.setViewName("pinjaman/rekeninginquirypelaporan");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/inquirytagihan/{noRekening}", method = RequestMethod.GET)
+	public ModelAndView InquiryTagihan(@PathVariable String noRekening) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		List<DataTagihan> listDataTagihan = dataTagihanService.findByNoRekening(noRekening);
+		modelAndView.addObject("listDataTagihan", listDataTagihan);
+		
+		Double sumPokok = dataTagihanService.sumPokokByNoRekening(noRekening);
+		Double sumBunga = dataTagihanService.sumBungaByNoRekening(noRekening);
+		Double sumDendaPokok = dataTagihanService.sumDendaPokokByNoRekening(noRekening);
+		Double sumDendaBunga = dataTagihanService.sumDendaBungaByNoRekening(noRekening);
+		Double sumLainnya = dataTagihanService.sumLainnyaByNoRekening(noRekening);
+		
+		if (sumPokok == null)
+			sumPokok = 0.0;
+		if (sumBunga == null)
+			sumBunga = 0.0;
+		if (sumDendaPokok == null)
+			sumDendaPokok = 0.0;
+		if (sumDendaBunga == null)
+			sumDendaBunga = 0.0;
+		if (sumLainnya == null)
+			sumLainnya = 0.0;
+		
+		Double totalKewajiban = sumPokok + sumBunga + sumDendaPokok + sumDendaBunga + sumLainnya;
+		
+		modelAndView.addObject("sumPokok", sumPokok);
+		modelAndView.addObject("sumBunga", sumBunga);
+		modelAndView.addObject("sumDendaPokok", sumDendaPokok);
+		modelAndView.addObject("sumDendaBunga", sumDendaBunga);
+		modelAndView.addObject("sumLainnya", sumLainnya);
+		modelAndView.addObject("totalKewajiban", totalKewajiban);
+		
+		modelAndView.addObject("noRekening", noRekening);
+		modelAndView.setViewName("pinjaman/rekeninginquirytagihan");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/inquiryagunan/{noRekening}", method = RequestMethod.GET)
+	public ModelAndView InquiryAgunan(@PathVariable String noRekening) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+		String noFasilitas = rekeningKredit.getNoFasilitas();
+		
+		FasilitasKredit fasilitasKredit = fasilitasKreditService.findOne(noFasilitas);
+		modelAndView.addObject("fasilitasKredit", fasilitasKredit);
+		
+		DataAgunan dataAgunan = dataAgunanService.findByNoFasilitas(noFasilitas);
+		modelAndView.addObject("dataAgunan", dataAgunan);
+		
+		AsuransiPenjaminan asuransiPenjaminan = asuransiPenjaminanService.findOne(noFasilitas);
+		modelAndView.addObject("asuransiPenjaminan", asuransiPenjaminan);
+		
+		modelAndView.addObject("noRekening", noRekening);
+		modelAndView.setViewName("pinjaman/rekeninginquiryagunan");
 		return modelAndView;
 	}
 	

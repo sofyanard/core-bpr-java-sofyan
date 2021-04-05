@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pemantauan Data Pinjaman</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation" class="active"><a href="#">Informasi Saldo</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/inquirypelaporan/' + ${noRekening}}">Informasi Sandi Pelaporan</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/inquirytagihan/' + ${noRekening}}">Informasi Tagihan</a></li>
+					<li role="presentation"><a th:href="@{'/pinjaman/rekening/inquiryagunan/' + ${noRekening}}">Informasi Agunan</a></li>
+				</ul>
+				<br/>
+				
+				<!-- Form Name -->
+				<form id="form1" action="#" class="form-horizontal" role="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label" >No Rekening</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.NoRekening}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">No Fasilitas</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.NoFasilitas}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">No Nasabah</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.NoNasabah}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Nama Nasabah</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.NamaNasabah}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.UnitId.UnitId} + ' - ' + ${rekeningKredit.UnitId.UnitName}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Produk</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.Produk.Desc}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label" for="BungaPersen">Bunga (%)</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" th:value="${rekeningKredit.BungaPersen}" readonly />
+								</div>
+								<div class="col-md-5">
+									<input type="text" class="form-control" th:value="${rekeningKredit.HitungBunga.Desc}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Kurs</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" th:value="${#numbers.formatDecimal(rekeningKredit.Kurs, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
+								</div>
+								<div class="col-md-5">
+									<input type="text" class="form-control" th:value="${rekeningKredit.Valuta.Desc}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Plafond</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${#numbers.formatDecimal(rekeningKredit.Plafond, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Eqv Plafond</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${#numbers.formatDecimal(rekeningKredit.EqvPlafond, 1, 'DEFAULT', 2, 'DEFAULT')}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tenor (bulan)</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.Tenor}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-5 control-label">Pinalti Angsuran Pokok (%)</label>
+								<div class="col-md-7">
+									<input type="text" class="form-control" th:value="${rekeningKredit.PinaltiPokokPersen}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-5 control-label">Pinalti Angsuran Bunga (%)</label>
+								<div class="col-md-7">
+									<input type="text" class="form-control" th:value="${rekeningKredit.PinaltiBungaPersen}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-4 control-label">Pinalti Pelunasan (%)</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" th:value="${rekeningKredit.PinaltiLunasPersen}" readonly />
+								</div>
+								<div class="col-md-4">
+									<input type="text" class="form-control" th:value="${rekeningKredit.PinaltiFlag.pinaltiName}" readonly />
+								</div>
+							</div>
+						
+						</div>
+						<div class="col-md-6">
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label">Status Rekening</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.StatusRekening != null ? rekeningKredit.StatusRekening.deskripsi : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Status Kolektibilitas</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.StatusKolektibilitas != null ? rekeningKredit.StatusKolektibilitas.KolektibilitasName : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Pencairan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.Disburse != null ? #numbers.formatDecimal(rekeningKredit.Disburse, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Baki Debet</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.BakiDebet != null ? #numbers.formatDecimal(rekeningKredit.BakiDebet, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Kelonggaran Tarik</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.AvailableAmount != null ? #numbers.formatDecimal(rekeningKredit.AvailableAmount, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tunggakan Pokok</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.TotalPokok != null ? #numbers.formatDecimal(rekeningKredit.TotalPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tunggakan Bunga</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.TotalBunga != null ? #numbers.formatDecimal(rekeningKredit.TotalBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Denda Pokok</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.TotalDendaPokok != null ? #numbers.formatDecimal(rekeningKredit.TotalDendaPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Denda Bunga</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.TotalDendaBunga != null ? #numbers.formatDecimal(rekeningKredit.TotalDendaBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tunggakan Lainnya</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.TotalLainnya != null ? #numbers.formatDecimal(rekeningKredit.TotalLainnya, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Total Tunggakan</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.TotalKewajiban != null ? #numbers.formatDecimal(rekeningKredit.TotalKewajiban, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Nilai Pinalti</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningKredit.NilaiPinalti != null ? #numbers.formatDecimal(rekeningKredit.NilaiPinalti, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</fieldset>
+				</form>
+				
+			</div>
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+	
+		$("#form1").validate();
+		
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>
