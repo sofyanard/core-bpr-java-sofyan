@@ -102,7 +102,7 @@ public class PinjamanRekeningController {
 		modelAndView.addObject("nonasabah", nonasabah);
 		modelAndView.addObject("nama", nama);
 		
-		modelAndView.setViewName("/pinjaman/rekeningsearchedit");
+		modelAndView.setViewName("pinjaman/rekeningsearchedit");
 		return modelAndView;
 	}
 	
@@ -119,7 +119,7 @@ public class PinjamanRekeningController {
 		modelAndView.addObject("nonasabah", nonasabah);
 		modelAndView.addObject("nama", nama);
 		
-		modelAndView.setViewName("/pinjaman/rekeningsearchread");
+		modelAndView.setViewName("pinjaman/rekeningsearchread");
 		return modelAndView;
 	}
 	

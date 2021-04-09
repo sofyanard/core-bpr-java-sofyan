@@ -162,7 +162,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/biayaadminkredittunai");
+		modelAndView.setViewName("kasir/pinjaman/biayaadminkredittunai");
 		return modelAndView;
 	}
 	
@@ -314,7 +314,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/biayaadminkreditrekening");
+		modelAndView.setViewName("kasir/pinjaman/biayaadminkreditrekening");
 		return modelAndView;
 	}
 	
@@ -404,7 +404,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/pencairankredittunai");
+		modelAndView.setViewName("kasir/pinjaman/pencairankredittunai");
 		return modelAndView;
 	}
 	
@@ -550,7 +550,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/pencairankreditrekening");
+		modelAndView.setViewName("kasir/pinjaman/pencairankreditrekening");
 		return modelAndView;
 	}
 	
@@ -660,7 +660,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/angsurankredittunai");
+		modelAndView.setViewName("kasir/pinjaman/angsurankredittunai");
 		return modelAndView;
 	}
 	
@@ -826,7 +826,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/angsurankreditrekening");
+		modelAndView.setViewName("kasir/pinjaman/angsurankreditrekening");
 		return modelAndView;
 	}
 	
@@ -910,7 +910,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/pelunasankredittunai");
+		modelAndView.setViewName("kasir/pinjaman/pelunasankredittunai");
 		return modelAndView;
 	}
 	
@@ -1050,7 +1050,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
 		modelAndView.addObject("mode", "MODE_POSTING");
-		modelAndView.setViewName("/kasir/pinjaman/pelunasankreditrekening");
+		modelAndView.setViewName("kasir/pinjaman/pelunasankreditrekening");
 		return modelAndView;
 	}
 	
