@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4 th:text="${'Transaksi Ref No : ' + trxRefNo}"></h4>
+		
+	    <table class="table">
+	    	<thead>
+	    		<tr>
+	    			<th scope="col">Tanggal</th>
+		    		<th scope="col">Kode</th>
+		    		<th scope="col">Tipe</th>
+		    		<th scope="col">Debit</th>
+		    		<th scope="col"></th>
+		    		<th scope="col">Kredit</th>
+		    		<th scope="col"></th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+		    	<tr scope="row" th:each="tranHistory : ${listTranHistory}">
+		    		<td th:text="${tranHistory.TranDate}"></td>
+		    		<td th:text="${tranHistory.KoTran}"></td>
+		    		<td th:text="${tranHistory.AccountType}"></td>
+		    		<td th:text="${tranHistory.NoRekDebit}"></td>
+		    		<td th:text="${tranHistory.ValueDebit}"></td>
+		    		<td th:text="${tranHistory.NoRekKredit}"></td>
+		    		<td th:text="${tranHistory.ValueKredit}"></td>
+		    	</tr>
+	    	</tbody>
+	    </table>
+	</div>
+	
+	<!-- jQuery 2.2.3 -->
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<!-- popper -->
+	<script src="/js/popper.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="/js/bootstrap.min.js"></script>
+	
+	<script src="/js/bootstrap-select.min.js"></script>
+	<script src="/js/jquery.validate.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+			window.print();
+		});
+	</script>
+	
+</body>
+</html>
