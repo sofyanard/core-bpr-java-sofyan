@@ -93,6 +93,8 @@ public class KasirTransaksiPinjamanController {
 		return modelAndView;
 	}
 	
+	/* 1001 */
+	
 	@RequestMapping(value="/biayaadminkredittunaisearch", method = RequestMethod.GET)
 	public ModelAndView BiayaAdminKreditTunaiSearch(String errMsg) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -142,7 +144,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/biayaadminkredittunai/{noReferensi}", method = RequestMethod.GET)
-	public ModelAndView BiayaAdminKreditTunai(@PathVariable String noReferensi, String errMsg, String sccMsg) {
+	public ModelAndView BiayaAdminKreditTunai(@PathVariable String noReferensi, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -161,6 +163,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("noReferensi", noReferensi);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/biayaadminkredittunai");
 		return modelAndView;
@@ -185,9 +188,12 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/biayaadminkredittunai/" + noReferensi + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/biayaadminkredittunai/" + noReferensi + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
+	
+	/* 1002 */
 	
 	@RequestMapping(value="/biayaadminkreditrekeningsearch", method = RequestMethod.GET)
 	public ModelAndView BiayaAdminKreditRekeningSearch(String errMsg) {
@@ -275,7 +281,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/biayaadminkreditrekening/{noReferensi}/{noRekBeban}/{jenisRekBeban}", method = RequestMethod.GET)
-	public ModelAndView BiayaAdminKreditRekening(@PathVariable String noReferensi, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg) {
+	public ModelAndView BiayaAdminKreditRekening(@PathVariable String noReferensi, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -313,6 +319,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("jenisRekBeban", jenisRekBeban);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/biayaadminkreditrekening");
 		return modelAndView;
@@ -337,9 +344,12 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/biayaadminkreditrekening/" + noReferensi + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/biayaadminkreditrekening/" + noReferensi + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
+	
+	/* 1003 */
 
 	@RequestMapping(value="/pencairankredittunaisearch", method = RequestMethod.GET)
 	public ModelAndView PencairanKreditTunaiSearch(String errMsg) {
@@ -387,7 +397,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/pencairankredittunai/{noRekKredit}", method = RequestMethod.GET)
-	public ModelAndView PencairanKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg) {
+	public ModelAndView PencairanKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -403,6 +413,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("noRekKredit", noRekKredit);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/pencairankredittunai");
 		return modelAndView;
@@ -427,9 +438,12 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/pencairankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pencairankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
+	
+	/* 1004 */
 
 	@RequestMapping(value="/pencairankreditrekeningsearch", method = RequestMethod.GET)
 	public ModelAndView PencairanKreditRekeningSearch(String errMsg) {
@@ -514,7 +528,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/pencairankreditrekening/{noRekKredit}/{noRekPenerima}/{jenisRekPenerima}", method = RequestMethod.GET)
-	public ModelAndView PencairanKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekPenerima, @PathVariable String jenisRekPenerima, String errMsg, String sccMsg) {
+	public ModelAndView PencairanKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekPenerima, @PathVariable String jenisRekPenerima, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -549,6 +563,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("jenisRekPenerima", jenisRekPenerima);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/pencairankreditrekening");
 		return modelAndView;
@@ -573,9 +588,12 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/pencairankreditrekening/" + noRekKredit + "/" + noRekPenerima + "/" + jenisRekPenerima + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pencairankreditrekening/" + noRekKredit + "/" + noRekPenerima + "/" + jenisRekPenerima + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
+	
+	/* 1005 */
 	
 	@RequestMapping(value="/angsurankredittunaisearch", method = RequestMethod.GET)
 	public ModelAndView AngsuranKreditTunaiSearch(String errMsg) {
@@ -619,7 +637,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/angsurankredittunai/{noRekKredit}", method = RequestMethod.GET)
-	public ModelAndView AngsuranKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg) {
+	public ModelAndView AngsuranKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -659,6 +677,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("noRekKredit", noRekKredit);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/angsurankredittunai");
 		return modelAndView;
@@ -683,9 +702,12 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
+	
+	/* 1006 */
 	
 	@RequestMapping(value="/angsurankreditrekeningsearch", method = RequestMethod.GET)
 	public ModelAndView AngsuranKreditRekeningSearch(String errMsg) {
@@ -766,7 +788,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/angsurankreditrekening/{noRekKredit}/{noRekBeban}/{jenisRekBeban}", method = RequestMethod.GET)
-	public ModelAndView AngsuranKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg) {
+	public ModelAndView AngsuranKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -825,6 +847,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("jenisRekBeban", jenisRekBeban);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/angsurankreditrekening");
 		return modelAndView;
@@ -849,9 +872,12 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/angsurankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
+	
+	/* 1007 */
 	
 	@RequestMapping(value="/pelunasankredittunaisearch", method = RequestMethod.GET)
 	public ModelAndView PelunasanKreditTunaiSearch(String errMsg) {
@@ -885,7 +911,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/pelunasankredittunai/{noRekKredit}", method = RequestMethod.GET)
-	public ModelAndView PelunasanKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg) {
+	public ModelAndView PelunasanKreditTunai(@PathVariable String noRekKredit, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -909,6 +935,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("noRekKredit", noRekKredit);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/pelunasankredittunai");
 		return modelAndView;
@@ -933,9 +960,12 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankredittunai/" + noRekKredit + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
+	
+	/* 1008 */
 	
 	@RequestMapping(value="/pelunasankreditrekeningsearch", method = RequestMethod.GET)
 	public ModelAndView PelunasanKreditRekeningSearch(String errMsg) {
@@ -1006,7 +1036,7 @@ public class KasirTransaksiPinjamanController {
 	}
 	
 	@RequestMapping(value="/pelunasankreditrekening/{noRekKredit}/{noRekBeban}/{jenisRekBeban}", method = RequestMethod.GET)
-	public ModelAndView PelunasanKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg) {
+	public ModelAndView PelunasanKreditRekening(@PathVariable String noRekKredit, @PathVariable String noRekBeban, @PathVariable String jenisRekBeban, String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -1049,6 +1079,7 @@ public class KasirTransaksiPinjamanController {
 		modelAndView.addObject("jenisRekBeban", jenisRekBeban);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.addObject("mode", "MODE_POSTING");
 		modelAndView.setViewName("kasir/pinjaman/pelunasankreditrekening");
 		return modelAndView;
@@ -1073,7 +1104,8 @@ public class KasirTransaksiPinjamanController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/pinjaman/pelunasankreditrekening/" + noRekKredit + "/" + noRekBeban + "/" + jenisRekBeban + "?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
 	

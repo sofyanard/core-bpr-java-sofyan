@@ -53,6 +53,13 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					<h4><i class="icon fa fa-check"></i> Success!</h4>
 					<h5 th:text="${sccMsg}"></h5>
+					<p>
+						<button class="btn btn-success" 
+								th:attr="data-url=${validUrl}" 
+								onClick="popupvalidation(this.getAttribute('data-url'))">
+							Print Validasi
+						</button>
+					</p>
 				</div>
 				
 				<!-- Error Alert -->
@@ -248,6 +255,13 @@
 			hitung();
 			$('#biayaLain').attr('readonly', true);
 		}
+	}
+	
+	function popupvalidation(vurl) {
+		popup = window.open('about:blank', 'Validasi', 'width=800,height=600,toolbar=no,menubar=no,location=no,directories=no,resizable=no,scrollbars=no');
+		popup.location.href = vurl;
+		popup.focus();
+		return false;
 	}
 </script>
 
