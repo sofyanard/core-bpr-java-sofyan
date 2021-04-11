@@ -15,6 +15,11 @@ public interface LapKeuDailyRepository extends JpaRepository<LapKeuDaily, Intege
 			"order by id ", nativeQuery=true)
 	List<LapKeuDaily> findByTanggal(@Param("strDate") String strDate);
 	
+	@Query(value = "select * from lapkeudaily " + 
+			"where unit_id = :unitId and jenis_id = :jenisId " + 
+			"order by id ", nativeQuery=true)
+	List<LapKeuDaily> findByUnitAndJenis(@Param("unitId") String unitId, @Param("jenisId") String jenisId);
+	
 	@Query(value = "select " + 
 			"ROW_NUMBER () OVER (ORDER BY a.jenis_id, " + 
 			"b.posisi_id, b2.unit_id, " + 

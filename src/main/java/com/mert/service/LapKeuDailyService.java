@@ -38,6 +38,10 @@ public class LapKeuDailyService {
 		return lapKeuDailyRepository.findByTanggal(strDate);
 	}
 	
+	public List<LapKeuDaily> findByUnitAndJenis(String unitId, String jenisId) {
+		return lapKeuDailyRepository.findByUnitAndJenis(unitId, jenisId);
+	}
+	
 	public List<LapKeuDaily> customEodLapKeu() {
 		return lapKeuDailyRepository.customEodLapKeu();
 	}

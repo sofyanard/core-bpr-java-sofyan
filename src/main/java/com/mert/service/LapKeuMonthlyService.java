@@ -34,6 +34,14 @@ public class LapKeuMonthlyService {
 		return lapKeuMonthlyRepository.findByTanggal(strDate);
 	}
 	
+	public List<LapKeuMonthly> findByTanggalAndUnitAndJenis(String strDate, String unitId, String jenisId) {
+		return lapKeuMonthlyRepository.findByTanggalAndUnitAndJenis(strDate, unitId, jenisId);
+	}
+	
+	public List<String> listTanggal() {
+		return lapKeuMonthlyRepository.listTanggal();
+	}
+	
 	public List<LapKeuMonthly> customEodLapKeu() {
 		return lapKeuMonthlyRepository.customEodLapKeu();
 	}

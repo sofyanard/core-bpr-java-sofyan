@@ -30,5 +30,9 @@ public class ParameterProdukService {
 	public void save(ParameterProduk parameterProduk) {
 		parameterProdukRepository.save(parameterProduk);
 	}
+	
+	public ParameterProduk findByBukuBesar(String bukuBesarId) {
+		return parameterProdukRepository.findByBukuBesar(bukuBesarId);
+	}
 
 }

@@ -12,5 +12,8 @@ public interface ParameterProdukRepository extends JpaRepository<ParameterProduk
 	
 	@Query(value = "select * from produk p where p.type = :productTypeId ", nativeQuery=true)
 	List<ParameterProduk> findByType(@Param("productTypeId") String productTypeId);
+	
+	@Query(value = "select * from produk p where p.buku_besar = :bukuBesarId ", nativeQuery=true)
+	ParameterProduk findByBukuBesar(@Param("bukuBesarId") String bukuBesarId);
 
 }

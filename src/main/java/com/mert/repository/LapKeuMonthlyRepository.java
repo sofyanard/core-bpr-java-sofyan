@@ -15,6 +15,18 @@ public interface LapKeuMonthlyRepository extends JpaRepository<LapKeuMonthly, In
 			"order by id ", nativeQuery=true)
 	List<LapKeuMonthly> findByTanggal(@Param("strDate") String strDate);
 	
+	@Query(value = "select tanggal from " + 
+			"(select distinct to_char(tanggal, 'yyyy-MM-dd') as tanggal from lapkeumonthly) x " + 
+			"order by tanggal desc limit 6 ", nativeQuery=true)
+	List<String> listTanggal();
+	
+	@Query(value = "select * from lapkeumonthly " + 
+			"where to_char(tanggal, 'yyyy-MM-dd') = :strDate " + 
+			"and unit_id = :unitId " + 
+			"and jenis_id = :jenisId " + 
+			"order by id ", nativeQuery=true)
+	List<LapKeuMonthly> findByTanggalAndUnitAndJenis(@Param("strDate") String strDate, @Param("unitId") String unitId, @Param("jenisId") String jenisId);
+	
 	@Query(value = "select " + 
 			"ROW_NUMBER () OVER (ORDER BY a.jenis_id, " + 
 			"b.posisi_id, b2.unit_id, " + 

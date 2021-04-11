@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+	<header th:replace="fragments :: main-header"></header>
+	<!-- Left side column. contains the logo and sidebar -->
+	<aside th:replace="fragments :: main-sidebar"></aside>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<!-- <section class="content-header"> -->
+		<!-- </section> -->
+
+		<!-- Main content -->
+		<section class="content">
+			
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+			
+			<div class="container">
+				<legend>Pemantauan Buku Besar</legend>
+				
+				<ul class="nav nav-pills">
+					<li role="presentation" class="active"><a href="#">Pemantauan Rincian Buku Besar</a></li>
+					<li role="presentation"><a th:href="@{/akunting/laporankeuanganharian}">Laporan Keuangan Harian</a></li>
+					<li role="presentation"><a th:href="@{/akunting/laporankeuanganbulanan}">Laporan Keuangan Bulanan</a></li>
+				</ul>
+				<br/>
+				
+				<div class="row">
+					<div class="col-md-9">
+					
+						<form id="form1" action="#" method="GET" th:action="@{'/akunting/pemantauanbukubesar'}" class="form-horizontal" role="form">
+						
+							<div class="form-group row">
+								<label class="col-md-3 control-label">Buku Besar</label>
+								<div class="col-md-9">
+									<select class="selectpicker" data-live-search="true" name="bbid">
+										<option th:each="bukubesar: ${listBukuBesar}" th:value="${bukubesar.BukuBesarId}" th:text="${bukubesar.BukuBesarId + ' - ' + bukubesar.BukuBesarName}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label"></label>
+								<div class="col-md-9">
+									<button type="submit" class="btn btn-primary">Tampilkan</button>
+								</div>
+							</div>
+							
+						</form>
+						
+						<!-- DETAIL BUKU BESAR -->
+						<div th:if="${(bbid != null) && (bbid != '')}">
+							
+							<div class="form-group row">
+								<label class="col-md-3 control-label">No Buku Besar</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${bbid}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<label class="col-md-3 control-label">Deskripsi</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${bukuBesar.BukuBesarName}" readonly />
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<label class="col-md-3 control-label">Saldo Buku Besar</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" th:value="${rekeningBukuBesar.Saldo != null ? #numbers.formatDecimal(rekeningBukuBesar.Saldo, 1, 'DEFAULT', 2, 'DEFAULT') : ''}" readonly />
+								</div>
+							</div>
+							
+						</div>
+						
+						<!-- LIST REKENING PINJAMAN -->
+						<div th:if="${(listRekeningKredit != null)}">
+						
+							<table id="table1" class="table table-bordered table-striped" width="80%">
+								<thead>
+									<tr class="table-active">
+										<th>No Rekening</th>
+										<th>Nama</th>
+										<th>Saldo</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="rekeningKredit : ${listRekeningKredit}">
+										<td th:text="${rekeningKredit.NoRekening}"></td>
+										<td th:text="${rekeningKredit.NamaNasabah}"></td>
+										<td th:text="${rekeningKredit.BakiDebet != null ? #numbers.formatDecimal(rekeningKredit.BakiDebet, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tfoot>
+							</table>
+						
+						</div>
+						
+						<!-- LIST REKENING TABUNGAN -->
+						<div th:if="${(listRekeningTabungan != null)}">
+						
+						</div>
+						
+					</div>
+				</div>
+				
+			</div>	
+				
+			<!-- MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT MY CONTENT -->
+
+		</section>
+		<!-- /.content -->
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/js/jquery-2.2.3.min.js"></script>
+<!-- popper -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$("#form1").validate();
+		
+	});
+</script>
+
+<!-- FastClick -->
+<script src="/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/js/demo.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- Morris.js charts -->
+<script src="/js/raphael-min.js"></script>
+<script src="/js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/jquery.sparkline.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/js/jquery.knob.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
+,
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+</body>
+</html>

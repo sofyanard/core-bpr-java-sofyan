@@ -45,6 +45,10 @@ public class RekeningKreditService {
 		return rekeningKreditRepository.findByNoFasilitas(nofasilitas);
 	}
 	
+	public List<RekeningKredit> findByProduk(String produkId) {
+		return rekeningKreditRepository.findByProduk(produkId);
+	}
+	
 	public List<RekeningKredit> searchByProp(String norek, Long nonasabah, String nama) {
 		if ((norek != null) && (!norek.trim().isEmpty())) {
 			RekeningKredit rekeningKredit = rekeningKreditRepository.findOne(norek);

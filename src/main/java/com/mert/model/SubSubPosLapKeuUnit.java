@@ -23,7 +23,7 @@ public class SubSubPosLapKeuUnit {
 	private Integer Id;
 	
 	@ManyToOne
-	@JoinColumn(name = "subpos_id", referencedColumnName = "subpos_id")
+	@JoinColumn(name = "subsubpos_id", referencedColumnName = "subsubpos_id")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private SubSubPosLapKeu SubSubPosLapKeu;
 	

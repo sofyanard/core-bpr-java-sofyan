@@ -19,6 +19,9 @@ public interface RekeningKreditRepository extends JpaRepository<RekeningKredit, 
 	@Query(value = "select * from rekeningkredit n where lower(n.nama_nasabah) like %:namanasabah% ", nativeQuery=true)
 	List<RekeningKredit> findByNamaNasabah(@Param("namanasabah") String namanasabah);
 	
+	@Query(value = "select * from rekeningkredit n where n.produk = :produkId ", nativeQuery=true)
+	List<RekeningKredit> findByProduk(@Param("produkId") String produkId);
+	
 	
 	
 	@Query(value = "select n.* from rekeningkredit n " +
