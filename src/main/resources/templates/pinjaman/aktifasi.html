@@ -112,7 +112,7 @@
 								<div class="form-group row">
 									<label class="col-md-3 control-label">Tanggal Biaya</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:value="${#dates.format(fasilitasKredit2.getPembayaranBiayaDate(), 'dd-MM-yyyy')}" readonly />
+										<input type="text" class="form-control" th:value="${(fasilitasKredit2.PembayaranBiayaDate != null) ? #dates.format(fasilitasKredit2.getPembayaranBiayaDate(), 'dd-MM-yyyy') : ''}" readonly />
 									</div>
 								</div>
 								
@@ -140,14 +140,14 @@
 								<div class="form-group row">
 									<label class="col-md-3 control-label">Tanggal Angsuran</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:value="${(rekeningKredit != null) ? #dates.format(rekeningKredit.getDueDate(), 'dd-MM-yyyy') : ''}" readonly />
+										<input type="text" class="form-control" th:value="${((rekeningKredit != null) && (rekeningKredit.getDueDate() != null)) ? #dates.format(rekeningKredit.getDueDate(), 'dd-MM-yyyy') : ''}" readonly />
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-md-3 control-label" for="submitButton"></label>
 									<div class="col-md-9">
-										<button type="submit" id="submitButton" name="submitButton" class="btn btn-primary" th:disabled="${rekeningKredit != null}">Generate</button>
+										<button type="submit" id="submitButton" name="submitButton" class="btn btn-primary" th:disabled="${fasilitasKredit2.getPembayaranBiayaDate() == null}">Generate</button>
 										<a th:href="@{/pinjaman/fasilitas/aktifasisearch}" class="btn btn-inverse">Cancel</a>
 									</div>
 								</div>

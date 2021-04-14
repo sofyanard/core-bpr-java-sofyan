@@ -74,7 +74,7 @@ public class NasabahController {
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
 		modelAndView.addObject("nasabahBadanUsaha", new NasabahBadanUsaha());
 		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
-		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
+		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("SEKTOR"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
 		modelAndView.setViewName("nasabah/createbadanusaha");
@@ -142,7 +142,7 @@ public class NasabahController {
 		NasabahBadanUsaha nasabahBadanUsaha = nasabahService.FindByIdBadanUsaha(nonasabah);
 		modelAndView.addObject("nasabahBadanUsaha", nasabahBadanUsaha);
 		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
-		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
+		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("SEKTOR"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahBadanUsaha.getOfficeprov()));
 		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
@@ -184,7 +184,7 @@ public class NasabahController {
 		NasabahJobnSpouse nasabahJobnSpouse = nasabahService.FindByIdJobnSpouse(nonasabah);
 		modelAndView.addObject("nasabahJobnSpouse", nasabahJobnSpouse);
 		modelAndView.addObject("jobcodes", parameterService.listSandiBIOJKJobCode());
-		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
+		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("SEKTOR"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahJobnSpouse.getOfficeprov()));
 		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
@@ -335,7 +335,7 @@ public class NasabahController {
 		NasabahBadanUsaha nasabahBadanUsaha = nasabahService.FindByIdBadanUsaha(nonasabah);
 		modelAndView.addObject("nasabahBadanUsaha", nasabahBadanUsaha);
 		modelAndView.addObject("jenisbus", parameterService.ListAllBadanUsaha());
-		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
+		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("SEKTOR"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahBadanUsaha.getOfficeprov()));
 		modelAndView.addObject("homestatuses", parameterService.ListAllHomeStatus());
@@ -356,7 +356,7 @@ public class NasabahController {
 		NasabahJobnSpouse nasabahJobnSpouse = nasabahService.FindByIdJobnSpouse(nonasabah);
 		modelAndView.addObject("nasabahJobnSpouse", nasabahJobnSpouse);
 		modelAndView.addObject("jobcodes", parameterService.listSandiBIOJKJobCode());
-		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("BIDUSAHA"));
+		modelAndView.addObject("bidusahas", parameterService.listSandiBIOJKByKategori("SEKTOR"));
 		modelAndView.addObject("provinsis", parameterService.listAllProvinsi());
 		modelAndView.addObject("kotas", parameterService.listKotaKabByProv(nasabahJobnSpouse.getOfficeprov()));
 		modelAndView.addObject("jenisids", parameterService.listAllJenisID());
