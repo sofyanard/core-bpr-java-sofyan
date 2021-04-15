@@ -170,6 +170,7 @@
 						</div>
 						<div class="col-md-6">
 						
+							<!--
 							<div class="form-group">
 								<label class="col-md-4 control-label" for="ProvisiPersen">Biaya Provisi (%)</label>
 								<div class="col-md-8">
@@ -177,10 +178,12 @@
 									<span class="text-danger" th:if="${#fields.hasErrors('ProvisiPersen')}" th:errors="*{ProvisiPersen}">ProvisiPersen Error</span>
 								</div>
 							</div>
+							-->
+							<input type="hidden" class="form-control" id="ProvisiPersen" name="ProvisiPersen" th:field=*{ProvisiPersen} />
 							
 							<div class="form-group">
-								<label class="col-md-4 control-label" for="ProvisiAmount">Biaya Provisi Nominal</label>
-								<div class="col-md-8">
+								<label class="col-md-3 control-label" for="ProvisiAmount">Biaya Provisi</label>
+								<div class="col-md-9">
 									<input type="number" class="form-control" id="ProvisiAmount" name="ProvisiAmount" th:field=*{ProvisiAmount} />
 									<span class="text-danger" th:if="${#fields.hasErrors('ProvisiAmount')}" th:errors="*{ProvisiAmount}">ProvisiAmount Error</span>
 								</div>
@@ -303,7 +306,9 @@
 							<div class="col-md-9">
 								<button type="submit" id="submitButton" name="submitButton" class="btn btn-success">Save</button>
 								<a th:href="@{'/pinjaman/fasilitas/edit/' + ${nofasilitas}}" class="btn btn-inverse">Cancel</a>
+								<!--
 								<button type="button" class="btn btn-primary">Submit for Approval</button>
+								-->
 							</div>
 						</div>
 					</div>

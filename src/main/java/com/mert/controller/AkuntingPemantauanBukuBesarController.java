@@ -1,8 +1,18 @@
 package com.mert.controller;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -135,9 +145,6 @@ public class AkuntingPemantauanBukuBesarController {
 					// Cari semua rekening pinjaman berdasarkan produk
 					List<RekeningKredit> listRekeningKredit = rekeningKreditService.findByProduk(parameterProduk.getCode());
 					modelAndView.addObject("listRekeningKredit", listRekeningKredit);
-					
-					System.out.println("listRekeningKredit");
-					System.out.println(listRekeningKredit.toString());
 					
 				}
 				
@@ -352,6 +359,235 @@ public class AkuntingPemantauanBukuBesarController {
 		modelAndView.addObject("tanggal", tanggal);
 		modelAndView.setViewName("akunting/laporankeuanganbulanan");
 		return modelAndView;
+	}
+	
+	@RequestMapping(value="/akunting/laporankeuanganharianexcel", method = RequestMethod.GET)
+	public void LaporanKeuanganHarianExcel(HttpServletResponse response, String unit, String jenis) throws IOException {
+		
+		if ((unit != null) && (!unit.isEmpty()) && (jenis != null) && (!jenis.isEmpty())) {
+			
+			List<LapKeuDaily> listLapKeuDaily = lapKeuDailyService.findByUnitAndJenis(unit, jenis);
+			
+			response.setContentType("application/octet-stream");
+			String heardeKey = "Content-Disposition";
+			String headerValue = "attachment; filename=excelbook1.xlsx";
+			response.setHeader(heardeKey, headerValue);
+			
+			XSSFWorkbook xSSFWorkbook = new XSSFWorkbook();
+			XSSFSheet xSSFSheet = xSSFWorkbook.createSheet("Sheet1");
+			
+			// Header Row
+			Row row = xSSFSheet.createRow(0);
+			
+			List<String> listHeaderColumn = Arrays.asList("Posisi", "Pos", "Sub Pos", "Sub Sub Pos", "Buku Besar", "Saldo");
+			
+			Integer column = 0;
+			for (String headerColumn : listHeaderColumn) {
+				Cell cell = row.createCell(column);
+				cell.setCellValue(headerColumn);
+				column++;
+			}
+			
+			// Data Rows
+			Integer dataRow = 1;
+			
+			for (LapKeuDaily lapKeuDaily : listLapKeuDaily) {
+				
+				row = xSSFSheet.createRow(dataRow);
+				
+				Cell cell = row.createCell(0); // Posisi
+				if (lapKeuDaily.getPosisiLapKeu() != null) {
+					cell.setCellValue(lapKeuDaily.getPosisiLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(1); // Pos
+				if (lapKeuDaily.getPosLapKeu() != null) {
+					cell.setCellValue(lapKeuDaily.getPosLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(2); // Sub Pos
+				if (lapKeuDaily.getSubPosLapKeu() != null) {
+					cell.setCellValue(lapKeuDaily.getSubPosLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(3); // Sub Sub Pos
+				if (lapKeuDaily.getSubSubPosLapKeu() != null) {
+					cell.setCellValue(lapKeuDaily.getSubSubPosLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(4); // Buku Besar
+				if (lapKeuDaily.getRekeningBukuBesar() != null) {
+					cell.setCellValue(lapKeuDaily.getRekeningBukuBesar().getNoRekening());
+				}
+				
+				cell = row.createCell(5); // Saldo
+				if (lapKeuDaily.getValue() != null) {
+					cell.setCellValue(lapKeuDaily.getValue());
+				}
+				
+				dataRow++;
+				
+			}
+			
+			ServletOutputStream servletOutputStream = response.getOutputStream();
+			xSSFWorkbook.write(servletOutputStream);
+			xSSFWorkbook.close();
+			servletOutputStream.close();
+			
+		}
+		
+	}
+	
+	@RequestMapping(value="/akunting/laporankeuanganbulananexcel", method = RequestMethod.GET)
+	public void LaporanKeuanganBulananExcel(HttpServletResponse response, String unit, String jenis, String tanggal) throws IOException {
+		
+		if ((unit != null) && (!unit.isEmpty()) && (jenis != null) && (!jenis.isEmpty()) && (tanggal != null) && (!tanggal.isEmpty())) {
+			
+			List<LapKeuMonthly> listLapKeuMonthly = lapKeuMonthlyService.findByTanggalAndUnitAndJenis(tanggal, unit, jenis);
+			
+			response.setContentType("application/octet-stream");
+			String heardeKey = "Content-Disposition";
+			String headerValue = "attachment; filename=excelbook1.xlsx";
+			response.setHeader(heardeKey, headerValue);
+			
+			XSSFWorkbook xSSFWorkbook = new XSSFWorkbook();
+			XSSFSheet xSSFSheet = xSSFWorkbook.createSheet("Sheet1");
+			
+			// Header Row
+			Row row = xSSFSheet.createRow(0);
+			
+			List<String> listHeaderColumn = Arrays.asList("Posisi", "Pos", "Sub Pos", "Sub Sub Pos", "Buku Besar", "Saldo");
+			
+			Integer column = 0;
+			for (String headerColumn : listHeaderColumn) {
+				Cell cell = row.createCell(column);
+				cell.setCellValue(headerColumn);
+				column++;
+			}
+			
+			// Data Rows
+			Integer dataRow = 1;
+			
+			for (LapKeuMonthly lapKeuMonthly : listLapKeuMonthly) {
+				
+				row = xSSFSheet.createRow(dataRow);
+				
+				Cell cell = row.createCell(0); // Posisi
+				if (lapKeuMonthly.getPosisiLapKeu() != null) {
+					cell.setCellValue(lapKeuMonthly.getPosisiLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(1); // Pos
+				if (lapKeuMonthly.getPosLapKeu() != null) {
+					cell.setCellValue(lapKeuMonthly.getPosLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(2); // Sub Pos
+				if (lapKeuMonthly.getSubPosLapKeu() != null) {
+					cell.setCellValue(lapKeuMonthly.getSubPosLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(3); // Sub Sub Pos
+				if (lapKeuMonthly.getSubSubPosLapKeu() != null) {
+					cell.setCellValue(lapKeuMonthly.getSubSubPosLapKeu().getDeskripsi());
+				}
+				
+				cell = row.createCell(4); // Buku Besar
+				if (lapKeuMonthly.getRekeningBukuBesar() != null) {
+					cell.setCellValue(lapKeuMonthly.getRekeningBukuBesar().getNoRekening());
+				}
+				
+				cell = row.createCell(5); // Saldo
+				if (lapKeuMonthly.getValue() != null) {
+					cell.setCellValue(lapKeuMonthly.getValue());
+				}
+				
+				dataRow++;
+				
+			}
+			
+			ServletOutputStream servletOutputStream = response.getOutputStream();
+			xSSFWorkbook.write(servletOutputStream);
+			xSSFWorkbook.close();
+			servletOutputStream.close();
+			
+		}
+		
+	}
+	
+	@RequestMapping(value="/akunting/rincianbukubesarpinjamanexcel", method = RequestMethod.GET)
+	public void RincianBukuBesarPinjamanExcel(HttpServletResponse response, String bbid) throws IOException {
+		
+		if ((bbid != null) && (!bbid.isEmpty())) {
+			
+			ParameterProduk parameterProduk = parameterProdukService.findByBukuBesar(bbid);
+			
+			if (parameterProduk != null) {
+				
+				// Produk Pinjaman
+				if (parameterProduk.getType().getProductTypeId().equals("1")) {
+					
+					// Cari semua rekening pinjaman berdasarkan produk
+					List<RekeningKredit> listRekeningKredit = rekeningKreditService.findByProduk(parameterProduk.getCode());
+					
+					// CREATE EXCEL
+					response.setContentType("application/octet-stream");
+					String heardeKey = "Content-Disposition";
+					String headerValue = "attachment; filename=excelbook1.xlsx";
+					response.setHeader(heardeKey, headerValue);
+					
+					XSSFWorkbook xSSFWorkbook = new XSSFWorkbook();
+					XSSFSheet xSSFSheet = xSSFWorkbook.createSheet("Sheet1");
+					
+					// Header Row
+					Row row = xSSFSheet.createRow(0);
+					
+					List<String> listHeaderColumn = Arrays.asList("No Rekening", "Nama Nasabah", "Baki Debet");
+					
+					Integer column = 0;
+					for (String headerColumn : listHeaderColumn) {
+						Cell cell = row.createCell(column);
+						cell.setCellValue(headerColumn);
+						column++;
+					}
+					
+					// Data Rows
+					Integer dataRow = 1;
+					
+					for (RekeningKredit rekeningKredit : listRekeningKredit) {
+						
+						row = xSSFSheet.createRow(dataRow);
+						
+						Cell cell = row.createCell(0); // No Rekening
+						if (rekeningKredit.getNoRekening() != null) {
+							cell.setCellValue(rekeningKredit.getNoRekening());
+						}
+						
+						cell = row.createCell(1); // Nama Nasabah
+						if (rekeningKredit.getNamaNasabah() != null) {
+							cell.setCellValue(rekeningKredit.getNamaNasabah());
+						}
+						
+						cell = row.createCell(2); // Baki Debet
+						if (rekeningKredit.getBakiDebet() != null) {
+							cell.setCellValue(rekeningKredit.getBakiDebet());
+						}
+						
+						dataRow++;
+						
+					}
+					
+					ServletOutputStream servletOutputStream = response.getOutputStream();
+					xSSFWorkbook.write(servletOutputStream);
+					xSSFWorkbook.close();
+					servletOutputStream.close();
+					
+				}
+				
+			}
+			
+		}
+		
 	}
 
 }
