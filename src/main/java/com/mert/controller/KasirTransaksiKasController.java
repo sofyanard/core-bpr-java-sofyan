@@ -60,7 +60,7 @@ public class KasirTransaksiKasController {
 	}
 	
 	@RequestMapping(value="/kasir/kaskeluar", method = RequestMethod.GET)
-	public ModelAndView KasKeluar(String errMsg, String sccMsg) {
+	public ModelAndView KasKeluar(String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -73,6 +73,7 @@ public class KasirTransaksiKasController {
 		modelAndView.addObject("listPecahan", listPecahan);
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		modelAndView.setViewName("kasir/kaskeluar");
 		return modelAndView;
 	}
@@ -96,12 +97,13 @@ public class KasirTransaksiKasController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/kaskeluar?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/kaskeluar?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
 	
 	@RequestMapping(value="/kasir/kaspooling", method = RequestMethod.GET)
-	public ModelAndView KasPooling(String errMsg, String sccMsg) {
+	public ModelAndView KasPooling(String errMsg, String sccMsg, String validUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
@@ -148,6 +150,7 @@ public class KasirTransaksiKasController {
 		
 		modelAndView.addObject("errMsg", errMsg);
 		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.addObject("validUrl", validUrl);
 		
 		modelAndView.setViewName("kasir/kaspooling");
 		return modelAndView;
@@ -172,7 +175,8 @@ public class KasirTransaksiKasController {
 		}
 		
 		String sccMsg = "Posting Success, Transaction Ref No : " + trxRefNo;
-		modelAndView.setViewName("redirect:/kasir/kaspooling?sccMsg=" + sccMsg);
+		String validUrl = "/kasir/validasi/printtext/" + trxRefNo;
+		modelAndView.setViewName("redirect:/kasir/kaspooling?sccMsg=" + sccMsg + "&validUrl=" + validUrl);
 		return modelAndView;
 	}
 }

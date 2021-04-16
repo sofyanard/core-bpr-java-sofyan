@@ -126,6 +126,7 @@ public class EodUnitStatusService {
 	
 	// Check if Specific Unit is Close
 	public boolean checkIfUnitIsClose(String unitId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
 		if (eodUnitStatus == null) {
 			throw new Exception("Unit belum dibuka!");
@@ -139,6 +140,7 @@ public class EodUnitStatusService {
 	
 	// Check if Specific User is Open
 	public boolean checkIfUserIsOpen(String userId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
 		if (eodUnitStatus == null) {
 			return false;
@@ -152,6 +154,7 @@ public class EodUnitStatusService {
 	
 	// Check if Specific User is Close
 	public boolean checkIfUserIsClose(String userId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
 		if (eodUnitStatus == null) {
 			throw new Exception("User belum dibuka!");
@@ -165,6 +168,7 @@ public class EodUnitStatusService {
 	
 	// Check if All Only Units in a Whole Bank is Close
 	public boolean checkIfAllUnitsIsClose() throws Exception {
+		this.requestEodTanggal();
 		List<EodUnitStatus> listEodUnitStatus = this.findUnits();
 		for (EodUnitStatus eodUnitStatus : listEodUnitStatus) {
 			if (eodUnitStatus.getStatusUnit().getOpenCloseId().trim().equals("1")) {
@@ -176,6 +180,7 @@ public class EodUnitStatusService {
 	
 	// Check if All Only Users in a Specific Unit is Close
 	public boolean checkIfAllUsersByUnitIsClose(String unitId) throws Exception {
+		this.requestEodTanggal();
 		List<EodUnitStatus> listEodUnitStatus = this.findUsersByUnit(unitId);
 		for (EodUnitStatus eodUnitStatus : listEodUnitStatus) {
 			if (eodUnitStatus.getStatusUser().getOpenCloseId().trim().equals("1")) {
@@ -188,6 +193,7 @@ public class EodUnitStatusService {
 	
 	// Check if All Unis and All Users in a Whole Bank is Close
 	public boolean checkIfAllUnitsAndUsersIsClose(String unitId) throws Exception {
+		this.requestEodTanggal();
 		List<EodUnitStatus> listEodUnitStatus = this.findUnitsAndUsers();
 		for (EodUnitStatus eodUnitStatus : listEodUnitStatus) {
 			if (eodUnitStatus.getTypeId().getTypeId().trim().equals("2")) {
@@ -207,6 +213,7 @@ public class EodUnitStatusService {
 	
 	// Open a Unit
 	public void setUnitOpen(String unitId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
 		
 		if ((eodUnitStatus != null) && (this.checkIfUnitIsOpen(unitId))) {
@@ -228,6 +235,7 @@ public class EodUnitStatusService {
 	
 	// Close a Unit (Normal Process)
 	public void setUnitClose(String unitId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
 		
 		if (eodUnitStatus == null) {
@@ -257,6 +265,7 @@ public class EodUnitStatusService {
 	
 	// Force Close a Unit (Forced Process)
 	public void forceUnitClose(String unitId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
 		
 		if (eodUnitStatus == null) {
@@ -283,6 +292,7 @@ public class EodUnitStatusService {
 	
 	// Open a User
 	public void setUserOpen(String userId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
 		AppUser appUser = appUserService.findOne(userId);
 		String unitId = appUser.getUnitId().getUnitId();
@@ -316,6 +326,7 @@ public class EodUnitStatusService {
 	
 	// Close a User (Normal Process)
 	public void setUserClose(String userId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
 		AppUser appUser = appUserService.findOne(userId);
 		
@@ -339,6 +350,7 @@ public class EodUnitStatusService {
 	
 	// Force Close a User (Forced Process)
 	public void forceUserClose(String userId) throws Exception {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
 		AppUser appUser = appUserService.findOne(userId);
 		
@@ -359,6 +371,7 @@ public class EodUnitStatusService {
 	
 	// Get Status Detail of a Unit
 	public EodUnitStatus getUnitStatusDetail(String unitId) {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUnit(unitId);
 		if ((eodUnitStatus != null) && (eodUnitStatus.getUnitId().getUnitId().trim().equals(unitId))) {
 			return eodUnitStatus;
@@ -373,6 +386,7 @@ public class EodUnitStatusService {
 	
 	// Get Status Detail of a User
 	public EodUnitStatus getUserStatusDetail(String userId) {
+		this.requestEodTanggal();
 		EodUnitStatus eodUnitStatus = this.findUser(userId);
 		if ((eodUnitStatus.getUserId() != null) && (eodUnitStatus.getUserId().getUserId().trim().equals(userId))) {
 			return eodUnitStatus;
@@ -390,16 +404,19 @@ public class EodUnitStatusService {
 	
 	// List User-User yang sudah terdaftar di Buku Besar di Unit tertentu
 	public List<AppUser> listAvailableUsersByUnit(String unitId) {
+		this.requestEodTanggal();
 		return appUserService.listBukuBesarUsersByUnit(unitId);
 	}
 	
 	// List User-User yang terdaftar di Buku Besar di Unit tertentu yang sudah Buka Kasir pada Hari Ini
 	public List<AppUser> listOpenBukuBesarUsersByUnitToday(String unitId) {
+		this.requestEodTanggal();
 		return appUserService.listOpenBukuBesarUsersByUnit(unitId, this.strToday);
 	}
 	
 	// List User-User yang terdaftar di Buku Besar di Unit tertentu yang sudah Buka Kasir dan sudah dilakukan Transaksi Kas Keluar pada Hari Ini
 	public List<AppUser> listOpenBukuBesarKasUsersByUnitToday(String unitId) {
+		this.requestEodTanggal();
 		return appUserService.listOpenBukuBesarKasUsersByUnit(unitId, this.strToday);
 	}
 

@@ -20,7 +20,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, String> {
 	@Query(value = "select u.* from appuser u " + 
 			"join bukubesar b on u.rek_buku_besar = b.bukubesar_id " + 
 			"join eodunitstatus s on u.user_id = s.user_id and s.status_user = '1' " + 
-			"where u.unit_id = :unitId and to_char(s.date_buka, 'YYYY-MM-DD') = :strDate " + 
+			"where u.unit_id = :unitId and to_char(s.date_buka, 'YYYY-MM-DD') = cast(:strDate as text) " + 
 			"order by u.full_name ", nativeQuery=true)
 	List<AppUser> listOpenBukuBesarUsersByUnit(@Param("unitId") String unitId, @Param("strDate") String strDate);
 	
@@ -29,7 +29,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, String> {
 				"join bukubesar b on u.rek_buku_besar = b.bukubesar_id " + 
 				"join eodunitstatus s on u.user_id = s.user_id and s.status_user = '1' " + 
 				"join unitkasstatus k on s.user_id = k.user_id and to_char(s.date_buka, 'YYYY-MM-DD') = to_char(k.kaskeluar_date, 'YYYY-MM-DD') " + 
-				"where u.unit_id = :unitId and to_char(s.date_buka, 'YYYY-MM-DD') = :strDate " + 
+				"where u.unit_id = :unitId and to_char(s.date_buka, 'YYYY-MM-DD') = cast(:strDate as text) " + 
 				"order by u.full_name ", nativeQuery=true)
 		List<AppUser> listOpenBukuBesarKasUsersByUnit(@Param("unitId") String unitId, @Param("strDate") String strDate);
 
