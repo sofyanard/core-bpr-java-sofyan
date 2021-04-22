@@ -38,7 +38,9 @@ public class NasabahBasicService {
 		if (nonasabah != null) {
 			NasabahBasic nasabahBasic = nasabahBasicRepository.findByNonasabah(nonasabah);
 			List<NasabahBasic> listNasabahBasic = new ArrayList<NasabahBasic>();
-			listNasabahBasic.add(nasabahBasic);
+			if (nasabahBasic != null) {
+				listNasabahBasic.add(nasabahBasic);
+			}
 			return listNasabahBasic;
 		} else if ((noid != "") && (noid != null)) {
 			return nasabahBasicRepository.findByNoid(noid);
