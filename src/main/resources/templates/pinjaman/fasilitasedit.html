@@ -337,8 +337,12 @@
 <script src="/js/bootstrap-select.min.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 
+<script src="/js/jquery.mask.js"></script>
+
 <script>
 	$(document).ready(function () {
+	
+		$('.money').mask('000.000.000.000.000,00', {reverse: true});
 	
 		$("#form1").validate();
 		requestProduct();

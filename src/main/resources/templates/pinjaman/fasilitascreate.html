@@ -146,7 +146,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="NilaiBank">Nilai Bank</label>
 								<div class="col-md-9">
-									<input type="number" class="form-control" id="NilaiBank" name="NilaiBank" th:field=*{NilaiBank} />
+									<input type="text" class="money form-control" id="NilaiBank" name="NilaiBank" th:field=*{NilaiBank} />
 									<span class="text-danger" th:if="${#fields.hasErrors('NilaiBank')}" th:errors="*{NilaiBank}">NilaiBank Error</span>
 								</div>
 							</div>
@@ -340,8 +340,12 @@
 <script src="/js/bootstrap-select.min.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 
+<script src="/js/jquery.mask.js"></script>
+
 <script>
 	$(document).ready(function () {
+	
+		$('.money').mask('000.000.000.000.000,00', {reverse: true});
 	
 		$("#form1").validate();
 		requestProduct();
@@ -394,6 +398,8 @@
 <script src="/js/jquery-ui.min.js"></script>
 <!-- Slimscroll -->
 <script src="/js/jquery.slimscroll.min.js"></script>
+
+
 
 
 <!-- Morris.js charts -->
