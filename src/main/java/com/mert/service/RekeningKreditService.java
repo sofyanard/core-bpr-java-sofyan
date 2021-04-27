@@ -53,7 +53,9 @@ public class RekeningKreditService {
 		if ((norek != null) && (!norek.trim().isEmpty())) {
 			RekeningKredit rekeningKredit = rekeningKreditRepository.findOne(norek);
 			List<RekeningKredit> listRekeningKredit = new ArrayList<RekeningKredit>();
-			listRekeningKredit.add(rekeningKredit);
+			if (rekeningKredit != null) {
+				listRekeningKredit.add(rekeningKredit);
+			}
 			return listRekeningKredit;
 		} else if (nonasabah != null) {
 			return rekeningKreditRepository.findByNoNasabah(nonasabah);

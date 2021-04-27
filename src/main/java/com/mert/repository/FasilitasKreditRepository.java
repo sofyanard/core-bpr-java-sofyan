@@ -16,6 +16,57 @@ public interface FasilitasKreditRepository extends JpaRepository<FasilitasKredit
 	@Query(value = "select * from fasilitaskredit n where lower(n.nama_nasabah) like %:namanasabah% ", nativeQuery=true)
 	List<FasilitasKredit> findByNamaNasabah(@Param("namanasabah") String namanasabah);
 	
+	@Query(value = "select " + 
+			"no_fasilitas, " + 
+			"no_nasabah, " + 
+			"nama_nasabah, " + 
+			"produk, " + 
+			"valuta, " + 
+			"cast (plafond as decimal) as plafond, " + 
+			"kurs, " + 
+			"cast (eqv_plafond as decimal) as eqv_plafond," + 
+			"tenor, " + 
+			"bunga_persen, " + 
+			"hitung_bunga, " + 
+			"segment, " + 
+			"take_over, " + 
+			"bank, " + 
+			"fas_khusus, " + 
+			"joint_flag, " + 
+			"cif_joint, " + 
+			"nama_joint, " + 
+			"seq_joint, " + 
+			"pinalti_bunga_persen, " + 
+			"pinalti_pokok_persen, " + 
+			"pinalti_lunas_persen, " + 
+			"pinalti_flag, " + 
+			"agunan, " + 
+			"nilai_bank, " + 
+			"ltv_persen, " + 
+			"pledging_persen, " + 
+			"tujuan_kredit, " + 
+			"provisi_persen, " + 
+			"provisi_amount, " + 
+			"amt_admin, " + 
+			"amt_notaris, " + 
+			"amt_asuransi, " + 
+			"amt_appraisal, " + 
+			"amt_materai, " + 
+			"note_putusan, " + 
+			"putusan, " + 
+			"reason, " + 
+			"no_ref, " + 
+			"pembayaran_biaya_date, " + 
+			"pembayaran_biaya_amount, " + 
+			"pembayaran_biaya_tranref, " + 
+			"aktifasi_date, " + 
+			"no_rekening, " + 
+			"accrual_provisi, " + 
+			"accrual_admin " + 
+			"from fasilitaskredit " + 
+			"where no_fasilitas = :nofasilitas ", nativeQuery=true)
+	FasilitasKredit findOneX(@Param("nofasilitas") String nofasilitas);
+	
 	
 	
 	@Query(value = "select f.* " + 

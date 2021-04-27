@@ -33,6 +33,10 @@ public class FasilitasKreditService {
 		return fasilitasKreditRepository.findOne(id);
 	}
 	
+	public FasilitasKredit findOneX(String nofasilitas) {
+		return fasilitasKreditRepository.findOneX(nofasilitas);
+	}
+	
 	public void save(FasilitasKredit fasilitasKredit) {
 		fasilitasKreditRepository.save(fasilitasKredit);
 	}
@@ -53,7 +57,9 @@ public class FasilitasKreditService {
 		if ((nofasilitas != "") && (nofasilitas != null)) {
 			FasilitasKredit fasilitasKredit = fasilitasKreditRepository.findOne(nofasilitas);
 			List<FasilitasKredit> listFasilitasKredit = new ArrayList<FasilitasKredit>();
-			listFasilitasKredit.add(fasilitasKredit);
+			if (fasilitasKredit != null) {
+				listFasilitasKredit.add(fasilitasKredit);
+			}
 			return listFasilitasKredit;
 		} else if (nonasabah != null) {
 			return fasilitasKreditRepository.findByNoNasabah(nonasabah);
