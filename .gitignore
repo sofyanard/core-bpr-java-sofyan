@@ -4,6 +4,7 @@ target/
 .settings/
 
 upload/
+template/
 
 ### STS ###
 .apt_generated

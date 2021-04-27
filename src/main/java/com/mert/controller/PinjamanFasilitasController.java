@@ -1,5 +1,8 @@
 package com.mert.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -12,6 +15,10 @@ import javax.validation.Valid;
 
 import org.apache.poi.ss.formula.functions.Finance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mert.model.AppUser;
@@ -28,6 +36,7 @@ import com.mert.model.AppUnit;
 import com.mert.service.AppUnitService;
 import com.mert.model.NasabahBasic;
 import com.mert.service.NasabahBasicService;
+import com.mert.service.NasabahDokumenService;
 import com.mert.model.FasilitasKredit;
 import com.mert.service.FasilitasKreditService;
 import com.mert.model.FasilitasKreditOverrideModel;
@@ -60,6 +69,12 @@ import com.mert.model.StatusRekg;
 import com.mert.service.StatusRekgService;
 import com.mert.model.SkalaAngsuran;
 import com.mert.service.SkalaAngsuranService;
+import com.mert.model.DokumenFasilitas;
+import com.mert.service.DokumenFasilitasService;
+import com.mert.model.DcxTemplateMaster;
+import com.mert.service.DcxTemplateMasterService;
+import com.mert.model.NasabahDokumen;
+import com.mert.service.NasabahDokumenService;
 
 @Controller
 @RequestMapping("/pinjaman/fasilitas")
@@ -115,6 +130,22 @@ public class PinjamanFasilitasController {
 	
 	@Autowired
 	private SkalaAngsuranService skalaAngsuranService;
+	
+	@Autowired
+	private DokumenFasilitasService dokumenFasilitasService;
+	
+	@Autowired
+	private DcxTemplateMasterService dcxTemplateMasterService;
+	
+	@Autowired
+	private NasabahDokumenService nasabahDokumenService;
+	
+	// dari application.properties
+	@Value("${ExportDocApiUrlr}")
+	private String exportDocApiUrlr;
+	
+	@Value("${upload.folder}")
+	private String uploadFolder;
 	
 	private AppUser getUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -193,7 +224,7 @@ public class PinjamanFasilitasController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("auth", getUser());
 		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
-		FasilitasKredit fasilitasKredit = fasilitasKreditService.findOne(nofasilitas);
+		FasilitasKredit fasilitasKredit = fasilitasKreditService.findOneX(nofasilitas);
 		modelAndView.addObject("fasilitasKredit", fasilitasKredit);
 		modelAndView.addObject("produk", parameterProdukService.findOne(fasilitasKredit.getProduk().getCode()));
 		modelAndView.addObject("listPurpose", parameterPurposeService.findAll());
@@ -630,6 +661,112 @@ public class PinjamanFasilitasController {
 		cal.setTime(date);
 		cal.add(Calendar.MONTH, numMonth);
 		return cal.getTime();
+	}
+	
+	@RequestMapping(value="/searchexport", method = RequestMethod.GET)
+	public ModelAndView SearchSurat(String nofasilitas, Long nonasabah, String namanasabah) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		List<FasilitasKredit> listFasilitas = fasilitasKreditService.searchbyProp(nofasilitas, nonasabah, namanasabah);
+		modelAndView.addObject("listFasilitas", listFasilitas);
+		modelAndView.addObject("nofasilitas", nofasilitas);
+		modelAndView.addObject("nonasabah", nonasabah);
+		modelAndView.addObject("namanasabah", namanasabah);
+		modelAndView.setViewName("pinjaman/fasilitassearchexport");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/export/{nofasilitas}", method = RequestMethod.GET)
+	public ModelAndView Export(@PathVariable String nofasilitas, String errMsg, String sccMsg) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		FasilitasKredit fasilitasKredit = fasilitasKreditService.findOne(nofasilitas);
+		modelAndView.addObject("fasilitasKredit", fasilitasKredit);
+		
+		List<DokumenFasilitas> listDokumen = dokumenFasilitasService.FindByNoFasilitas(nofasilitas);
+		modelAndView.addObject("listDokumen", listDokumen);
+		
+		List<DcxTemplateMaster> listTemplate = dcxTemplateMasterService.findByTemplateGroup("pk");
+		modelAndView.addObject("listTemplate", listTemplate);
+		
+		modelAndView.addObject("nofasilitas", nofasilitas);
+		modelAndView.addObject("errMsg", errMsg);
+		modelAndView.addObject("sccMsg", sccMsg);
+		modelAndView.setViewName("pinjaman/fasilitasexport");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/export/{nofasilitas}", method = RequestMethod.POST)
+	public ModelAndView ExportPost(@PathVariable String nofasilitas, @RequestParam(value="TemplateId", required=true) String TemplateId) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		/*** !!! NANTI BISA BEDA_BEDA TERGANTUNG TEMPLATENYA YAAA !!! ***/
+		String exportUrl = exportDocApiUrlr + "/api/word/export/" + TemplateId + "/" + nofasilitas;
+		
+		try {
+			
+			RestTemplate restTemplate = new RestTemplate();
+			// String result = restTemplate.getForObject(exportUrl, String.class);
+			ResponseEntity<String> response = restTemplate.getForEntity(exportUrl, String.class);
+			if (response.getStatusCode().equals(HttpStatus.OK)) {
+				Long nonasabah = fasilitasKreditService.findOne(nofasilitas).getNoNasabah();
+				
+				NasabahDokumen nasabahDokumen = new NasabahDokumen();
+				nasabahDokumen.setNonasabah(nonasabah);
+				nasabahDokumen.setFilename(response.getBody());
+				nasabahDokumenService.save(nasabahDokumen);
+				
+				DokumenFasilitas dokumenFasilitas = new DokumenFasilitas();
+				dokumenFasilitas.setNoFasilitas(nofasilitas);
+				dokumenFasilitas.setNasabahDokumen(nasabahDokumen);
+				dokumenFasilitasService.save(dokumenFasilitas);
+				
+				String sccMsg = "Export success!"; // response.getBody();
+				modelAndView.setViewName("redirect:/pinjaman/fasilitas/export/" + nofasilitas + "?sccMsg=" + sccMsg);
+				return modelAndView;
+			}
+			else {
+				String errMsg = response.getBody();
+				modelAndView.setViewName("redirect:/pinjaman/fasilitas/export/" + nofasilitas + "?errMsg=" + errMsg);
+				return modelAndView;
+			}
+			
+		} catch (Exception e) {
+			String errMsg = "Export error!";
+			modelAndView.setViewName("redirect:/pinjaman/fasilitas/export/" + nofasilitas + "?errMsg=" + errMsg);
+			return modelAndView;
+		}
+	}
+	
+	@RequestMapping(value="/deleteexport/{nofasilitas}/{id}", method = RequestMethod.POST)
+	public ModelAndView DeleteExport(@PathVariable String nofasilitas, @PathVariable int id) {
+		DokumenFasilitas dokumenFasilitas = dokumenFasilitasService.findOne(id);
+		Integer nasabahDokumenId = dokumenFasilitas.getNasabahDokumen().getId();
+		String fileName = dokumenFasilitas.getNasabahDokumen().getFilename();
+		Path path = Paths.get(uploadFolder + fileName);
+		
+		// Delete DokumenFasilitas
+		dokumenFasilitasService.delete(id);
+		
+		// Delete NasabahDokumen
+		try {
+			nasabahDokumenService.delete(nasabahDokumenId);
+		} catch (Exception e) { }
+		
+		// Delete File
+		try {
+			Files.deleteIfExists(path);
+		} catch(Exception e) { }
+		
+		// Return View
+		ModelAndView modelAndView = new ModelAndView("redirect:/pinjaman/fasilitas/export/" + nofasilitas);
+		return modelAndView;
+		
 	}
 
 }
