@@ -232,6 +232,10 @@ public class PinjamanFasilitasController {
 		modelAndView.addObject("listPinalti", parameterPinaltiService.findAll());
 		modelAndView.addObject("listBank", parameterBankService.findAll());
 		modelAndView.addObject("listSegment", parameterSegmentService.findAll());
+		
+		String printUrl = "/pinjaman/fasilitas/print/" + nofasilitas;
+		modelAndView.addObject("printUrl", printUrl);
+		
 		modelAndView.addObject("nofasilitas", nofasilitas);
 		modelAndView.setViewName("pinjaman/fasilitasedit");
 		return modelAndView;
@@ -767,6 +771,24 @@ public class PinjamanFasilitasController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/pinjaman/fasilitas/export/" + nofasilitas);
 		return modelAndView;
 		
+	}
+	
+	@RequestMapping(value="/print/{nofasilitas}", method = RequestMethod.GET)
+	public ModelAndView Print(@PathVariable String nofasilitas) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		FasilitasKredit fasilitasKredit = fasilitasKreditService.findOneX(nofasilitas);
+		modelAndView.addObject("fasilitasKredit", fasilitasKredit);
+		modelAndView.addObject("produk", parameterProdukService.findOne(fasilitasKredit.getProduk().getCode()));
+		modelAndView.addObject("listPurpose", parameterPurposeService.findAll());
+		modelAndView.addObject("listYesNo", parameterYesNoService.findAll());
+		modelAndView.addObject("listPinalti", parameterPinaltiService.findAll());
+		modelAndView.addObject("listBank", parameterBankService.findAll());
+		modelAndView.addObject("listSegment", parameterSegmentService.findAll());
+		modelAndView.addObject("nofasilitas", nofasilitas);
+		modelAndView.setViewName("pinjaman/fasilitasprint");
+		return modelAndView;
 	}
 
 }

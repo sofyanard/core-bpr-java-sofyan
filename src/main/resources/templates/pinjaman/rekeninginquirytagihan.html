@@ -62,7 +62,7 @@
 								<td th:text="${row.PaidStatus}"></td>
 								<td th:text="${row.PaidDate != null ? #dates.format(row.PaidDate, 'yyyy-MM-dd') : ''}"></td>
 								<td th:text="${row.HapusDate != null ? #dates.format(row.HapusDate, 'yyyy-MM-dd') : ''}"></td>
-								<td></td>
+								<td><button class="btn btn-inverse" th:attr="data-url=@{'/pinjaman/rekening/inquirytagihanprint/' + ${row.RekeningKredit.NoRekening} + '/' + ${row.Id}}" onClick="popupprint(this.getAttribute('data-url'))">Print</button></td>
 							</tr>
 						</tbody>
 						<tfoot>
@@ -132,6 +132,13 @@
 			$('#LainnyaDisplay').val('0.00');
 		});
 	});
+	
+	function popupprint(purl) {
+		popup = window.open('about:blank', 'Print Fasilitas', 'width=600,height=1200,toolbar=no,menubar=no,location=no,directories=no,resizable=no,scrollbars=yes');
+		popup.location.href = purl;
+		popup.focus();
+		return false;
+	}
 </script>
 
 <!-- FastClick -->

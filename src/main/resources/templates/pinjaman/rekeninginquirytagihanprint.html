@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4></h4>
+		
+		<div class="row">
+			<div class="col-md-9">
+				<table class="table">
+			    	<tbody>
+			    	
+				    	<tr scope="row">
+				    		<td>No Nasabah</td>
+				    		<td th:text="${rekeningKredit.NoNasabah}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Nama Nasabah</td>
+				    		<td th:text="${rekeningKredit.NamaNasabah}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>No Rekening</td>
+				    		<td th:text="${rekeningKredit.NoFasilitas}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Produk</td>
+				    		<td th:text="${rekeningKredit.Produk.Desc}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Due Date</td>
+				    		<td th:text="${dataTagihan.DueDate != null ? #dates.format(dataTagihan.DueDate, 'yyyy-MM-dd') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Pokok</td>
+				    		<td th:text="${dataTagihan.Pokok != null ? #numbers.formatDecimal(dataTagihan.Pokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Bunga</td>
+				    		<td th:text="${dataTagihan.Bunga != null ? #numbers.formatDecimal(dataTagihan.Bunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Denda Pokok</td>
+				    		<td th:text="${dataTagihan.DendaPokok != null ? #numbers.formatDecimal(dataTagihan.DendaPokok, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Denda Bunga</td>
+				    		<td th:text="${dataTagihan.DendaBunga != null ? #numbers.formatDecimal(dataTagihan.DendaBunga, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Lainnya</td>
+				    		<td th:text="${dataTagihan.Lainnya != null ? #numbers.formatDecimal(dataTagihan.Lainnya, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Total Tagihan</td>
+				    		<td th:text="${totalTagihan != null ? #numbers.formatDecimal(totalTagihan, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+			    	</tbody>
+			    </table>
+			<div>
+		</div>
+	</div>
+	
+	<!-- jQuery 2.2.3 -->
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<!-- popper -->
+	<script src="/js/popper.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="/js/bootstrap.min.js"></script>
+	
+	<script src="/js/bootstrap-select.min.js"></script>
+	<script src="/js/jquery.validate.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+			window.print();
+		});
+	</script>
+	
+</body>
+</html>

@@ -1,13 +1,21 @@
 package com.mert.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.poi.ss.formula.functions.Finance;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -384,8 +392,83 @@ public class PinjamanRekeningController {
 		List<SkalaAngsuran> listSkalaAngsuran = skalaAngsuranService.findByNoRekening(noRekening);
 		modelAndView.addObject("listSkalaAngsuran", listSkalaAngsuran);
 		
+		modelAndView.addObject("noRekening", noRekening);
 		modelAndView.setViewName("pinjaman/rekeninglistangsuran");
 		return modelAndView;
+	}
+	
+	@RequestMapping(value="/listangsuranexcel/{noRekening}", method = RequestMethod.GET)
+	public void ListAngsuranExcel(HttpServletResponse response, @PathVariable String noRekening) throws IOException {
+		
+		List<SkalaAngsuran> listSkalaAngsuran = skalaAngsuranService.findByNoRekening(noRekening);
+		
+		// CREATE EXCEL
+        response.setContentType("application/octet-stream");
+		String heardeKey = "Content-Disposition";
+		String headerValue = "attachment; filename=excelbook1.xlsx";
+		response.setHeader(heardeKey, headerValue);
+		
+		XSSFWorkbook xSSFWorkbook = new XSSFWorkbook();
+		XSSFSheet xSSFSheet = xSSFWorkbook.createSheet("Sheet1");
+		
+		// Header Row
+		Row row = xSSFSheet.createRow(0);
+				
+		List<String> listHeaderColumn = Arrays.asList("Bulan Ke", "DueDate", "Angsuran Pokok", "Angsuran Bunga", "Total Angsuran", "Sisa Pinjaman");
+				
+		Integer column = 0;
+		for (String headerColumn : listHeaderColumn) {
+			Cell cell = row.createCell(column);
+			cell.setCellValue(headerColumn);
+			column++;
+		}
+		
+		// Data Rows
+		Integer dataRow = 1;
+				
+		for (SkalaAngsuran skalaAngsuran : listSkalaAngsuran) {
+					
+			row = xSSFSheet.createRow(dataRow);
+					
+			Cell cell = row.createCell(0); // Bulan Ke
+			if (skalaAngsuran.getBulanKe() != null) {
+				cell.setCellValue(skalaAngsuran.getBulanKe());
+			}
+			
+			cell = row.createCell(1); // Due Date
+			if (skalaAngsuran.getDueDate() != null) {
+				cell.setCellValue(skalaAngsuran.getDueDate());
+			}
+					
+			cell = row.createCell(2); // Angsuran Pokok
+			if (skalaAngsuran.getAngsuranPokok() != null) {
+				cell.setCellValue(skalaAngsuran.getAngsuranPokok());
+			}
+					
+			cell = row.createCell(3); // Angsuran Bunga
+			if (skalaAngsuran.getAngsuranBunga() != null) {
+				cell.setCellValue(skalaAngsuran.getAngsuranBunga());
+			}
+					
+			cell = row.createCell(4); // Total Angsuran
+			if (skalaAngsuran.getTotalAngsuran() != null) {
+				cell.setCellValue(skalaAngsuran.getTotalAngsuran());
+			}
+					
+			cell = row.createCell(5); // Sisa Pinjaman
+			if (skalaAngsuran.getSisaPinjaman() != null) {
+				cell.setCellValue(skalaAngsuran.getSisaPinjaman());
+			}
+					
+			dataRow++;
+					
+		}
+		
+		ServletOutputStream servletOutputStream = response.getOutputStream();
+		xSSFWorkbook.write(servletOutputStream);
+		xSSFWorkbook.close();
+		servletOutputStream.close();
+		
 	}
 	
 	@RequestMapping(value="/tagihanindex/{noRekening}", method = RequestMethod.GET)
@@ -627,6 +710,30 @@ public class PinjamanRekeningController {
 		
 		modelAndView.addObject("noRekening", noRekening);
 		modelAndView.setViewName("pinjaman/rekeninginquiryagunan");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/inquirytagihanprint/{noRekening}/{tagihanId}", method = RequestMethod.GET)
+	public ModelAndView InquiryTagihanPrint(@PathVariable String noRekening, @PathVariable Integer tagihanId) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("auth", getUser());
+		modelAndView.addObject("userMenus", appUserService.GetUserMenu(getUser()));
+		
+		RekeningKredit rekeningKredit = rekeningKreditService.findOne(noRekening);
+		modelAndView.addObject("rekeningKredit", rekeningKredit);
+		
+		DataTagihan dataTagihan = dataTagihanService.findOne(tagihanId);
+		modelAndView.addObject("dataTagihan", dataTagihan);
+		
+		Double tPokok = dataTagihan.getPokok() != null ? dataTagihan.getPokok() : 0.0;
+		Double tBunga = dataTagihan.getBunga() != null ? dataTagihan.getBunga() : 0.0;
+		Double tDendaPokok = dataTagihan.getDendaPokok() != null ? dataTagihan.getDendaPokok() : 0.0;
+		Double tDendaBunga = dataTagihan.getDendaBunga() != null ? dataTagihan.getDendaBunga() : 0.0;
+		Double tLainnya = dataTagihan.getLainnya() != null ? dataTagihan.getLainnya() : 0.0;
+		Double totalTagihan = tPokok + tBunga + tDendaPokok + tDendaBunga + tLainnya;
+		modelAndView.addObject("totalTagihan", totalTagihan);
+		
+		modelAndView.setViewName("pinjaman/rekeninginquirytagihanprint");
 		return modelAndView;
 	}
 	

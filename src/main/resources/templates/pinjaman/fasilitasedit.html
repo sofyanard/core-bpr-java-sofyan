@@ -28,7 +28,7 @@
 					<li role="presentation" class="active"><a href="#">Fasilitas</a></li>
 					<li role="presentation"><a th:href="@{'/pinjaman/dokfasilitas/index/' + ${nofasilitas}}">Dokumen Fasilitas</a></li>
 					<li role="presentation"><a th:href="@{'/pinjaman/join/index/' + ${nofasilitas}}">Join Rekening</a></li>
-					<li role="presentation"><a th:href="@{#}">Cetak Data</a></li>
+					<!--<li role="presentation"><a th:href="@{#}">Cetak Data</a></li>-->
 					<li role="presentation"><a th:href="@{'/pinjaman/angsuran/index/' + ${nofasilitas}}">Skala Angsuran</a></li>
 				</ul>
 				<br/>
@@ -309,6 +309,7 @@
 								<!--
 								<button type="button" class="btn btn-primary">Submit for Approval</button>
 								-->
+								<button class="btn btn-inverse" th:attr="data-url=${printUrl}" onClick="popupprint(this.getAttribute('data-url'))">Print</button>
 							</div>
 						</div>
 					</div>
@@ -382,6 +383,13 @@
                     $('#HitungBunga').selectpicker('refresh');
                 }
             });
+	}
+	
+	function popupprint(purl) {
+		popup = window.open('about:blank', 'Print Fasilitas', 'width=600,height=1200,toolbar=no,menubar=no,location=no,directories=no,resizable=no,scrollbars=yes');
+		popup.location.href = purl;
+		popup.focus();
+		return false;
 	}
 </script>
 

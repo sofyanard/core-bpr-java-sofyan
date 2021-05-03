@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+	<div class="container">
+		<h4></h4>
+		
+		<div class="row">
+			<div class="col-md-9">
+				<table class="table">
+			    	<tbody>
+			    	
+				    	<tr scope="row">
+				    		<td>No Nasabah</td>
+				    		<td th:text="${fasilitasKredit.NoNasabah}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Nama Nasabah</td>
+				    		<td th:text="${fasilitasKredit.NamaNasabah}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>No Fasilitas</td>
+				    		<td th:text="${fasilitasKredit.NoFasilitas}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Produk</td>
+				    		<td th:text="${fasilitasKredit.Produk.Desc}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Plafond</td>
+				    		<td th:text="${fasilitasKredit.EqvPlafond != null ? #numbers.formatDecimal(fasilitasKredit.EqvPlafond, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Jangka Waktu (bulan)</td>
+				    		<td th:text="${fasilitasKredit.Tenor}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Suku Bunga (% / tahun)</td>
+				    		<td th:text="${fasilitasKredit.BungaPersen != null ? #numbers.formatDecimal(fasilitasKredit.BungaPersen, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Tujuan</td>
+				    		<td th:text="${fasilitasKredit.TujuanKredit.PurposeName}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Agunan</td>
+				    		<td th:text="${fasilitasKredit.Agunan.YesNoName}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Nilai Bank</td>
+				    		<td th:text="${fasilitasKredit.NilaiBank != null ? #numbers.formatDecimal(fasilitasKredit.NilaiBank, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>LTV (%)</td>
+				    		<td th:text="${fasilitasKredit.LtvPersen != null ? #numbers.formatDecimal(fasilitasKredit.LtvPersen, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Pledging (%)</td>
+				    		<td th:text="${fasilitasKredit.PledgingPersen != null ? #numbers.formatDecimal(fasilitasKredit.PledgingPersen, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Biaya Provisi</td>
+				    		<td th:text="${fasilitasKredit.ProvisiAmount != null ? #numbers.formatDecimal(fasilitasKredit.ProvisiAmount, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Biaya Administrasi</td>
+				    		<td th:text="${fasilitasKredit.AmtAdmin != null ? #numbers.formatDecimal(fasilitasKredit.AmtAdmin, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Biaya Notaris</td>
+				    		<td th:text="${fasilitasKredit.AmtNotaris != null ? #numbers.formatDecimal(fasilitasKredit.AmtNotaris, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Biaya Asuransi</td>
+				    		<td th:text="${fasilitasKredit.AmtAsuransi != null ? #numbers.formatDecimal(fasilitasKredit.AmtAsuransi, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Biaya Appraisal</td>
+				    		<td th:text="${fasilitasKredit.AmtAppraisal != null ? #numbers.formatDecimal(fasilitasKredit.AmtAppraisal, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Biaya Materai</td>
+				    		<td th:text="${fasilitasKredit.AmtMaterai != null ? #numbers.formatDecimal(fasilitasKredit.AmtMaterai, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Pinalti Pokok (%)</td>
+				    		<td th:text="${fasilitasKredit.PinaltiPokokPersen != null ? #numbers.formatDecimal(fasilitasKredit.PinaltiPokokPersen, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Pinalti Bunga (%)</td>
+				    		<td th:text="${fasilitasKredit.PinaltiBungaPersen != null ? #numbers.formatDecimal(fasilitasKredit.PinaltiBungaPersen, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Pinalti Pelunasan (%)</td>
+				    		<td th:text="${fasilitasKredit.PinaltiLunasPersen != null ? #numbers.formatDecimal(fasilitasKredit.PinaltiLunasPersen, 1, 'DEFAULT', 2, 'DEFAULT') : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td></td>
+				    		<td th:text="${fasilitasKredit.PinaltiFlag != null ? fasilitasKredit.PinaltiFlag.PinaltiName : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Take Over</td>
+				    		<td th:text="${fasilitasKredit.TakeOver.YesNoName}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td></td>
+				    		<td th:text="${fasilitasKredit.Bank != null ? fasilitasKredit.Bank.BankName : ''}"></td>
+				    	</tr>
+				    	
+				    	<tr scope="row">
+				    		<td>Segmen</td>
+				    		<td th:text="${fasilitasKredit.Segment != null ? fasilitasKredit.Segment.SegmentName : ''}"></td>
+				    	</tr>
+				    	
+			    	</tbody>
+			    </table>
+			<div>
+		</div>
+	</div>
+	
+	<!-- jQuery 2.2.3 -->
+	<script src="/js/jquery-2.2.3.min.js"></script>
+	<!-- popper -->
+	<script src="/js/popper.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="/js/bootstrap.min.js"></script>
+	
+	<script src="/js/bootstrap-select.min.js"></script>
+	<script src="/js/jquery.validate.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+			window.print();
+		});
+	</script>
+	
+</body>
+</html>

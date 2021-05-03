@@ -28,7 +28,7 @@
 					<li role="presentation"><a th:href="@{'/pinjaman/fasilitas/edit/' + ${nofasilitas}}">Fasilitas</a></li>
 					<li role="presentation"><a th:href="@{'/pinjaman/dokfasilitas/index/' + ${nofasilitas}}">Dokumen Fasilitas</a></li>
 					<li role="presentation"><a th:href="@{'/pinjaman/join/index/' + ${nofasilitas}}">Join Rekening</a></li>
-					<li role="presentation"><a th:href="@{#}">Cetak Data</a></li>
+					<!--<li role="presentation"><a th:href="@{#}">Cetak Data</a></li>-->
 					<li role="presentation" class="active"><a th:href="@{'/pinjaman/angsuran/index/' + ${nofasilitas}}">Skala Angsuran</a></li>
 				</ul>
 				<br/>
@@ -64,6 +64,10 @@
 				</table>
 				
 				<p><div th:if="${((errorMsg != null) && (errorMsg != ''))}" th:text="${errorMsg}"></div></p>
+				
+				<p>
+					<a th:href="@{'/pinjaman/angsuran/indexexcel/' + ${nofasilitas}}">Download to Excel</a>
+				</p>
 				
 			</div>
 				
