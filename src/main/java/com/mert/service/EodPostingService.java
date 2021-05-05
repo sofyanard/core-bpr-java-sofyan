@@ -12,6 +12,7 @@ import com.mert.model.RekeningBukuBesar;
 import com.mert.model.KodeTranUnit;
 import com.mert.model.EodKalkulasi;
 import com.mert.model.RekeningKredit;
+import com.mert.model.EodUnitStatus;
 
 @Service
 public class EodPostingService {
@@ -39,6 +40,9 @@ public class EodPostingService {
 	
 	@Autowired
 	private RekeningKreditService rekeningKreditService;
+	
+	@Autowired
+	private EodUnitStatusService eodUnitStatusService;
 	
 	private String _eodTanggal;
 	
@@ -80,6 +84,13 @@ public class EodPostingService {
 				
 		return rekeningBukuBesar;
 	}
+	
+	private void CheckIfAllUnitsAndUsersAreClosed() throws Exception {
+		List<EodUnitStatus> listEodUnitStatus = eodUnitStatusService.findOpenUnitsAndUsers();
+		if (listEodUnitStatus != null) {
+			throw new Exception("Masih ada unit atau user dengan status open!");
+		}
+	}
 		
 		
 		
@@ -87,6 +98,9 @@ public class EodPostingService {
 			
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 			
 		// Initiate Progress Status
 		if (eodProgressService.Validate("4004")) {
@@ -170,6 +184,9 @@ public class EodPostingService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 			
 		// Initiate Progress Status
 		if (eodProgressService.Validate("4005")) {
@@ -267,6 +284,9 @@ public class EodPostingService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 			
 		// Initiate Progress Status
 		if (eodProgressService.Validate("4006")) {
@@ -364,6 +384,9 @@ public class EodPostingService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 			
 		// Initiate Progress Status
 		if (eodProgressService.Validate("4007")) {
@@ -461,6 +484,9 @@ public class EodPostingService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 			
 		// Initiate Progress Status
 		if (eodProgressService.Validate("4008")) {

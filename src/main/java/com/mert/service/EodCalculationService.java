@@ -24,6 +24,7 @@ import com.mert.model.DataTagihan;
 import com.mert.model.DataAgunan;
 import com.mert.model.ParameterJenisAgunan;
 import com.mert.model.ParameterJenisAgunanBase;
+import com.mert.model.EodUnitStatus;
 
 @Service
 public class EodCalculationService {
@@ -63,6 +64,9 @@ public class EodCalculationService {
 	
 	@Autowired
 	private ParameterKolektibilitasService parameterKolektibilitasService;
+	
+	@Autowired
+	private EodUnitStatusService eodUnitStatusService;
 	
 	private String _eodTanggal;
 	
@@ -121,6 +125,13 @@ public class EodCalculationService {
 		return rekeningBukuBesar;
 	}
 	
+	private void CheckIfAllUnitsAndUsersAreClosed() throws Exception {
+		List<EodUnitStatus> listEodUnitStatus = eodUnitStatusService.findOpenUnitsAndUsers();
+		if (listEodUnitStatus != null) {
+			throw new Exception("Masih ada unit atau user dengan status open!");
+		}
+	}
+	
 	
 	
 	// @Async
@@ -158,6 +169,9 @@ public class EodCalculationService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1001")) {
@@ -248,6 +262,9 @@ public class EodCalculationService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1002")) {
@@ -359,6 +376,9 @@ public class EodCalculationService {
 		// Request EodTanggal
 		this.requestEodTanggal();
 		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
+		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1003")) {
 			eodProgressService.Start("1003");
@@ -446,6 +466,9 @@ public class EodCalculationService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1004")) {
@@ -539,6 +562,9 @@ public class EodCalculationService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1005")) {
@@ -653,6 +679,9 @@ public class EodCalculationService {
 		// Request EodTanggal
 		this.requestEodTanggal();
 		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
+		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1006")) {
 			eodProgressService.Start("1006");
@@ -765,6 +794,9 @@ public class EodCalculationService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1007")) {
@@ -898,6 +930,9 @@ public class EodCalculationService {
 		// Request EodTanggal
 		this.requestEodTanggal();
 		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
+		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1008")) {
 			eodProgressService.Start("1008");
@@ -989,6 +1024,9 @@ public class EodCalculationService {
 		// Request EodTanggal
 		this.requestEodTanggal();
 		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
+		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1009")) {
 			eodProgressService.Start("1009");
@@ -1060,6 +1098,9 @@ public class EodCalculationService {
 		// Request EodTanggal
 		this.requestEodTanggal();
 		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
+		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1010")) {
 			eodProgressService.Start("1010");
@@ -1130,6 +1171,9 @@ public class EodCalculationService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1011")) {
@@ -1225,6 +1269,9 @@ public class EodCalculationService {
 		// Request EodTanggal
 		this.requestEodTanggal();
 		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
+		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1012")) {
 			eodProgressService.Start("1012");
@@ -1317,6 +1364,9 @@ public class EodCalculationService {
 		
 		// Request EodTanggal
 		this.requestEodTanggal();
+		
+		// Cek apakah masih ada unit atau user yang terbuka
+		CheckIfAllUnitsAndUsersAreClosed();
 		
 		// Initiate Progress Status
 		if (eodProgressService.Validate("1013")) {

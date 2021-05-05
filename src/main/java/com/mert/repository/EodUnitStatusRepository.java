@@ -31,4 +31,10 @@ public interface EodUnitStatusRepository extends JpaRepository<EodUnitStatus, In
 	@Query(value = "select * from eodunitstatus n where to_char(n.date_buka, 'YYYY-MM-DD') = :strDate order by n.unit_id, n.user_id ", nativeQuery=true)
 	List<EodUnitStatus> findAllByOpenDate(@Param("strDate") String strDate);
 	
+	@Query(value = "select * from eodunitstatus n "
+			+ " where to_char(n.date_buka, 'YYYY-MM-DD') = :strDate "
+			+ " and ((coalesce(status_unit,'') != '0') or (coalesce(status_user,'') != '0')) "
+			+ " order by n.unit_id, n.user_id ", nativeQuery=true)
+	List<EodUnitStatus> findAllOpenByOpenDate(@Param("strDate") String strDate);
+	
 }

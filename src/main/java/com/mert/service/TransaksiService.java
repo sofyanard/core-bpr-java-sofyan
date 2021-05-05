@@ -369,6 +369,70 @@ public class TransaksiService {
 		
 	}
 	
+	private void HistoryDebit (
+			String accountType,
+			UUID tranRef,
+			String koTran,
+			AppUser userPost,
+			String noRekDebit,
+			Double valueDebit,
+			String note,
+			String otherNote,
+			String isCorrection) throws Exception {
+		
+		try {
+			TranHistory tranHistory = new TranHistory();
+			tranHistory.setTranRef(tranRef);
+			tranHistory.setKoTran(koTran);
+			tranHistory.setTranDate(new Date());
+			tranHistory.setAccountType(accountType);
+			tranHistory.setUnitId(userPost.getUnitId());
+			tranHistory.setUserId(userPost);
+			tranHistory.setNoRekDebit(noRekDebit);
+			tranHistory.setValueDebit(valueDebit);
+			tranHistory.setNote(note);
+			tranHistory.setOtherNote(otherNote);
+			tranHistory.setIsCorrection(isCorrection);
+			tranHistoryService.save(tranHistory);
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		
+	}
+	
+	private void HistoryKredit (
+			String accountType,
+			UUID tranRef,
+			String koTran,
+			AppUser userPost,
+			String noRekKredit,
+			Double valueKredit,
+			String note,
+			String otherNote,
+			String isCorrection) throws Exception {
+		
+		try {
+			TranHistory tranHistory = new TranHistory();
+			tranHistory.setTranRef(tranRef);
+			tranHistory.setKoTran(koTran);
+			tranHistory.setTranDate(new Date());
+			tranHistory.setAccountType(accountType);
+			tranHistory.setUnitId(userPost.getUnitId());
+			tranHistory.setUserId(userPost);
+			tranHistory.setNoRekKredit(noRekKredit);
+			tranHistory.setValueKredit(valueKredit);
+			tranHistory.setNote(note);
+			tranHistory.setOtherNote(otherNote);
+			tranHistory.setIsCorrection(isCorrection);
+			tranHistoryService.save(tranHistory);
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		
+	}
+	
 	
 	
 	public String Transaksi4001(Transaksi4001Input transaksi4001Input) throws Exception {
@@ -1786,6 +1850,12 @@ public class TransaksiService {
 	
 	public String Koreksi(UUID tranRef, String userId) throws Exception {
 		
+		// Kalau sudah pernah dikoreksi, tolak!
+		List<TranHistory> listCorrectionTranHistory = tranHistoryService.findCorrectionsByTranRef(tranRef);
+		if (listCorrectionTranHistory != null) {
+			throw new Exception("Transaksi sudah pernah dikoreksi!");
+		}
+		
 		AppUser appUser = appUserService.findOne(userId);
 		if (appUser == null) {
 			throw new Exception("User " + userId + " tidak terdaftar!");
@@ -1802,7 +1872,7 @@ public class TransaksiService {
 			String note = tranHistory.getNote();
 			
 			// Cek Transaksinya Debit atau Kredit
-			if ((tranHistory.getValueDebit() != null) && (tranHistory.getValueDebit() > 0.0)) {
+			if ((tranHistory.getValueDebit() != null) && (tranHistory.getValueDebit() != 0.0)) {
 				
 				// Transaksinya Debit, Jadi Koreksinya Kredit
 				Double value = tranHistory.getValueDebit();
@@ -1826,7 +1896,7 @@ public class TransaksiService {
 						rekeningBukuBesarService.save(rekeningBukuBesar);
 						
 						// Insert Transaction History
-						this.HistoryKredit("4", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						this.HistoryKredit("4", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note, null, "1");
 						
 					} else if (accType.trim().equals("2")) { // Rekening Tabungan
 						
@@ -1842,7 +1912,7 @@ public class TransaksiService {
 						tabunganPembentukanRekeningService.save(tabunganPembentukanRekening);
 						
 						// Insert Transaction History
-						this.HistoryKredit("2", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						this.HistoryKredit("2", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note, null, "1");
 						
 					} else if (accType.trim().equals("1")) { // Rekening Pinjaman
 						
@@ -1860,7 +1930,7 @@ public class TransaksiService {
 							rekeningKreditService.save(rekeningKredit);
 							
 							// Insert Transaction History
-							this.HistoryKredit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+							this.HistoryKredit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note, null, "1");
 						}
 						
 					}
@@ -1871,7 +1941,7 @@ public class TransaksiService {
 				}
 				
 				
-			} else if ((tranHistory.getValueKredit() != null) && (tranHistory.getValueKredit() > 0.0)) {
+			} else if ((tranHistory.getValueKredit() != null) && (tranHistory.getValueKredit() != 0.0)) {
 				
 				// Transaksinya Kredit, Jadi Koreksinya Debit
 				Double value = tranHistory.getValueKredit();
@@ -1895,7 +1965,7 @@ public class TransaksiService {
 						rekeningBukuBesarService.save(rekeningBukuBesar);
 						
 						// Insert Transaction History
-						this.HistoryDebit("4", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						this.HistoryDebit("4", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note, null, "1");
 						
 						// Tambahan utk Pinjaman : 
 						try {
@@ -1945,7 +2015,7 @@ public class TransaksiService {
 						tabunganPembentukanRekeningService.save(tabunganPembentukanRekening);
 						
 						// Insert Transaction History
-						this.HistoryDebit("2", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+						this.HistoryDebit("2", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note, null, "1");
 						
 					} else if (accType.trim().equals("1")) { // Rekening Pinjaman
 						
@@ -1963,7 +2033,7 @@ public class TransaksiService {
 							rekeningKreditService.save(rekeningKredit);
 							
 							// Insert Transaction History
-							this.HistoryDebit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+							this.HistoryDebit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note, null, "1");
 							
 							// Mengembalikan DataTagihan
 							String strDueDate = tranHistory.getOtherNote().trim();
@@ -1991,7 +2061,7 @@ public class TransaksiService {
 							rekeningKreditService.save(rekeningKredit);
 							
 							// Insert Transaction History
-							this.HistoryDebit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note);
+							this.HistoryDebit("1", tranRef, koTran, appUser, noRek, value, "KOREKSI " + note, null, "1");
 						}
 						
 					}

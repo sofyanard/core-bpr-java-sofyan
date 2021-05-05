@@ -42,5 +42,9 @@ public class TranHistoryService {
 	public List<TranHistory> findByTranRef(UUID tranRef) {
 		return tranHistoryRepository.findByTranRef(tranRef);
 	}
+	
+	public List<TranHistory> findCorrectionsByTranRef(UUID tranRef) {
+		return tranHistoryRepository.findCorrectionsByTranRef(tranRef);
+	}
 
 }

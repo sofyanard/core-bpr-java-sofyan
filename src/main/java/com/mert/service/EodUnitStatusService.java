@@ -110,6 +110,12 @@ public class EodUnitStatusService {
 		return eodUnitStatusRepository.findAllByOpenDate(this.strToday);
 	}
 	
+	// List All Open Units and Users in a Whole Bank
+	public List<EodUnitStatus> findOpenUnitsAndUsers() {
+		this.requestEodTanggal();
+		return eodUnitStatusRepository.findAllOpenByOpenDate(this.strToday);
+	}
+	
 	// Check if Specific Unit is Open
 	public boolean checkIfUnitIsOpen(String unitId) throws Exception {
 		this.requestEodTanggal();

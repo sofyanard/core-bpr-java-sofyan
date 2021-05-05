@@ -69,6 +69,10 @@ public class TranHistory {
 	@Size(max = 50)
 	private String OtherNote;
 	
+	@Column(name = "is_correction")
+	@Size(max = 1)
+	private String IsCorrection;
+	
 	
 	
 	// Getter and Setter
@@ -175,6 +179,14 @@ public class TranHistory {
 
 	public void setOtherNote(String otherNote) {
 		OtherNote = otherNote;
+	}
+
+	public String getIsCorrection() {
+		return IsCorrection;
+	}
+
+	public void setIsCorrection(String isCorrection) {
+		IsCorrection = isCorrection;
 	}
 	
 	
