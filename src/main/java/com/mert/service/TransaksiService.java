@@ -1852,7 +1852,7 @@ public class TransaksiService {
 		
 		// Kalau sudah pernah dikoreksi, tolak!
 		List<TranHistory> listCorrectionTranHistory = tranHistoryService.findCorrectionsByTranRef(tranRef);
-		if (listCorrectionTranHistory != null) {
+		if ((listCorrectionTranHistory != null) && (!listCorrectionTranHistory.isEmpty())) {
 			throw new Exception("Transaksi sudah pernah dikoreksi!");
 		}
 		
