@@ -127,7 +127,7 @@ public class EodCalculationService {
 	
 	private void CheckIfAllUnitsAndUsersAreClosed() throws Exception {
 		List<EodUnitStatus> listEodUnitStatus = eodUnitStatusService.findOpenUnitsAndUsers();
-		if (listEodUnitStatus != null) {
+		if ((listEodUnitStatus != null) && (!listEodUnitStatus.isEmpty())) {
 			throw new Exception("Masih ada unit atau user dengan status open!");
 		}
 	}
